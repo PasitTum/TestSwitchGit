@@ -1,0 +1,181 @@
+﻿@model OCS.Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "สมัครสอบ";
+    Layout = "~/Views/Shared/_LayoutEExam.cshtml";
+}
+
+@*@using (Html.BeginForm("Register", "Register", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()*@
+<div ng-app="registerModule" ng-controller="registerController">
+    <div class="form-group">
+        <div class="card">
+            <h5 class="card-header header-table">การสอบเพื่อวัดความรู้ความสามารถทั่วไป 2563</h5>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <br />
+            <div class="form-group text-danger pl-2">
+                <h5><b>หมายเหตุ</b></h5>
+                <p class="pl-3" ng-repeat="remark in remarks">{{remark.Detail}}</p>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-12" ng-class="{ 'validation-error': formProject.examCenter.$error.required }">
+                    @Html.LabelFor(model => model.ExamCenter, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2 " })
+                    <div class="input-group col-12 col-md-10" ng-class="{ 'validation-error': formProject.examCenterSelect.$error.required }">
+                        <select class="form-control col-md-10" name="examCenter" id="examCenter" ng-model="register.ExamCenterID">
+                            <option ng-repeat="examCenter in examCenters" value="{{examCenter.id}}">{{examCenter.text}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-6">
+                    @Html.LabelFor(model => model.CitizenID, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <div class="col-12 col-md-12 style-citizenid">
+                        <label>@Model.CitizenID</label>
+                        <div ng-hide="@Model.CitizenID" ng-model="register.CitizenID" class="ng-hide"></div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.proviceID.$error.required }">
+                    @Html.LabelFor(model => model.CitizenProvice, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <div class="col-12 col-md-12">
+                        <select class="form-control col-md-10" name="examCenterSelect" id="examCenterSelect" ng-model="register.ProviceID">
+                            <option ng-repeat="provice in provices" value="{{provice.id}}">{{provice.text}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.prefix.$error.required }">
+                    @Html.LabelFor(model => model.PrefixID, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <label class="pl-4" ng-repeat="prefix in prefixes" ng-model="register.PrefixeID">
+                        <input type="radio" name="prefix" ng-value="prefix.id"> {{prefix.text}}
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.firstName.$error.required }">
+                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2 " })
+                    <div class="col-12 col-md-12">
+                        <input type="text" class="form-control col-md-10" id="firstName" name="firstName"
+                               ng-model="register.FirstName" autocomplete="off" placeholder="ชื่อ" required />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.lastName.$error.required }">
+                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2" })
+                    <div class="col-12 col-md-12">
+                        <input type="text" class="form-control col-md-10" id="lastName" name="lastName"
+                               ng-model="register.LastName" autocomplete="off" placeholder="นามสกุล" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.gender.$error.required }">
+                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <label class="pl-4" ng-model="register.GenderID">
+                        <input type="radio" name="gender" ng-value="M"> <span class="pr-3">ชาย</span>
+                        <input type="radio" name="gender" ng-value="F"> หญิง
+                    </label>
+                </div>
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.nationality.$error.required }">
+                    @Html.LabelFor(model => model.Nationality, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2" })
+                    <div class="col-12 col-md-12">
+                        <input type="text" class="form-control col-md-10" id="nationality" name="nationality"
+                               ng-model="register.Nationality" autocomplete="off" placeholder="สัญชาติ" required />
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.race.$error.required }">
+                    @Html.LabelFor(model => model.Race, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2" })
+                    <div class="col-12 col-md-12">
+                        <input type="text" class="form-control col-md-10" id="race" name="race"
+                               ng-model="register.Race" autocomplete="off" placeholder="เชื้อชาติ" required />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.religion.$error.required }">
+                    @Html.LabelFor(model => model.Religion, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2" })
+                    <div class="col-12 col-md-12">
+                        <select class="form-control col-md-10" name="religion" id="religion" ng-model="register.ReligionID">
+                            <option ng-repeat="religion in religions" value="{{religion.id}}">{{religion.text}}</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.status.$error.required }">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <label class="pl-4" ng-repeat="status in statuses" ng-model="register.StatusID">
+                        <input type="radio" name="prefix" ng-value="status.id"> {{status.text}}
+                    </label>
+                </div>
+                <div class="col-12 col-md-6" ng-class="{ 'validation-error': formProject.birthday.$error.required }">
+                    @Html.LabelFor(model => model.Birthday, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <div class="col-12 col-md-12 input-group-append pointer">
+                        <input type="text" class="form-control datepicker" id="birthday" name="birthday"
+                               ng-model="register.Birthday" autocomplete="off" ng-csp-datepicker="" required />
+                        <div class="input-group-text dp-icon" ng-click="setFocus('birthday')">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="card">
+            <h5 class="card-header header-table">วุฒิการศึกษา</h5>
+            <div class="form-group row pt-3">
+                <div class="col-12 col-md-12" ng-class="{ 'validation-error': formProject.educational.$error.required }">
+                    @Html.LabelFor(model => model.Educational, htmlAttributes: new { @class = "control-label font-weight-bold col-md-2 " })
+                    <div class="input-group col-12 col-md-10" ng-class="{ 'validation-error': formProject.examCenterSelect.$error.required }">
+                        <select class="form-control col-md-10" name="educational" id="educational" ng-model="register.EducationalID">
+                            <option ng-repeat="educational in educationals" value="{{educational.id}}">{{educational.text}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-6">
+                    @Html.LabelFor(model => model.SchoolType, htmlAttributes: new { @class = "control-label font-weight-bold col-12 col-md-12" })
+                    <label class="pl-4">
+                        <input class="pl-4" type="radio" ng-model="register.SchoolType" value="G"> <span class="pr-3">รัฐบาล</span> 
+                        <input class="pl-4" type="radio" ng-model="register.SchoolType" value="P"> เอกชน
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>   
+</div>
+
+<div class="form-group row">
+    <div class="col-12 col-md-12 text-center">
+        @Html.Captcha("เปลี่ยน", "กรอกตัวอักษรที่อยู่บนหน้าเว็บ", 5, "Validate your captcha", false)
+        @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+    </div>
+
+</div>
+
+<div class="form-group row pt-3">
+    <div class="col-12 col-md-12 text-center">
+        <input type="submit" value="ส่งใบสมัคร" class="btn btn-success" />
+        <a href="@Url.Action("NewsMain","Home")" class="btn btn-primary">@*<i class="fas fa-backward"></i>*@ กลับ</a>
+    </div>
+</div>
+@*}*@
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+@section scripts {
+    <script src="~/Scripts/views/EExam/register-master.js"></script>
+
+}

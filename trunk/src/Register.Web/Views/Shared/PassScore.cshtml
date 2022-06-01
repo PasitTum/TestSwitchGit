@@ -1,0 +1,176 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "ค้นหารายชื่อผู้สอบผ่าน";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="registerApp" ng-controller="searchExamPassController">
+    <div class="col-12">
+        <form name="searchExamPass">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">ค้นหารายชื่อผู้สอบผ่าน</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row ">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchExamPass.citizenID.$error.pattern || searchExamPass.citizenID.$error.required) && searchExamPass.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button ng-click="submit()" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="showPass">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">เลขประจำตัวสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{examPassInfo.SEAT_NO}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อ-นามสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{examPassInfo.FULL_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{examPassInfo.CLASS_NAME}}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="table-responsive">
+                        <table class="table w-100 table-bordered">
+                            <thead>
+                                <tr class="text-center bg-light">
+                                    <th>
+                                        ผลการทดสอบเพื่อวัดความรู้ความสามารถทั่วไป
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <td class="vertical-align-middle">
+                                        <div class="text-center">
+                                            <div class="col-12 mt-5">
+                                                <lebel class="font-weight-bold text-success information">สอบผ่าน</lebel>
+                                            </div>
+                                            <div class="col-12 my-5">
+                                                <a href="@Url.Action("Score","Announce")?testTypeID={{testTypeID}}" class="btn btn-outline-success">ตรวจสอบผลคะแนน</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 ng-cloak" ng-show="showFail">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">เลขประจำตัวสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{examPassInfo.SEAT_NO}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อ-นามสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{examPassInfo.FULL_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{examPassInfo.CLASS_NAME}}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="table-responsive">
+                        <table class="table w-100 table-bordered">
+                            <thead>
+                                <tr class="text-center bg-light">
+                                    <th>
+                                        ผลการทดสอบเพื่อวัดความรู้ความสามารถทั่วไป
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <td class="vertical-align-middle">
+                                        <div class="text-center">
+                                            <div class="col-12 mt-5">
+                                                <lebel class="font-weight-bold text-danger information">ไม่ผ่าน</lebel>
+                                            </div>
+                                            <div class="col-12 my-5">
+                                                <a href="@Url.Action("Score","Announce")?testTypeID={{testTypeID}}" class="btn btn-outline-danger">ตรวจสอบผลคะแนน</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center">ไม่พบข้อมูลการสมัครสอบ หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/search-exam-pass.js"></script>
+    <script>
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

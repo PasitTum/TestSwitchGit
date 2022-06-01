@@ -1,0 +1,12 @@
+﻿
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("Print", "Reports", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("ReportName", "SMSPayinReport")
+    @Html.Hidden("TestTypeID", "2")
+    @Html.Hidden("CitizenID", "1111111111111")
+    <input type="submit" />
+}

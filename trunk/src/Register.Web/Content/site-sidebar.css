@@ -1,0 +1,92 @@
+﻿/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: var(--sidebarBackground);
+    color: var(--normal-text-color);
+    transition: all 0.3s;
+}
+
+    #sidebar.active {
+        margin-left: -250px;
+    }
+
+    #sidebar .sidebar-header {
+        height: 80px;
+        padding: 0px;
+        background: var(--sidebarHeaderBg);
+    }
+
+a.menu-item {
+    display: flex !important;
+    vertical-align:middle;
+}
+
+.menu-item-text {
+    padding-left: 8px;
+}
+
+.menu-item-icon {
+    text-align: center;
+    min-width: 20px;
+    align-self: center!important;
+}
+
+.sidebar-logo {
+    height: auto;
+    max-width: 90% !important;
+    margin-top: 3vh;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: var(--sidebarElmC);
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+
+    #sidebar ul li a:hover {
+        color: var(--sidebarEleHovC);
+        background: var(--menu-item-background-hover); /*#a3d5f5;*/
+    }
+
+#sidebar ul li.active > a,
+a[aria-expanded="true"] {
+    color: var(--sidebarElmActC);
+    background: var(--menu-item-background-active);
+}
+
+#sidebar ul li.active > a:hover,
+a[aria-expanded="true"]:hover {
+    color: var(--sidebarEleHovC);
+    background: var(--menu-item-background-hover);
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: var(--sidebarElmActBg);
+}

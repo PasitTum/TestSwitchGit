@@ -1,0 +1,152 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "สมัคร SMS แจ้งเตือน";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="registerApp" ng-controller="smsRegisterController">
+    <div class="col-12">
+        <form name="searchSMS" ng-submit="submit()">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">สมัคร SMS แจ้งเตือน</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row ">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchSMS.citizenID.$error.pattern || searchSMS.citizenID.$error.required) && searchSMS.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="show">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อ-นามสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{smsStatus.FULL_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{smsStatus.CLASS_NAME}}
+                    </div>
+                </div>
+                @*<div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ศูนย์สอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{smsStatus.CENTER_EXAM_NAME}}
+                    </div>
+                </div>*@
+
+                <div class="row mt-5 ng-cloak" ng-if="isRegisted">
+                    <div class="col-12 font-weight-bold text-center information">บริการเสริม SMS</div>
+                    <div class="col-12 text-blue text-center information mt-3">ท่านได้สมัครรับข่าวสารทาง SMS แล้ว</div>
+                    <div class="col-12 mt-3 text-center">
+                        <label class="control-label font-weight-bold">สถานะการชำระเงิน</label> {{smsStatus.SMS_PAYMENT}}
+                    </div>
+                    <div class="col-12 mt-3 text-center ng-cloak">
+                        @using (Html.BeginForm("PrintSmsPayIn", "Reports", FormMethod.Post, new { area = "", enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("ReportName", "SMSPayinReport")
+                            <input type="hidden" id="TestTypeID" name="TestTypeID" value="{{testTypeID}}" />
+                            <input type="hidden" id="CitizenID" name="CitizenID" value="{{model.CitizenID}}" />
+                            <button type="submit" target="_blank" ng-if="smsStatus.SMS_PAYIN_BUTTON == 'Y'" class="btn btn-info"><i class="far fa-file-pdf fa-1x"></i>&nbsp;&nbsp;พิมพ์แบบฟอร์มการชำระเงินค่าบริการ SMS</button>
+                        }
+                    </div>
+                </div>
+
+                <div class="row mt-5 ng-cloak" ng-if="!isRegisted">
+                    <div class="col-12 font-weight-bold text-center information">บริการเสริม SMS</div>
+                    <div class="col-12 text-blue text-center information mt-3">ท่านต้องการรับข่าวสารทาง SMS</div>
+                    <div class="col-12 text-danger text-center mt-3">ค่าบริการเสริมจากบริษัท CWN 20 บาท โดยบริการเสริมไม่เกี่ยวข้อง กับ กรมการพัฒนาชุมชน</div>
+                    <div class="col-12 mt-3">
+                        <div class="col-12 col-md-6 offset-md-3">
+                            1. แจ้งเตือนกำหนดวันชำระเงินวันสุดท้าย<br />
+                            2. แจ้งเตือนวันประกาศรายชื่อผู้สมัครสอบและพิมพ์บัตรประจำตัวสอบ<br />
+                            3. แจ้งเตือนวันสอบล่วงหน้า<br />
+                            4. แจ้งเตือนเมื่อถึงวันประกาศผลสอบข้อเขียน<br />
+                            5. แจ้งเตือนเมื่อมีการประกาศสำคัญอื่นๆ เพิ่มเติมจากหน่วยงาน
+                        </div>
+                    </div>
+                </div>
+                <form name="smsRegister" ng-submit="smsRegis()" ng-if="!isRegisted">
+                    <div class="row mt-3 ng-cloak">
+                        <div class="col-12 col-md-10 offset-md-1">
+                            <div class="row">
+                                <label for="" class="control-label col-12 col-md-5 col-form-label text-md-right required">โทรศัพท์เคลื่อนที่</label>
+                                <div class="input-group col-12 col-md-6" ng-class="{ 'validation-error': (smsRegister.smsMobile.$error.pattern || smsRegister.smsMobile.$error.required) && smsRegister.smsMobile.$dirty }">
+                                    <input type="text" class="col-12 col-md-8 form-control" id="smsMobile" name="smsMobile"
+                                           maxlength="10" ng-pattern="/^[0-9]{10,10}$/"
+                                           ng-model="model.SMSMobile" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-success">สมัคร SMS แจ้งเตือน</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center">ไม่พบข้อมูล หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/ng-template" id="_SMSDialogModal.html">
+        @Html.Partial("_SMSDialogModal")
+    </script>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/sms-register.js?_=2021072102"></script>
+    <script>
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

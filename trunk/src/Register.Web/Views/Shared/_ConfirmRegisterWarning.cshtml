@@ -1,0 +1,81 @@
+﻿<div class="modal-header bg-lightgreen" ng-init="init()">
+    <h5 class="modal-title header-table font-weight-bold" id="projectEventModalLabel">คำเตือน!โปรดตรวจสอบความถูกต้องของข้อมูลครั้งสุดท้าย</h5>
+    <button type="button" class="close" aria-label="Close" ng-click="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="box-body">
+        <div class="pl-2 pr-2 font-weight-bold">
+            <div class="form-group row mt-3">
+                <div class="col-12 col-md-2"></div>
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label">เลขประจำตัวประชาชน</label>
+                <div class="input-group col-12 col-md-7">
+                    <label for="" class="col-12 col-md-8 ml-3 ml-md-0 style-citizenid">@Model.CitizenID</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-2"></div>
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label">ชื่อตัว - ชื่อสกุล</label>
+                <div class="input-group col-12 col-md-7">
+                    <label for="" class="col-12 col-md-8 ml-3 ml-md-0 style-citizenid">{{model.FullName}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-2"></div>
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label">วุฒิที่ใช้ในการสมัคร</label>
+                <div class="input-group col-12 col-md-7">
+                    <label for="" class="col-12 col-md-12 ml-3 ml-md-0 style-citizenid">{{model.ClassLevel}}</label>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                    <div class="col-12 col-md-2"></div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label">ภาค/เขต ที่สมัครสอบ</label>
+                    <div class="input-group col-12 col-md-7">
+                        <label for="" class="col-12 col-md-8 ml-3 ml-md-0 style-citizenid">{{model.CenterExamName}}</label>
+                    </div>
+                </div>*@
+            @*<div class="form-group row m-0">
+                    <div class="col-12 col-md-1"></div>
+                    <label for="" class="col-12 col-md-10 text-center col-form-label information">ภาค/เขต ที่สมัครสอบ</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-12 col-md-1"></div>
+                    <div class="col-12 col-md-10 text-center">
+                        <label for="" class="style-position px-md-3">{{model.CenterExamName}}</label>
+                    </div>
+                </div>*@
+            @*<div class="form-group row">
+                    <div class="col-12 col-md-2"></div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label">รหัสวิชา/กลุ่มวิชา</label>
+                    <div class="input-group col-12 col-md-7">
+                        <label for="" class="col-12 col-md-12 ml-3 ml-md-0 style-citizenid">{{model.ClassGroupName}}</label>
+                    </div>
+                </div>*@
+            <div class="form-group row m-0">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="col-12 col-md-10 text-center col-form-label information">ตำแหน่งที่สมัครสอบ</label>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-1"></div>
+                <div class="col-12 col-md-10 text-center">
+                    <label for="" class="style-position px-md-3">{{model.RegClassName}}</label>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-12 col-md-12 text-center">
+                    <label for="" class="text-danger information font-weight-bold">
+                        ผู้สมัครสอบจะสมัครได้เพียงครั้งเดียวเท่านั้น เมื่อกดส่งใบสมัครแล้วไม่สามารถเปลี่ยนแปลงหรือแก้ไขได้!!!<br />
+                        กรณีชื่อตัว-ชื่อสกุล หรือเลขประจำตัวประชาชนไม่ตรงกับบัตรประจำตัวประชาชน<br />
+                        จะไม่อนุญาตให้เข้าสอบ
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer text-center">
+    <button type="button" class="btn btn-success btn-standard-size ml-2" ng-click="ok()">ส่งใบสมัคร</button>
+    <button type="button" class="btn btn-danger btn-standard-size ml-2" ng-click="cancel()">แก้ไข</button>
+</div>

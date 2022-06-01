@@ -1,0 +1,109 @@
+﻿@{
+    var testTypeID = this.ViewContext.RouteData.GetRequiredString("testtypeid");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="~/Content/Images/favicon.ico?@Html.GetAppVersion()">
+    <title>@ViewBag.Title @SysParameterHelper.ApplicationName</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Our Custom CSS -->
+    <link href="~/Content/csp-datetimepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/csp-datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/three-dots/three-dots.css" />
+    <link rel="stylesheet" href="~/Content/Site.css?id=20220513">
+    @{
+        var cssFile = String.Format("~/Content/Site-Color-TestType{0}.css", testTypeID);
+        var absolutePath = HttpContext.Current.Server.MapPath(cssFile);
+        if (System.IO.File.Exists(absolutePath))
+        {
+            <link href="@Url.Content(cssFile + "?id=2021071901")" rel="stylesheet" type="text/css" />
+        }
+    }
+
+    <!-- Font Awesome JS -->
+    <link href="~/Content/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert2.min.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+    <script src="~/Scripts/angular-touch.min.js"></script>
+    <script src="~/Scripts/angular-sanitize.min.js"></script>
+    <script src="~/Scripts/ui-bootstrap.js"></script>
+    <script src="~/Scripts/ui-bootstrap-tpls.js"></script>
+    <script src="~/Scripts/sweetalert2.min.js"></script>
+
+    <script src="~/Scripts/csp-datetimepicker/bootstrap-datepicker.custom.js"></script>
+    <script src="~/Scripts/csp-datetimepicker/bootstrap-datepicker-thai.js"></script>
+    <script src="~/Scripts/csp-datetimepicker/locales/bootstrap-datepicker.th.js" charset="UTF-8"></script>
+    <script src="~/Scripts/csp-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+</head>
+<body>
+    <input type="hidden" id="TestTypeID" value="@testTypeID" />
+    <input type="hidden" id="YearNo" value="" />
+    <div class="wrapper" ng-app="registerApp">
+        <!-- Sidebar  -->
+
+        @{
+            var sideBarFileName = String.Format("_SideBar_TestType{0}", testTypeID);
+            var sideBarFile = "~/Views/Shared/" + sideBarFileName + ".cshtml";
+            var absolutePathSideBar = HttpContext.Current.Server.MapPath(sideBarFile);
+            if (System.IO.File.Exists(absolutePathSideBar))
+            {
+                @Html.Partial(sideBarFileName)
+            }
+            else
+            {
+                @Html.Partial("_SideBar")
+            }
+        }
+
+        <!-- Page Content  -->
+        <div id="content">
+            <div id="mobileHeader" class="d-md-none bg-sidebar-header my-0 py-2">
+                <a class="ml-2" href="@Url.Action("Index","Landing")">
+                    <img class="img-layout" src="~/Content/Images/logo.png?_=20220511" style="height:40px" />
+                </a>
+            </div>
+            <div class="testtype-header">
+                <span class="testtype-header-text">@Html.GetTesttypeShortname(testTypeID)</span>
+            </div>
+            <div class="site-banner">
+                <button type="button" id="sidebarCollapse" class="d-inline btn btn-info button-icon">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h4 class="d-inline pl-1 pl-md-4 col-md-12 font-weight-bold col-form-label information">@ViewBag.Title</h4>
+            </div>
+            <div class="container-fluid body-content pt-3 pb-3">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("_Footer"+testTypeID)
+    <script>
+        var TEST_TYPE_ID = "@testTypeID";
+        var WWW_ROOT = window.location.protocol + '//' + window.location.host + "@SysParameterHelper.AppRoot";
+        var TEST_TYPE_ROOT = WWW_ROOT + "/" + TEST_TYPE_ID;
+        var DOC_ROOT = WWW_ROOT + "/Docs";
+        var HOME_URL = "@Url.Action("Index","Home")";
+        var API_ROOT = "@SysParameterHelper.ApiUrlClientSide";
+        var EXAM_TYPE = "@SysParameterHelper.ExamType";
+    </script>
+
+    <script src="~/Scripts/csp-angular/csp-helper.js?_=2021071901"></script>
+    <script src="~/Scripts/csp-angular/ng-csp-module.js?_=2021071901"></script>
+    <script src="~/Scripts/csp-angular/ng-lookup-service.js?_=2021071901"></script>
+    <script src="~/Scripts/csp/csp-alert.js"></script>
+    <script type="text/javascript" src="~/Scripts/views/_layout.js?_=2021071901"></script>
+    <script type="text/javascript" src="~/Scripts/csp/csp-lib.js?_=2021071901"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

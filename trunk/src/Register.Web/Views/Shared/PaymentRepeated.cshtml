@@ -1,0 +1,225 @@
+﻿@model DLA.Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "ขอคืนเงิน กรณีชำระซ้ำ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="ocsApp" ng-controller="paymentRepeatedController">
+    <div class="col-12">
+        <form name="searchPaymentRepeated" ng-submit="search()">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">@ViewBag.Title</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10">
+                            <h5 style="text-decoration: underline; color:red;" class="font-weight-bold">เงื่อนไขในการคืนเงิน</h5>
+                            1.  ผู้สมัครสอบจะได้รับคืนเงินเฉพาะในส่วนของค่าสมัครสอบเท่านั้น (ไม่รวมถึงค่าธรรมเนียมธนาคาร และค่าบริการทางอินเทอร์เน็ตที่ผู้สมัครสอบชำระมาแล้ว) โดยธนาคารจะมีการหักเงินค่าธรรมเนียมสำหรับการทำรายการคืนเงินจากค่าสมัครสอบดังกล่าว เป็นจำนวน 10 บาท ต่อรายการ ก่อนนำเงินส่วนที่เหลือ <span style="color:red;" class="font-weight-bold">290 บาทต่อรายการ</span> โอนเข้าบัญชีเงินฝากตามที่ผู้สมัครสอบได้แจ้งไว้ในการทำคำขอคืนเงินต่อไป<br />
+                            2.  หากผู้สมัครสอบไม่ทำคำขอคืนเงินภายใน 15 วัน <span style="color:red;" class="font-weight-bold">(ภายในวันที่ 16 เมษายน 2564)</span> หลังจากจบโครงการรับสมัครสอบ สถ. จะถือว่าผู้สมัครสอบไม่ประสงค์จะรับเงินในส่วนนี้คืน<br />
+                            3.  สถ. และธนาคาร จะดำเนินการคืนเงินให้แก่ผู้สมัครสอบภายหลังจากจบโครงการรับสมัครสอบแล้ว <span style="color:red;" class="font-weight-bold">ไม่เกินวันที่ 14 พฤษภาคม 2564</span><br /><br />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchEnroll.citizenID.$error.pattern || searchEnroll.citizenID.$error.required) && searchEnroll.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">เลขหลังบัตรประจำตัวประชาชน (12 หลัก)</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchEnroll.laserCode.$error.pattern || searchEnroll.laserCode.$error.required) && searchEnroll.laserCode.$dirty }">
+                            <input type="text" class="form-control col-md-5 d-inline" id="laserCode" name="laserCode"
+                                   ng-model="model.LaserCode"
+                                   ng-pattern="/^[a-zA-Z]{2}[0-9]{10}$/"
+                                   maxlength="12" autocomplete="off" placeholder="ตัวอย่าง JT9999999999" required />
+                            <button type="button" ng-click="(searchPaymentRepeated.$valid || searchPaymentRepeated.$invalid) && openDialog()" class="btn btn-info d-inline ml-2">คลิกดูตัวอย่าง</button>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="show">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อ-นามสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{paymentInfo[0].FULL_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{paymentInfo[0].TESTING_CLASS_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ภาค/เขต</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{paymentInfo[0].CENTER_EXAM_NAME}}
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12" style="overflow-x: auto;">
+                        <table class="table w-100 table-bordered">
+                            <thead>
+                                <tr class="text-center bg-light">
+                                    <th>
+                                        รายการที่
+                                    </th>
+                                    <th>
+                                        วัน-เวลา ที่ชำระเงินซ้ำ
+                                    </th>
+                                    <th>
+                                        ชื่อผู้ที่ชำระเงินซ้ำ
+                                    </th>
+                                    <th>
+                                        จำนวนเงิน
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" ng-repeat="payment in paymentInfo">
+                                    <td class="vertical-align-middle">
+                                        <lebel>{{payment.SEQ_NO}}</lebel>
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        <lebel>{{payment.PAYMENT_DTM}}</lebel>
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        <lebel>{{payment.CUSTOMER_NAME}}</lebel>
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        <lebel>{{payment.AMOUNT}}</lebel>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row information">
+                    <div class="col-12 col-md-12 col-form-label">
+                        รวมทั้งหมด <label class="font-weight-bold">{{paymentInfo[0].PAYMENT_CNT}}</label> รายการ คิดเป็นจำนวนเงินที่ขอคืนได้ เท่ากับ <label class="font-weight-bold">{{paymentInfo[0].TOTAL_REFUND_AMT | number}}</label> บาท
+                    </div>
+                </div>
+                <div class="row mt-2 information">
+                    <div class="col-12 col-md-4 col-form-label text-md-right">
+                        <label class="font-weight-bold" style="text-decoration: underline; color:red;">กรุณาระบุข้อมูลที่จำเป็นสำหรับขอคืนเงิน</label>
+                    </div>
+                </div>
+                <form name="refundPayment" ng-submit="submit($event)">
+                    <div class="row information">
+                        <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อธนาคารบัญชีที่รับเงินคืน</label>
+                        <div class="col-12 col-md-5 col-form-label" ng-class="{ 'validation-error': refundPayment.bankID.$error.required && refundPayment.bankID.$dirty }">
+                            <select id="bankID" name="bankID"
+                                    @*oninvalid="this.setCustomValidity('กรุณาเลือกจังหวัด')"*@
+                                    ng-model="model.BANK_ID"
+                                    ng-change="BankNameChange()"
+                                    ng-disabled="paymentInfo[0].REQUEST_STATUS == 'Y'"
+                                    class="form-control col-12 col-md-9" required>
+                                <option value="">กรุณาเลือกธนาคาร</option>
+                                <option ng-repeat="bank in lstBanks" value="{{bank.id}}">{{bank.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row information">
+                        <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">เลขที่บัญชีธนาคารที่รับเงินคืน</label>
+                        <div class="col-12 col-md-5 col-form-label" ng-class="{ 'validation-error': (refundPayment.acctNo.$error.pattern || refundPayment.acctNo.$error.required) && refundPayment.acctNo.$dirty }">
+                            <input type="text" class="form-control col-12 col-md-9" id="acctNo" name="acctNo"
+                                   @*oninvalid="this.setCustomValidity('กรุณากรอกชื่อ')"*@
+                                   maxlength="20" ng-pattern="/^[0-9]{1,20}$/" ng-disabled="paymentInfo[0].REQUEST_STATUS == 'Y'"
+                                   ng-model="model.ACCT_NO" autocomplete="off" placeholder="เลขที่บัญชี (ระบุเป็นตัวเลขติดกันเท่านั้น)" required />
+                        </div>
+                    </div>
+                    <div class="row information">
+                        <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">หมายเลขโทรศัพท์มือถือ</label>
+                        <div class="col-12 col-md-5 col-form-label" ng-class="{ 'validation-error': (refundPayment.mobile.$error.pattern || refundPayment.mobile.$error.required) && refundPayment.mobile.$dirty }">
+                            <input type="text" class="form-control col-12 col-md-9" id="mobile" name="mobile"
+                                   maxlength="10" ng-pattern="/^[0-9]{10,10}$/" ng-disabled="paymentInfo[0].REQUEST_STATUS == 'Y'"
+                                   ng-model="model.MOBILE_NO" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" required />
+                        </div>
+                    </div>
+                    <div class="row information">
+                        <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">อีเมล</label>
+                        <div class="col-12 col-md-5 col-form-label" ng-class="{ 'validation-error': (refundPayment.email.$error.pattern || refundPayment.email.$error.required) && refundPayment.email.$dirty }">
+                            <input type="text" class="form-control col-12 col-md-9" id="email" name="email"
+                                   ng-pattern="/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*&#64(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$|[-]/i"
+                                   maxlength="50" ng-model="model.EMAIL" autocomplete="off" placeholder="อีเมล" ng-disabled="paymentInfo[0].REQUEST_STATUS == 'Y'" required />
+                        </div>
+                    </div>
+                    <div class="row information" ng-show="paymentInfo[0].REQUEST_STATUS == 'N'">
+                        <label class="font-weight-bold col-12 col-md-4 col-form-label text-md-right"></label>
+                        <div class="col-12 col-md-8 col-form-label">
+                            <button type="submit" class="btn btn-success" ng-disabled="checked"><i class="fas fa-save"></i>&nbsp;&nbsp;ยืนยันขอคืนเงิน</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row information mt-4" ng-show="paymentInfo[0].REQUEST_STATUS == 'Y'">
+                    <div class="col-12 col-md-12 col-form-label text-center">
+                        <h2 class="font-weight-bold" style="color: red;">ท่านได้มีการทำรายการในระบบ เพื่อขอคืนเงินเรียบร้อยแล้ว</h2>
+                        <h2 class="font-weight-bold" style="color: red;">เมื่อวันที่ {{paymentInfo[0].REQUEST_DATE}} เวลา {{paymentInfo[0].REQUEST_TIME}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center">ไม่พบข้อมูลการชำระเงินซ้ำ ของผู้สมัครสอบ หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="_CitizenDialogModal.html">
+        @Html.Partial("_CitizenDialogModal")
+    </script>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/peyment-repeated.js?_=2020031903"></script>
+    <script>
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+        $("#laserCode").attr("style", "text-transform:uppercase;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+            $("#laserCode").keypress(function (e) { return Character.isKeyEngNumCharacter(e); });
+            $("#acctNo").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#mobile").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

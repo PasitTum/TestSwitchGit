@@ -1,0 +1,159 @@
+﻿@{
+    var testTypeID = this.ViewContext.RouteData.GetRequiredString("testtypeid");
+}
+<script src="~/Scripts/views/_sidebar.js?_=202103030404"></script>
+<nav id="sidebar" ng-app="registerApp" ng-controller="sideBarController">
+    <div class="sidebar-header text-center">
+        <a href="@Url.Action("Index","Landing")">
+            @{
+                var logoFile = String.Format("~/Content/Images/logo-testType{0}.png", testTypeID);
+                var absolutePath = HttpContext.Current.Server.MapPath(logoFile);
+                if (System.IO.File.Exists(absolutePath))
+                {
+                    <img class="sidebar-logo" src="@Url.Content(logoFile)?_=20220511" />
+                }
+                else
+                {
+                    <img class="sidebar-logo" src="~/Content/Images/logo.png?_=20220511" />
+                }
+            }
+        </a>
+    </div>
+    <ul class="sidebar-menu" data-widget="tree">
+        <li>
+            <a class="menu-item" href='@Url.Action("Index","Home")'>
+                <div class="menu-item-icon"><i class="align-self-center fas fa-home"></i></div>
+                <div class="menu-item-text">หน้าหลัก</div>
+            </a>
+        </li>
+        @*<li ng-class="{'disCalendar': !IsScheduleOpen('QA')}">
+            <a class="menu-item" href="~/Docs/@testTypeID/vec2020042_3.pdf" target="_blank">
+                <div class="menu-item-icon"><i class="fas fa-book"></i></div>
+                <div class="menu-item-text">คำถามที่พบบ่อย</div>
+            </a>
+        </li>*@
+        <li ng-class="{'disCalendar': !IsScheduleOpen('QA')}">      
+            <a class="menu-item" href="@Url.Action("Faq","Home")">
+                @*<a class="menu-item"href="~/Docs/1/VEC_คำถามที่พบบ่อย.pdf" download>*@
+                <div class="menu-item-icon"><i class="fas fa-book"></i></div>
+                <div class="menu-item-text">สารพันปัญหา</div>
+            </a>
+        </li>
+        @*<li ng-class="{'disCalendar': !IsScheduleOpen('ENROLL_MANUAL')}">
+            <a class="menu-item" href="~/Content/Files/howto_exam.pdf?_=202103031901" target="_blank">
+            <div class="menu-item-icon"><i class="fas fa-book"></i></div>
+            <div class="menu-item-text">คู่มือแนะนำการสมัครสอบ</div></a>
+        </li>*@
+        <li ng-class="{'disCalendar': !IsScheduleOpen('ENROLL')}">
+            <a class="menu-item" href="@Url.Action("Register", "Register")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('ENROLL')) ? '' : ''}}" 
+               data-original-title="{{ (IsScheduleOpen('ENROLL')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="fas fa-pencil-alt"></i></div>
+                <div class="menu-item-text">สมัครสอบ</div>
+            </a>
+        </li>
+        @*<li>
+            <a class="menu-item" href="http://e-accreditation.ocsc.go.th/acc/index.html" target="_blank">
+                <div class="menu-item-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="menu-item-text">ตรวจสอบคุณวุฒิ<br />ตามที่ ก.พ. รับรอง</div>
+            </a>
+        </li>*@
+        @*<li>
+            <a class="menu-item" href="http://qualification60.otepc.go.th/login.php" target="_blank">
+                <div class="menu-item-icon"><i class="fas fa-book-open"></i></div>
+                <div class="menu-item-text">ตรวจสอบคุณวุฒิ<br />ตามที่ ก.ค.ศ. กำหนด</div>
+            </a>
+        </li>*@
+        <li ng-class="{'disCalendar': !IsScheduleOpen('PRINT_PAYIN')}">
+            <a class="menu-item" href="@Url.Action("PaymentStatus","Inquiry")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('PRINT_PAYIN')) ? '' : ''}}" 
+               data-original-title="{{ (IsScheduleOpen('PRINT_PAYIN')) ? '' : ''}}">
+                <div class="menu-item-icon"><span class="font-weight-bold information">฿</span></div>
+                <div class="menu-item-text">ค้นหาแบบฟอร์มการชำระเงิน</div>
+            </a>
+        </li>
+        <li ng-class="{'disCalendar': !IsScheduleOpen('ENROLL_CHECK_STATUS')}">
+            <a class="menu-item" href="@Url.Action("RegisterStatus","Inquiry")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('ENROLL_CHECK_STATUS')) ? '' : ''}}" 
+               data-original-title="{{ (IsScheduleOpen('ENROLL_CHECK_STATUS')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="fas fa-tasks"></i></div>
+                <div class="menu-item-text">ตรวจสอบสถานะ<br />การสมัครสอบ</div>
+            </a>
+        </li>
+        <li ng-class="{'disCalendar': !IsScheduleOpen('UPLOAD_PHOTO')}">
+            <a class="menu-item" href="@Url.Action("Upload", "Photo")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('UPLOAD_PHOTO')) ? '' : ''}}"
+               data-original-title="{{ (IsScheduleOpen('UPLOAD_PHOTO')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="fas fa-scroll"></i></div>
+                <div class="menu-item-text">อัปโหลดรูปถ่ายใหม่<br />กรณีรูปถ่ายไม่ถูกต้อง</div>
+            </a>
+        </li>
+        @*<li ng-class="{'disCalendar': !IsScheduleOpen('REUPLOAD_DOC')}">
+            <a class="menu-item" href="@Url.Action("Index", "ReUploadDocs")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('PRINT_PAYIN')) ? '' : ''}}"
+               data-original-title="{{ (IsScheduleOpen('PRINT_PAYIN')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="far fa-file-alt"></i></div>
+                <div class="menu-item-text">อัปโหลดเอกสารใหม่</div>
+            </a>
+        </li>*@
+        <li ng-class="{'disCalendar': !IsScheduleOpen('PRINT_EXAM_APPLICATION')}">
+            <a class="menu-item" href="@Url.Action("ExamApplication","Inquiry")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('PRINT_EXAM_APPLICATION')) ? '' : ''}}" 
+               data-original-title="{{ (IsScheduleOpen('PRINT_EXAM_APPLICATION')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="fas fa-print"></i></div>
+                <div class="menu-item-text">พิมพ์ใบสมัคร</div>
+            </a>
+        </li>
+        <li ng-class="{'disCalendar': !IsScheduleOpen('GET_EXAM_SITE_PRINT_EXAM_CARD')}">
+            <a class="menu-item" href="@Url.Action("SeatInfo", "Inquiry")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('GET_EXAM_SITE_PRINT_EXAM_CARD')) ? '' : ''}}"
+               data-original-title="{{ (IsScheduleOpen('GET_EXAM_SITE_PRINT_EXAM_CARD')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <div class="menu-item-text">ค้นหาสถานที่สอบ</div>
+            </a>
+        </li>
+                <li class="" ng-class="{'disCalendar': !IsScheduleOpen('SEARCH_SCORE')}">
+            <a class="menu-item" href="@Url.Action("Score","Announce")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('SEARCH_SCORE')) ? '' : 'ระบบยังไม่เปิดให้บริการ !'}}"
+               data-original-title="{{ (IsScheduleOpen('SEARCH_SCORE')) ? '' : 'ระบบยังไม่เปิดให้บริการ !'}}">
+                <div class="menu-item-icon"><i class="fas fa-scroll"></i></div>
+                <div class="menu-item-text">ดูผลคะแนนสอบ</div>
+            </a>
+        </li>
+        <li ng-class="{'disCalendar': !IsScheduleOpen('ENROLL')}">
+            <a class="menu-item" href="@Url.Action("Register", "SMS")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('ENROLL')) ? '' : ''}}"
+               data-original-title="{{ (IsScheduleOpen('ENROLL')) ? '' : ''}}">
+                <div class="menu-item-icon"><i class="fas fa-sms"></i></div>
+                <div class="menu-item-text">สมัคร SMS แจ้งเตือน</div>
+            </a>
+        </li>
+        @*<li ng-class="{'disCalendar': !IsScheduleOpen('REFUND_REPEATED_PAYMENTS')}">
+            <a class="menu-item" href="@Url.Action("PaymentRepeated","Inquiry")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('REFUND_REPEATED_PAYMENTS')) ? '' : 'ระบบเริ่มเปิดวันที่ 22 มี.ค. 64'}}"
+               data-original-title="{{ (IsScheduleOpen('REFUND_REPEATED_PAYMENTS')) ? '' : 'ระบบเริ่มเปิดวันที่ 22 มี.ค. 64'}}">
+                <div class="menu-item-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                <div class="menu-item-text">ขอคืนเงิน กรณีชำระซ้ำ</div>
+            </a>
+        </li>*@
+        @*<li ng-class="{'disCalendar': !IsScheduleOpen('SEARCH_EXAM_PASS')}">
+            <a class="menu-item" href="@Url.Action("PassScore","Announce")" data-toggle="tooltip" data-placement="right"
+               title="{{ (IsScheduleOpen('SEARCH_EXAM_PASS')) ? '' : 'ระบบยังไม่เปิดให้บริการ !'}}" 
+               data-original-title="{{ (IsScheduleOpen('SEARCH_EXAM_PASS')) ? '' : 'ระบบยังไม่เปิดให้บริการ !'}}">
+                <div class="menu-item-icon"><i class="fas fa-search"></i></div>
+                <div class="menu-item-text">ค้นหารายชื่อ<br />ผู้สอบผ่านข้อเขียน</div>
+            </a>
+        </li>*@
+        @*<li>
+            <a class="menu-item" href="http://qualification60.otepc.go.th/login.php" target="_blank">
+                <div class="menu-item-icon"><i class="fas fa-stamp"></i></div>
+                <div class="menu-item-text">ตรวจสอบคุณวุฒิที่รับรองเป็นข้าราชการครู</div>
+            </a>
+        </li>*@
+    </ul>
+</nav>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

@@ -1,0 +1,190 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "สมัครสอบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" ng-app="registerApp" ng-controller="registerController">
+    <div class="col-12 px-1 px-md-3">
+        <form method="post" action="@Url.Action("Register", "Register")" class="form-horizontal" id="checkCitizenID" name="checkCitizenID" ng-submit="validateCitizen($event)">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <h5 class="card-header header-table">@SysParameterHelper.ApplicationName</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row ">
+                        <div class="col-12 col-md-12 control-label col-form-label text-center text-blue information font-weight-bold">กรอกข้อมูลให้ตรงกับบัตรประจำตัวประชาชนของท่าน (ใบล่าสุด)</div>
+                    </div>
+                    <div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">เลขประจำตัวประชาชน (13 หลัก)</label>
+                        <div class="col-12 col-md-6" ng-class="{ 'validation-error': (checkCitizenID.citizenID.$error.pattern || checkCitizenID.citizenID.$error.required) && checkCitizenID.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5 d-inline" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="ตัวอย่าง 1234567890123" required />
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <label class="col-12 col-md-4 col-form-label text-md-right information"></label>
+                        <label for="" class="col-12 col-md-6 col-form-label text-danger ng-cloak">ตัวอย่าง&nbsp;&nbsp;1234567890123</label>
+                    </div>*@
+                    @*<div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">เลขหลังบัตรประจำตัวประชาชน (12 หลัก)</label>
+                        <div class="col-12 col-md-6" ng-class="{ 'validation-error': (checkCitizenID.laserCode.$error.pattern || checkCitizenID.laserCode.$error.required) && checkCitizenID.laserCode.$dirty }">
+                            <input type="text" class="form-control col-md-5 d-inline" id="laserCode" name="laserCode"
+                                   ng-model="model.LaserCode"
+                                   ng-pattern="/^[a-zA-Z]{2}[0-9]{10}$/"
+                                   maxlength="12" autocomplete="off" placeholder="ตัวอย่าง JT9999999999" required />
+                            <button type="button" ng-click="(checkCitizenID.$valid || checkCitizenID.$invalid) && openDialog()" class="btn btn-info d-inline ml-2">คลิกดูตัวอย่าง</button>
+                        </div>
+                    </div>*@
+                    @*<div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">คำนำหน้า (ไทย)</label>
+                        <div class="custom-control custom-radio custom-control-inline mt-2 ml-3 mr-0 ng-cloak" ng-repeat="prefix in prefixes">
+                            <input class="custom-control-input col-form-label" type="radio"
+                                   name="prefixID"
+                                   ng-model="model.PrefixID"
+                                   id="prefix_{{prefix.id}}"
+                                   value="{{prefix.id}}" required>
+                            <label class="custom-control-label pointer" onclick="" for="prefix_{{prefix.id}}">{{prefix.text}}</label>
+                        </div>
+                        <div class="col-12 col-md-3 pl-md-3 d-inline check-element animate-show-hide ng-cloak" ng-if="model.PrefixID == '999999'">
+                            <div class="input-group" ng-class="{ 'validation-error': model.PrefixID == '999999' && checkCitizenID.prefixName.$error.required && checkCitizenID.prefixName.$dirty }">
+                                <input type="text" class="form-control" id="prefixName" name="prefixName"
+                                       ng-model="model.PrefixName"
+                                       maxlength="255" autocomplete="off" placeholder="คำนำหน้า (ไทย)" required />
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">ชื่อตัว</label>
+                        <div class="col-12 col-md-6" ng-class="{ 'validation-error': checkCitizenID.firstName.$error.required && checkCitizenID.firstName.$dirty }">
+                            <input type="text" class="form-control col-md-5 pr-2" id="firstName" name="firstName"
+                                   ng-model="model.FirstName"
+                                   maxlength="255" autocomplete="off" placeholder="ชื่อตัว" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-12 col-md-4 col-form-label text-md-right information"></label>
+                        <label for="" class="col-12 col-md-6 col-form-label text-danger ng-cloak">ไม่ต้องใส่ "คำนำหน้า", ไม่ต้องใส่ "ชื่อกลาง"</label>
+                    </div>
+                    <div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">ชื่อสกุล</label>
+                        <div class="col-12 col-md-6" ng-class="{ 'validation-error': checkCitizenID.lastName.$error.required && checkCitizenID.lastName.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="lastName" name="lastName"
+                                   ng-model="model.LastName"
+                                   maxlength="255" autocomplete="off" placeholder="ชื่อสกุล" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-12 col-md-4 col-form-label text-md-right information"></label>
+                        <label for="" class="col-12 col-md-8 col-form-label text-danger">(โปรดระบุชื่อตัว-ชื่อสกุลของท่าน ให้ตรงตามที่ปรากฏในบัตรประจำตัวประชาชนโดยไม่ต้องกรอกคำนำหน้า)</label>
+                    </div>
+                    <div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">วัน/เดือน/ปี เกิด (พ.ศ.)</label>
+                        <div class="input-group col-12 col-md-8 pointer">
+                            <div class="col-12 px-0">
+                                <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">วัน</label>
+                                <select ng-model="model.BirthDateDay" ng-change="validateAge()" style="min-width: 70px;"
+                                        class="form-control col-8 col-md-1 d-inline-flex" id="birthdateDay" name="birthdateDay">
+                                    <option class="custom-option" value="--">--</option>
+                                    <option class="custom-option" ng-repeat="option in lstDay" value="{{option}}">
+                                        {{option}}
+                                    </option>
+                                </select> <label for="" class="col-form-label mx-1 d-none d-md-inline">/</label>
+                                <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">เดือน</label>
+                                <select ng-model="model.BirthDateMonth" ng-change="validateAge()" style="min-width: 70px;"
+                                        class="form-control col-8 col-md-1 d-inline-flex" id="birthdateMonth" name="birthdateMonth">
+                                    <option class="custom-option" value="--">--</option>
+                                    <option class="custom-option" ng-repeat="option in lstMonth" value="{{option}}">
+                                        {{option}}
+                                    </option>
+                                </select> <label for="" class="col-form-label mx-1 d-none d-md-inline">/</label>
+                                <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">ปี</label>
+                                <select ng-model="model.BirthDateYear" ng-change="validateAge()" style="min-width: 85px;"
+                                        class="form-control col-8 col-md-1 d-inline-flex" id="birthdateYear" name="birthdateYear" required>
+                                    <option class="custom-option" value="0000">--</option>
+                                    <option class="custom-option" ng-repeat="option in lstYear" value="{{option}}">
+                                        {{option}}
+                                    </option>
+                                </select> 
+                                <label for="" class="col-form-label mt-1 col-3 d-inline-flex d-md-none" ng-if="showAges"></label>
+                                <label for="" class="col-form-label text-danger ml-2" ng-if="showAges" ng-cloak>อายุ {{model.AgeYear}} ปี {{model.AgeMonth}} เดือน</label>
+                            </div>                           
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-12 col-md-4 col-form-label text-md-right information"></label>
+                        <label for="" class="col-12 col-md-6 col-form-label text-danger ng-cloak">หากบนบัตรประชาชนไม่มีวันหรือเดือนเกิดให้เลือกเป็น '--'</label>
+                    </div>
+                    <div class="row">
+                        <label class="col-12 col-md-4 col-form-label text-md-right information"></label>
+                        <label for="" class="col-12 col-md-6 col-form-label text-danger ng-cloak">(อายุต้องไม่ต่ำกว่า 18 ปี นับถึงวันที่ปิดรับสมัครในวันที่ {{closeEnrollDate}})</label>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", true)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button type="submit" class="btn btn-success" ng-disabled="checked"><i class="fas fa-paper-plane"></i>&nbsp;&nbsp;สมัครสอบ</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                    @*<div class="row mt-5 justify-content-center">
+                        <div class="col-12 col-md-5 text-center">
+                            <img style="width:100%; border: 1px solid gray;" src="~/Content/Images/Warning_Thai_Name_Web.jpg" />
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+            <input type="hidden" id="TestTypeID" name="TestTypeID" value="{{model.TestTypeID}}" />
+            <input type="hidden" id="CenterExamID" name="CenterExamID" value="{{model.CenterExamID}}" />
+            <input type="hidden" id="CenterExamName" name="CenterExamName" value="{{model.CenterExamName}}" />
+            <input type="hidden" id="RegClassID" name="RegClassID" value="{{model.RegClassID}}" />
+            <input type="hidden" id="RegClassName" name="RegClassName" value="{{model.RegClassName}}" />
+            <input type="hidden" id="ExamType" name="ExamType" value="{{model.ExamType}}" />
+            <input type="hidden" id="AgeDay" name="AgeDay" value="{{model.AgeDay}}" />
+            <input type="hidden" id="AgeMonth" name="AgeMonth" value="{{model.AgeMonth}}" />
+            <input type="hidden" id="AgeYear" name="AgeYear" value="{{model.AgeYear}}" />
+            <input type="hidden" id="BirthDate" name="BirthDate" value="{{model.BirthDate}}" />
+            <input type="hidden" id="BirthDateChar" name="BirthDateChar" value="{{model.BirthDateChar}}" />
+        </form>
+    </div>
+    <script type="text/ng-template" id="_RegisterStepDialogModal.html">
+        @Html.Partial("_RegisterStepDialogModal")
+    </script>
+
+    <script type="text/ng-template" id="_CitizenDialogModal.html">
+        @Html.Partial("_CitizenDialogModal")
+    </script>
+</div>
+@section scripts {
+    <script src="~/Scripts/views/register-check-citizen.js?id=20220531"></script>
+    <script>
+        var HOME_URL = "@Url.Action("Index", "Home")";
+        var oldData = @Html.Raw(Model.ToJson());
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+        $("#laserCode").attr("style", "text-transform:uppercase;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#laserCode").keypress(function (e) { return Character.isKeyEngNumCharacter(e); });
+            //$("#firstName").keypress(function (e) { return Character.isKeyThaiCharacter(e); });
+            //$("#lastName").keypress(function (e) { return Character.isKeyThaiCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+
+    </script>
+}
+
+@*<div>
+        <i class="fas fa-backward"></i>
+        @Html.ActionLink("Back to List", "NewsMain","Home")
+    </div>*@

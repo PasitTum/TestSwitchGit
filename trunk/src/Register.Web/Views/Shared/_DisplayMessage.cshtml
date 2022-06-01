@@ -1,0 +1,63 @@
+﻿@model Register.Models.MessageModel
+@{
+    Layout = null;
+    var contextual = "info";
+    switch (Model.MessageType)
+    {
+        case EMessageType.Information:
+            contextual = "primary";
+            break;
+        case EMessageType.Error:
+            contextual = "danger";
+            break;
+        case EMessageType.Warning:
+            contextual = "warning";
+            break;
+        case EMessageType.Success:
+            contextual = "success";
+            break;
+        default:
+            break;
+    }
+    Model.ReturnText = (Model.ReturnText.IsNull() ? "กลับหน้าหลัก" : Model.ReturnText);
+    Model.ReturnUrl = (Model.ReturnUrl.IsNull() ? Url.Action("Index", "Home", new { Area = "Enroll" }) : Model.ReturnUrl);
+}
+
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="card border">
+            <h5 class="card-header font-weight-bold @(contextual.IsInList("success,danger,primary") ? "text-white" : "text-dark") bg-@(contextual)">
+                @Model.Title
+            </h5>
+            <div class="card-body text-center">
+                <div class="text-@(contextual) mb-1">
+                    @if (Model.MessageType == EMessageType.Information)
+                    {
+                        <i class="fas fa-info-circle fa-4x"></i>
+                    }
+                    else if (Model.MessageType == EMessageType.Success)
+                    {
+                        <i class="fas fa-check-circle fa-4x"></i>
+                    }
+                    else if (Model.MessageType == EMessageType.Error)
+                    {
+                        <i class="fas fa-exclamation-circle fa-4x"></i>
+                    }
+                    else if (Model.MessageType == EMessageType.Warning)
+                    {
+                        <i class="fas fa-exclamation-triangle fa-4x"></i>
+                    }
+                </div>
+                <div>
+                    <h5 class="text-@(contextual)">
+                        @Model.Message
+                    </h5>
+                    @Html.Raw(Model.Message2)
+                    <div class="align-middle text-center mt-3">
+                        <a href="@Model.ReturnUrl" class="btn btn-danger text-white">@Model.ReturnText</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

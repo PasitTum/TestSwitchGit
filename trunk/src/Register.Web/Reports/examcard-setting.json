@@ -1,0 +1,140 @@
+[
+  {
+    "varname": "EXAM_SEAT_NO",
+    "fieldname": "EXAM_SEAT_NO",
+    "size": 19,
+    "font-style": "bold",
+    "page": 1,
+    "x": 63, // 58
+    "y": 52.4
+  },
+  {
+    "varname": "TESTING_CLASS_NAME",
+    "fieldname": "TESTING_CLASS_NAME",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 55, //54
+    "y": 61.1
+  },
+  {
+    "varname": "CITIZEN_ID",
+    "fieldname": "CITIZEN_ID",
+    "size": 17,
+    "objecttype": "citizen",
+    "font-style": "bold",
+    "page": 1,
+    "x": 68, // 63
+    "y": 69.5
+  },
+  {
+    "varname": "FULL_NAME",
+    "fieldname": "FULL_NAME",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 51,
+    "y": 78
+  },
+  {
+    "varname": "EXAM_DATE",
+    "fieldname": "EXAM_DATE",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 44,
+    "y": 86.5
+  },
+  {
+    "varname": "EXAM_TIME",
+    "fieldname": "EXAM_TIME",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 112,
+    "y": 86.5
+  },
+  {
+    "varname": "EXAM_LOCATION",
+    "fieldname": "EXAM_LOCATION",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 48, // 51
+    "y": 95
+  },
+  {
+    "varname": "EXAM_ROOM",
+    "fieldname": "EXAM_ROOM",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 143,
+    "y": 95
+  },
+  {
+    "varname": "EXAM_BUILDING",
+    "fieldname": "EXAM_BUILDING",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 39,
+    "y": 103.7
+  },
+  {
+    "varname": "EXAM_FL",
+    "fieldname": "EXAM_FL",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 134,
+    "y": 103.7
+  },
+  {
+    "varname": "EXAM_ROW",
+    "fieldname": "EXAM_ROW",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 154.5,
+    "y": 103.7
+  },
+  {
+    "varname": "EXAM_ROW",
+    "fieldname": "EXAM_LROW",
+    "size": 17,
+    "font-style": "bold",
+    "page": 1,
+    "x": 184.5,
+    "y": 103.7
+  },
+  {
+    "varname": "DateFooterP1",
+    "fieldname": "Date",
+    "objecttype": "date",
+    "size": 12,
+    "page": 1,
+    "x": 139,
+    "y": 286.2
+  },
+  {
+    "varname": "IPFooterP1",
+    "fieldname": "IP",
+    "objecttype": "ip",
+    "size": 12,
+    "page": 1,
+    "x": 174,
+    "y": 286.2
+  },
+  {
+    "varname": "Photo",
+    "fieldname": "PHOTO_FILE_BASE64",
+    "objecttype": "photo",
+    "size": 12,
+    "page": 1,
+    "x": 170,
+    "y": 52,
+    "w": 80,
+    "h": 100
+  }
+]

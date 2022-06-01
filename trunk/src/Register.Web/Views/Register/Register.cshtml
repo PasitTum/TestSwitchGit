@@ -1,0 +1,1390 @@
+﻿@model Register.Models.RegisterModel
+@{
+    ViewBag.Title = "สมัครสอบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="registerApp" ng-controller="registerController">
+    <form method="post" action="@Url.Action("RegisterStep1", "Register")" id="register" name="register" ng-submit="submit($event)">
+        @Html.AntiForgeryToken()
+        <div class="ng-cloak">
+            <div class="col-12 px-1 px-md-3">
+                <div class="card">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">@SysParameterHelper.ApplicationName</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="row">
+                            <div class="col-11 col-md-12 col-form-label text-danger information ml-2">
+                                หมายเหตุ : กรุณาระบุข้อมูลให้ครบถ้วน หากไม่สามารถระบุได้ให้ใส่เครื่องหมาย -
+                            </div>
+                        </div>
+                        @*<div class="form-group row mb-0">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right pt-md-2 col-form-label font-weight-bold" style="margin-top:5px!important">ภาค/เขต ที่สมัครสอบ</label>
+                            <div class="col-12 col-md-6 col-form-label style-citizenid">
+                                <label>{{model.CenterExamName}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-0">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">ตำแหน่งที่สมัครสอบ</label>
+                            <div class="col-12 col-md-6 col-form-label style-citizenid">
+                                <label>{{model.RegClassName}}</label>
+                            </div>
+                        </div>*@
+                        <div class="form-group row mb-0">
+                            <input type="hidden" id="laserCode" name="laserCode" ng-model="model.LaserCode" value="{{model.LaserCode}}" />
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">เลขประจำตัวประชาชน</label>
+                            <div class="col-12 col-md-3 col-form-label style-citizenid">
+                                <label>{{model.CitizenID}}</label>
+                            </div>
+                            @*<label for="" class="control-label col-12 col-md-2 text-md-right pt-md-2 col-form-label required">บัตรประชาชนออกให้ ณ จังหวัด</label>
+                            <div class="input-group col-12 col-md-4 pt-md-1" ng-class="{ 'validation-error': register.citizenProvinceID.$error.required && register.citizenProvinceID.$dirty }">
+                                <select id="citizenProvinceID" name="citizenProvinceID"
+                                        ng-model="model.CitizenProvinceID"
+                                        class="form-control col-12 col-md-9" required>
+                                    <option value="">กรุณาเลือกจังหวัด</option>
+                                    <option ng-repeat="province in lstProvinces" value="{{province.id}}">{{province.text}}</option>
+                                </select>
+                            </div>*@
+
+                        </div>
+                        @*<div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">วันที่ออกบัตร</label>
+                            <div class="input-group col-6 col-md-3 pointer" ng-class="{ 'validation-error': register.issuedate.$error.required && register.issuedate.$dirty }">
+                                <input type="text" class="form-control datepicker ml-3 ml-md-0" style="max-width: 200px;" id="issuedate" name="issuedate"
+                                       ng-model="model.IssueDate" autocomplete="off" ng-csp-datepicker required />
+                                <div class="input-group-append pointer">
+                                    <div class="input-group-text dp-icon" ng-click="setFocus('issuedate')">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">บัตรหมดอายุ</label>
+                            <div class="input-group col-6 col-md-4 pointer" ng-class="{ 'validation-error': register.expireddate.$error.required && register.expireddate.$dirty }">
+                                <input type="text" class="form-control datepicker ml-3 ml-md-0" style="max-width: 200px;" id="expireddate" name="expireddate"
+                                       ng-model="model.ExpiredDate" autocomplete="off" ng-csp-datepicker required />
+                                <div class="input-group-append pointer">
+                                    <div class="input-group-text dp-icon" ng-click="setFocus('expireddate')">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-md-2 d-none d-md-flex text-md-right col-form-label"></label>
+                            <label for="" class="col-12 col-md-8 col-form-label text-danger">(ในวันเข้าสอบ บัตรประจำตัวประชาชน ของผู้สมัคร ต้องไม่หมดอายุ มิฉะนั้น จะไม่มีสิทธิ์เข้าสอบ)</label>
+                        </div>*@
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">คำนำหน้า</label>
+
+                            <div class="input-group col-12 col-md-10">
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-3" ng-repeat="prefix in prefixes">
+                                    <input class="custom-control-input col-form-label" type="radio" name="prefixID"
+                                           ng-model="model.PrefixID"
+                                           id="prefix_{{prefix.id}}"
+                                           ng-change="genderChange()"
+                                           value="{{prefix.id}}" required>
+                                    <label class="custom-control-label pointer" onclick="" for="prefix_{{prefix.id}}">{{prefix.text}}</label>
+                                </div>
+                                <div class="col-12 col-md-3 d-inline ng-cloak" ng-if="model.PrefixID == '999999'">
+                                    <div class="input-group" ng-class="{ 'validation-error': model.PrefixID == '999999' && register.prefixName.$error.required && register.prefixName.$dirty }">
+                                        <input type="text" class="form-control col-12 col-md-12" id="prefixName" name="prefixName"
+                                               ng-model="model.PrefixName" autocomplete="off"
+                                               placeholder="คำนำหน้า (ไทย)" required />
+
+                                    </div>
+                                </div>
+                                <input type="hidden" ng-if="model.PrefixID != '999999'" id="prefixName" name="prefixName" ng-model="model.PrefixName" value="{{model.PrefixName = getNameFromID(prefixes, model.PrefixID)}}" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อตัว</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.firstName.$error.required  && register.firstName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="firstName" name="firstName"
+                                       @*oninvalid="this.setCustomValidity('กรุณากรอกชื่อ')"*@
+                                       ng-model="model.FirstName" autocomplete="off" placeholder="ชื่อตัว" readonly="readonly" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อสกุล</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.lastName.$error.required  && register.lastName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="lastName" name="lastName"
+                                       ng-model="model.LastName" autocomplete="off" placeholder="ชื่อสกุล" readonly="readonly" />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required ">เพศ</label>
+
+                            <div class="input-group col-12 col-md-10">
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-3" ng-repeat="gen in genders">
+                                    <input class="custom-control-input col-form-label" type="radio"
+                                           name="gender"
+                                           ng-model="model.Gender"
+                                           id="gender_{{gen.id}}"
+                                           value="{{gen.id}}" required>
+                                    <label class="custom-control-label pointer" onclick="" for="gender_{{gen.id}}">{{gen.text}}</label>
+                                </div>
+                                <input type="hidden" id="genderName" name="genderName" ng-model="model.GenderName" value="{{model.GenderName = getNameFromID(genders, model.Gender)}}" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">สัญชาติ</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.nationName.$error.required  && register.nationName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="nationName" name="nationName"
+                                       ng-model="model.NationName" autocomplete="off" placeholder="สัญชาติ" readonly="readonly" required />
+                            </div>
+
+                            @*<label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เชื้อชาติ</label>
+                                <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.raceName.$error.required  && register.raceName.$dirty }">
+                                    <input type="text" class="form-control col-12 col-md-9" id="raceName" name="raceName"
+                                           ng-model="model.RaceName" autocomplete="off" placeholder="เชื้อชาติ" required />
+                                </div>*@
+                        </div>
+                        @*<div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ศาสนา</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.religionID.$error.required  && register.religionID.$dirty }">
+                                <select id="religionID" name="religionID"
+                                        ng-model="model.ReligionID"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกศาสนา</option>
+                                    <option ng-repeat="religion in religions" value="{{religion.id}}">{{religion.text}}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3 pl-md-3 d-inline check-element animate-show-hide ng-cloak" ng-if="model.ReligionID == '999999'">
+                                <div class="input-group" ng-class="{ 'validation-error': model.ReligionID == '999999' && register.religionName.$error.required && register.religionName.$dirty }">
+                                    <input type="text" class="form-control col-12 col-md-12" id="religionName" name="religionName"
+                                           ng-model="model.ReligionName"
+                                           maxlength="255" autocomplete="off" placeholder="ศาสนา" required />
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">สถานภาพ</label>
+
+                            <div class="input-group col-12 col-md-8">
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-3" ng-repeat="status in statuses">
+                                    <input class="custom-control-input col-form-label" type="radio" name="statusID"
+                                           ng-model="model.StatusID"
+                                           id="status_{{status.id}}"
+                                           value="{{status.id}}" required>
+                                    <label class="custom-control-label pointer" onclick="" for="status_{{status.id}}">{{status.text}}</label>
+                                </div>
+                            </div>
+                            <input type="hidden" id="statusName" name="statusName" ng-model="model.StatusName" value="{{model.StatusName = getNameFromID(statuses, model.StatusID)}}" />
+                        </div>
+                        @*<div class="form-group row">
+                                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">วัน/เดือน/ปี เกิด (พ.ศ.)</label>
+                                <div class="input-group col-6 col-md-4 pointer" style="max-width: 200px;" ng-class="{ 'validation-error': register.birthdate.$error.required && register.birthdate.$dirty }">
+                                    <input type="text" class="form-control ml-3 ml-md-0" id="birthdate" name="birthdate"
+                                           ng-model="model.BirthDate" autocomplete="off"
+                                           readonly="readonly" />
+                                    <div class="input-group-append pointer">
+                                        <div class="input-group-text dp-icon">
+                                            <i class="fas fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="" class="col-form-label text-danger">อายุ {{model.AgeYear}} ปี {{model.AgeMonth}} เดือน {{model.AgeDay}} วัน</label>
+                                </div>
+                            </div>*@
+
+                        <div class="row mt-3">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">วัน/เดือน/ปี เกิด (พ.ศ.)</label>
+                            <div class="input-group col-12 col-md-8 pointer">
+                                <div class="col-12 px-0">
+                                    <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">วัน</label>
+                                    <select ng-model="model.BirthDateDay" ng-change="validateAge()" style="min-width: 70px;"
+                                            class="form-control col-8 col-md-1 d-inline-flex" id="birthdateDay" name="birthdateDay" disabled="disabled">
+                                        <option class="custom-option" ng-repeat="option in lstDay" value="{{option}}">
+                                            {{option}}
+                                        </option>
+                                    </select> <label for="" class="col-form-label mx-1 d-none d-md-inline">/</label>
+                                    <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">เดือน</label>
+                                    <select ng-model="model.BirthDateMonth" ng-change="validateAge()" style="min-width: 70px;"
+                                            class="form-control col-8 col-md-1 d-inline-flex" id="birthdateMonth" name="birthdateMonth" disabled="disabled">
+                                        <option class="custom-option" ng-repeat="option in lstMonth" value="{{option}}">
+                                            {{option}}
+                                        </option>
+                                    </select> <label for="" class="col-form-label mx-1 d-none d-md-inline">/</label>
+                                    <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">ปี</label>
+                                    <select ng-model="model.BirthDateYear" ng-change="validateAge()" style="min-width: 85px;"
+                                            class="form-control col-8 col-md-1 d-inline-flex" id="birthdateYear" name="birthdateYear" disabled="disabled">
+                                        <option class="custom-option" value="0000">--</option>
+                                        <option class="custom-option" ng-repeat="option in lstYear" value="{{option}}">
+                                            {{option}}
+                                        </option>
+                                    </select>
+                                    <label for="" class="col-form-label mt-1 col-3 d-inline-flex d-md-none"></label>
+                                    <label for="" class="col-form-label text-danger ml-2">อายุ {{model.AgeYear}} ปี {{model.AgeMonth}} เดือน</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-md-2 d-none d-md-flex text-md-right col-form-label"></label>
+                            <label for="" class="col-12 col-md-8 col-form-label text-danger">(อายุต้องไม่ต่ำกว่า 18 ปี นับถึงวันที่ปิดรับสมัครในวันที่ {{closeEnrollDate}})</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">ตำแหน่งที่สมัคร และวุฒิการศึกษา</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="form-group row mt-3">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ตำแหน่งที่สมัครสอบ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.regClassID.$error.required && register.regClassID.$dirty }">
+                                <select id="regClassID" name="regClassID"
+                                        ng-model="model.RegClassID"
+                                        ng-change="regClassChange()"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="0">กรุณาเลือกตำแหน่งที่สมัครสอบ</option>
+                                    <option ng-repeat="class in lstClasses" value="{{class.id}}">{{class.text}}</option>
+                                </select>
+                            </div>
+                            @*<label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold" ng-if="model.RegClassID != '0'">รหัสวิชา/กลุ่มวิชา</label>
+                            <div class="input-group col-12 col-md-2 col-form-label" ng-if="model.RegClassID != '0'">
+                                {{model.ClassGroupName}}
+                            </div>*@
+                            <input type="hidden" id="classGroupName" name="classGroupName" ng-model="model.ClassGroupName" value="{{model.ClassGroupName}}" />
+                            <input type="hidden" id="regClassName" name="regClassName" ng-model="model.RegClassName" value="{{model.RegClassName = getNameFromID(lstClasses, model.RegClassID)}}" />
+                        </div>
+                        <div class="form-group row mt-3">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วุฒิที่ใช้ในการสมัคร</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.classLavelID.$error.required && register.classLavelID.$dirty }">
+                                <select id="classLavelID" name="classLavelID"
+                                        ng-model="model.ClassLavelID"
+                                        ng-change="educationChange()"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกวุฒิการศึกษา</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstEducationals')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="educational in lstEducationals" value="{{educational.id}}">{{educational.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstEducationals" })
+                            </div>
+                            <input type="hidden" id="classLavelName" name="classLavelName" ng-model="model.ClassLavelName" value="{{model.ClassLavelName = getNameFromID(lstEducationals, model.ClassLavelID)}}" />
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชื่อหลักสูตร/ปริญญาบัตร</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.degreeID.$error.required  && register.degreeID.$dirty }">
+                                <select id="degreeID" name="degreeID"
+                                        ng-model="model.DegreeID"
+                                        ng-change="degreeChange()"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกชื่อหลักสูตร/ปริญญาบัตร</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstDegrees')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="degree in lstDegrees" value="{{degree.id}}">{{degree.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstDegrees" })
+                            </div>
+                            <input type="hidden" ng-if="model.DegreeID != '999999'" id="degreeName" name="degreeName" ng-model="model.DegreeName" value="{{model.DegreeName = getNameFromID(lstDegrees, model.DegreeID)}}" />
+                            <div class="col-12 col-md-3 pl-md-3 d-inline check-element animate-show-hide ng-cloak" ng-if="model.DegreeID == '999999'">
+                                <div class="input-group" ng-class="{ 'validation-error': model.DegreeID == '999999' && register.degreeName.$error.required && register.degreeName.$dirty }">
+                                    <input type="text" class="form-control col-12 col-md-12" id="degreeName" name="degreeName"
+                                           ng-model="model.DegreeName"
+                                           maxlength="255" autocomplete="off" placeholder="ชื่อหลักสูตร/ปริญญาบัตร" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">สาขาวิชา/วิชาเอก</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.majorID.$error.required  && register.majorID.$dirty }">
+                                <select id="majorID" name="majorID"
+                                        ng-model="model.MajorID"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกสาขาวิชา/วิชาเอก</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstMajors')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="major in lstMajors" value="{{major.id}}">{{major.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstMajors" })
+                            </div>
+                            <input type="hidden" ng-if="model.MajorID != '999999'" id="majorName" name="majorName" ng-model="model.MajorName" value="{{model.MajorName = getNameFromID(lstMajors, model.MajorID)}}" />
+                            <div class="col-12 col-md-3 pl-md-3 d-inline check-element animate-show-hide ng-cloak" ng-if="model.MajorID == '999999'">
+                                <div class="input-group" ng-class="{ 'validation-error': model.MajorID == '999999' && register.majorName.$error.required && register.majorName.$dirty }">
+                                    <input type="text" class="form-control col-12 col-md-12" id="majorName" name="majorName"
+                                           ng-model="model.MajorName"
+                                           maxlength="255" autocomplete="off" placeholder="สาขาวิชา/วิชาเอก" required />
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required" ng-cloak>{{lstEducationals.length > 0 ? lstEducationals[0].title : "ชื่อปริญญา"}}</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.degreeName.$error.required  && register.degreeName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="degreeName" name="degreeName"
+                                       ng-model="model.DegreeName" autocomplete="off" placeholder="ชื่อปริญญา" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">สาขาวิชา/วิชาเอก</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.majorName.$error.required  && register.majorName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="majorName" name="majorName"
+                                       ng-model="model.MajorName" autocomplete="off" placeholder="สาขาวิชา/วิชาเอก" required />
+                            </div>
+                        </div>*@
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชื่อสถานศึกษา</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.schoolName.$error.required  && register.schoolName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="schoolName" name="schoolName"
+                                       ng-model="model.SchoolName" autocomplete="off" placeholder="เช่น มหาวิทยาลัยศิลปากร, จุฬาลงกรณ์มหาวิทยาลัย" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">จบการศึกษาคณะ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.facultyName.$error.required  && register.facultyName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="facultyName" name="facultyName"
+                                       ng-model="model.FacultyName" autocomplete="off" placeholder="เช่น นิติศาสตร์, รัฐศาสตร์" required />
+                            </div>
+                            <div class="col-12 col-md-3 pl-md-3 col-form-label text-danger">(หากไม่สามารถระบุคณะได้ให้ใส่เครื่องหมาย -)</div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ที่ตั้งสถานศึกษา</label>
+                            <div class="input-group col-12 col-md-4">
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-3">
+                                    <input class="custom-control-input col-form-label" type="radio" name="schoolFlag"
+                                           ng-model="model.SchoolFlag"
+                                           id="sch_loc_0"
+                                           value="DOM" required>
+                                    <label class="custom-control-label pointer" onclick="" for="sch_loc_0">ในประเทศ</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-3">
+                                    <input class="custom-control-input col-form-label" type="radio" name="schoolFlag"
+                                           ng-model="model.SchoolFlag"
+                                           id="sch_loc_1"
+                                           value="FOR" required>
+                                    <label class="custom-control-label pointer" onclick="" for="sch_loc_1">ต่างประเทศ</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row" ng-if="model.SchoolFlag == 'DOM'">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">จังหวัด</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': model.SchoolFlag == 'DOM' && register.schoolProvinceID.$error.required  && register.schoolProvinceID.$dirty }">
+                                <select id="schoolProvinceID" name="schoolProvinceID"
+                                        ng-model="model.SchoolProvinceID"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกจังหวัด</option>
+                                    <option ng-repeat="province in lstProvinces" value="{{province.id}}">{{province.text}}</option>
+                                </select>
+                            </div>
+                            <input type="hidden" id="schoolProvinceName" name="schoolProvinceName" ng-model="model.SchoolProvinceName" value="{{model.SchoolProvinceName = getNameFromID(lstProvinces, model.SchoolProvinceID)}}" />
+                        </div>
+
+                        <div class="form-group row" ng-if="model.SchoolFlag == 'FOR'">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ประเทศ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': model.SchoolFlag == 'FOR' && register.schoolProvinceName.$error.required  && register.schoolProvinceName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="schoolProvinceName" name="schoolProvinceName"
+                                       ng-model="model.SchoolProvinceName" autocomplete="off" placeholder="ประเทศ" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วัน/เดือน/ปี ที่สำเร็จการศึกษา</label>
+                            <div class="input-group col-6 col-md-6 pointer" style="max-width: 200px;"
+                                 ng-class="{ 'validation-error': register.graduatedate.$error.required && register.graduatedate.$dirty }">
+                                <input type="text" class="form-control datepicker" id="graduatedate" name="graduatedate"
+                                       ng-model="model.GraduateDate" autocomplete="off" ng-csp-datepicker required />
+                                <div class="input-group-append pointer">
+                                    <div class="input-group-text dp-icon" ng-click="setFocus('graduatedate')">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <label for="" class="col-12 col-md-3 col-form-label text-danger ng-cloak">(ภายในวันปิดรับสมัคร {{closeEnrollDate}})</label>
+                        </div>
+                        @*<div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">คะแนนเฉลี่ย</label>
+                            <div class="input-group col-12 col-md-2" ng-class="{ 'validation-error': register.gpa.$error.required  && register.gpa.$dirty }">
+                                <input type="text" class="form-control" id="gpa" name="gpa"
+                                       ng-model="model.GPA" autocomplete="off" placeholder="คะแนนเฉลี่ย" required />
+                            </div>
+                        </div>*@
+                        @* ก.พ. *@
+                        @*<div class="form-group row">
+
+                            <label for="" class="col-12 col-md-2 text-md-right col-form-label"></label>
+                            <div class="input-group col-12 col-md-8">
+                                <div class="custom-control custom-checkbox custom-control-inline mt-3 ml-2 mr-1 mr-md-0">
+                                    <input class="custom-control-input col-form-label" type="checkbox"
+                                           ng-model="ocscFlag"
+                                           id="ocscFlag" ng-change="ocscFlagChange()">
+                                    <label class="custom-control-label pointer font-weight-bold" onclick="" for="ocscFlag">
+                                        &nbsp;ข้าพเจ้าเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row mt-3">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ระดับวุฒิการศึกษา</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.ocscLevelID.$error.required && register.ocscLevelID.$dirty }">
+                                <select id="ocscLevelID" name="ocscLevelID"
+                                        ng-model="model.OCSCLevelID"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกวุฒิการศึกษา</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstOCSCEducationals')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="ocscEducational in lstOCSCEducationals" value="{{ocscEducational.id}}">{{ocscEducational.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstOCSCEducationals" })
+                            </div>
+                            <input type="hidden" id="ocscLevelName" name="ocscLevelName" ng-model="model.OCSCLevelName" value="{{model.OCSCLevelName = getNameFromID(lstOCSCEducationals, model.OCSCLevelID)}}" />
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">เลขที่หนังสือรับรองฯ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.ocscCertNo.$error.required  && register.ocscCertNo.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="ocscCertNo" name="ocscCertNo"
+                                       ng-model="model.OCSCCertNo" autocomplete="off" placeholder="เลขที่หนังสือรับรองฯ" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วันที่สอบ</label>
+                            <div class="input-group col-6 col-md-6 pointer" style="max-width: 200px;"
+                                 ng-class="{ 'validation-error': register.ocscExamDate.$error.required && register.ocscExamDate.$dirty }">
+                                <input type="text" class="form-control datepicker" id="ocscExamDate" name="ocscExamDate"
+                                       ng-model="model.OCSCExamDate" autocomplete="off" ng-csp-datepicker required />
+                                <div class="input-group-append pointer">
+                                    <div class="input-group-text dp-icon" ng-click="setFocus('ocscExamDate')">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วันประกาศขึ้นทะเบียนสอบ</label>
+                            <div class="input-group col-6 col-md-6 pointer" style="max-width: 200px;"
+                                 ng-class="{ 'validation-error': register.ocscPassDate.$error.required && register.ocscPassDate.$dirty }">
+                                <input type="text" class="form-control datepicker" id="ocscPassDate" name="ocscPassDate"
+                                       ng-model="model.OCSCPassDate" autocomplete="off" ng-csp-datepicker required />
+                                <div class="input-group-append pointer">
+                                    <div class="input-group-text dp-icon" ng-click="setFocus('ocscPassDate')">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                        @* end ก.พ. *@
+                        @*<div class="form-group row mt-3">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วุฒิการศึกษาสูงสุด</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.classHighestLavelID.$error.required && register.classHighestLavelID.$dirty }">
+                                <select id="classHighestLavelID" name="classHighestLavelID"
+                                        ng-model="model.ClassHighestLavelID"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกวุฒิการศึกษาสูงสุด</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstHighestEducationals')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="educational in lstHighestEducationals" value="{{educational.id}}">{{educational.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstHighestEducationals" })
+                            </div>
+                            <input type="hidden" id="classHighestLavelName" name="classHighestLavelName" ng-model="model.ClassHighestLavelName" value="{{model.ClassHighestLavelName = getNameFromID(lstHighestEducationals, model.ClassHighestLavelID)}}" />
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">สถานศึกษา</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.classHighestLavelSchoolName.$error.required  && register.classHighestLavelSchoolName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="classHighestLavelSchoolName" name="classHighestLavelSchoolName"
+                                       ng-model="model.ClassHighestLavelSchoolName" autocomplete="off" placeholder="สถานศึกษา" required />
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">ชื่อตัว-ชื่อสกุล ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="form-group row">
+
+                            <label for="" class="col-12 col-md-2 text-md-right col-form-label"></label>
+                            <div class="input-group col-12 col-md-8">
+                                <div class="custom-control custom-checkbox custom-control-inline mt-3 ml-2 mr-1 mr-md-0">
+                                    <input class="custom-control-input col-form-label" type="checkbox"
+                                           ng-model="eduFlag"
+                                           id="eduFlag" ng-change="eduFlagChange()">
+                                    <label class="custom-control-label pointer" onclick="" for="eduFlag">
+                                        &nbsp;ใช้คำนำหน้า ชื่อตัว และชื่อสกุลเดียวกับบัตรประชาชน
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">คำนำหน้า</label>
+
+                            <div class="input-group col-12 col-md-10">
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-3" ng-repeat="prefix in prefixes">
+                                    <input class="custom-control-input col-form-label" type="radio" name="eduPrefixID"
+                                           ng-model="model.EduPrefixID"
+                                           id="edu_prefix_{{prefix.id}}"
+                                           ng-change="eduPrefixChange()"
+                                           value="{{prefix.id}}" required>
+                                    <label class="custom-control-label pointer" onclick="" for="edu_prefix_{{prefix.id}}">{{prefix.text}}</label>
+                                </div>
+                                <div class="col-12 col-md-3 d-inline ng-cloak" ng-if="model.EduPrefixID == '999999'">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control col-12 col-md-12" id="eduPrefixName" name="eduPrefixName"
+                                               ng-model="model.EduPrefixName" autocomplete="off" ng-change="eduFlag = false"
+                                               placeholder="คำนำหน้า (ไทย)" />
+
+                                    </div>
+                                </div>
+                                <input type="hidden" ng-if="model.EduPrefixID != '999999'" id="eduPrefixName" name="eduPrefixName" ng-model="model.EduPrefixName" value="{{model.EduPrefixName = getNameFromID(prefixes, model.EduPrefixID)}}" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อตัว</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.eduFirstName.$error.required  && register.eduFirstName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="eduFirstName" name="eduFirstName"
+                                       @*oninvalid="this.setCustomValidity('กรุณากรอกชื่อ')"*@
+                                       ng-model="model.EduFirstName" autocomplete="off" placeholder="ชื่อตัว" ng-change="eduFlag = false" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อสกุล</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.eduLastName.$error.required  && register.eduLastName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="eduLastName" name="eduLastName"
+                                       ng-model="model.EduLastName" autocomplete="off" placeholder="ชื่อสกุล" ng-change="eduFlag = false" required />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-md-2 d-none d-md-flex text-md-right col-form-label"></label>
+                            <label for="" class="col-12 col-md-8 col-form-label text-danger">(โปรดระบุชื่อตัวและชื่อสกุลของท่านให้ตรงตามที่ปรากฏในคุณวุฒิการศึกษาที่ใช้ในการสมัครสอบ)</label>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            @*<div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">คุณมีความพิการตามหัวข้อด้านล่างนี้หรือไม่ ?</h5>
+                    <div class="form-group row mt-3">
+                        <div class="input-group col-12 offset-md-1 col-md-10">
+                            <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-0 col-12 col-md-12">
+                                <input class="custom-control-input col-form-label" type="radio" name="defectiveHelpID"
+                                       ng-model="model.DefectiveHelpID"
+                                       id="defectiveHelpID_0"
+                                       value="0" required>
+                                <label class="custom-control-label pointer" onclick="" for="defectiveHelpID_0">ไม่มีความพิการ</label>
+                            </div>
+                        </div>
+                        <div class="input-group col-12 offset-md-1 col-md-10">
+                            <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-0 col-12 col-md-12">
+                                <input class="custom-control-input col-form-label" type="radio" name="defectiveHelpID"
+                                       ng-model="model.DefectiveHelpID"
+                                       id="defectiveHelpID_2"
+                                       value="2" required>
+                                <label class="custom-control-label pointer" onclick="" for="defectiveHelpID_2">พิการทางขา</label>
+                            </div>
+                        </div>
+                        <div class="input-group col-12 offset-md-1 col-md-10">
+                            <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-0 col-12 col-md-12">
+                                <input class="custom-control-input col-form-label" type="radio" name="defectiveHelpID"
+                                       ng-model="model.DefectiveHelpID"
+                                       id="defectiveHelpID_4"
+                                       value="4" required>
+                                <label class="custom-control-label pointer" onclick="" for="defectiveHelpID_4">ตามัว ไม่สามารถอ่านตัวหนังสือขนาดปกติได้ <span class="font-weight-bold" style="color:red;">(มีใบรับรองแพทย์)</span></label>
+                            </div>
+                        </div>
+                        <div class="input-group col-12 offset-md-1 col-md-10">
+                            <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-0 col-12 col-md-12">
+                                <input class="custom-control-input col-form-label" type="radio" name="defectiveHelpID"
+                                       ng-model="model.DefectiveHelpID"
+                                       id="defectiveHelpID_1"
+                                       value="1" required>
+                                <label class="custom-control-label pointer" onclick="" for="defectiveHelpID_1">พิการทางการมองเห็น ตาบอดทั้ง 2 ข้าง <span class="font-weight-bold" style="color:red;">(จัดให้เข้าสอบตามที่ กสถ. กำหนด)</span></label>
+                            </div>
+                        </div>
+                        <div class="input-group col-12 offset-md-1 col-md-10">
+                            <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-0 col-12 col-md-12">
+                                <input class="custom-control-input col-form-label" type="radio" name="defectiveHelpID"
+                                       ng-model="model.DefectiveHelpID"
+                                       id="defectiveHelpID_3"
+                                       value="3" required>
+                                <label class="custom-control-label pointer" onclick="" for="defectiveHelpID_3">พิการทางการมองเห็น ตาบอดทั้ง 2 ข้าง และพิการทางขา <span class="font-weight-bold" style="color:red;">(จัดให้เข้าสอบตามที่ กสถ. กำหนด)</span></label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <input type="hidden" id="defectiveFlag" name="defectiveFlag" ng-model="model.DefectiveFlag" value="{{model.DefectiveHelpID == '0' ? model.DefectiveFlag = 'N' : model.DefectiveFlag = 'Y'}}" />
+                            <input type="hidden" id="defectiveHelpFlag" name="defectiveHelpFlag" ng-model="model.DefectiveHelpFlag" value="{{model.DefectiveHelpID == '0' ? model.DefectiveHelpFlag = 'N' : model.DefectiveHelpFlag = 'Y'}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">อาชีพปัจจุบัน</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="form-group row mt-3">
+                            <label for="" class="col-12 col-md-1 text-md-right col-form-label"></label>
+                            <div class="input-group col-12 col-md-9">
+                                <div class="custom-control custom-radio custom-control-inline mt-2 ml-2 mr-0 col-12 col-md-5" ng-repeat="career in lstOccupation">
+                                    <input class="custom-control-input col-form-label" type="radio" name="occuupationID"
+                                           ng-model="model.OccuupationID"
+                                           ng-change="carreerChange()"
+                                           id="career_{{career.id}}"
+                                           value="{{career.id}}" required>
+                                    <label class="custom-control-label pointer mt-2" onclick="" for="career_{{career.id}}">{{career.text}}</label>
+                                    <div class="ml-3 d-inline check-element animate-show-hide ng-cloak" ng-if="model.OccuupationID == '999999' && career.id == '999999'">
+                                        <div class="input-group" ng-class="{ 'validation-error': model.OccuupationID == '999999' && register.occuupationName.$error.required && register.occuupationName.$dirty }">
+                                            <input type="text" class="form-control col-12 col-md-12" id="occuupationName" name="occuupationName"
+                                                   ng-model="model.OccuupationName"
+                                                   maxlength="255" autocomplete="off" placeholder="อื่นๆ ระบุ" required />
+                                        </div>
+                                    </div>
+                                    @*<div class="ml-3 d-inline check-element animate-show-hide ng-cloak" ng-if="career.id == '1'">
+                                        <div class="input-group" ng-class="{ 'validation-error': model.OccuupationID == '1' && register.occuupationName4Gov.$error.required && register.occuupationName4Gov.$dirty }">
+                                            <input type="text" class="form-control col-12 col-md-12" id="occuupationName4Gov" name="occuupationName4Gov"
+                                                   ng-model="model.OccuupationName4Gov" ng-disabled="model.OccuupationID != '1'" ng-readonly="model.OccuupationID != '1'"
+                                                   maxlength="255" autocomplete="off" placeholder="ประเภทของข้าราชการ" required />
+                                        </div>
+                                    </div>*@
+                                </div>
+
+                                <input ng-if="model.OccuupationID != '999999'" type="hidden" id="occuupationName" name="occuupationName" ng-model="model.OccuupationName" value="{{model.OccuupationName = getNameFromID(lstOccupation, model.OccuupationID)}}" />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ตำแหน่ง</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.positionName.$error.required  && register.positionName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="positionName" name="positionName"
+                                       ng-model="model.PositionName" autocomplete="off" placeholder="ตำแหน่ง" ng-readonly="occFlag" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">สถานที่ทำงาน</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.stationName.$error.required  && register.stationName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="stationName" name="stationName"
+                                       ng-model="model.StationName" autocomplete="off" placeholder="สถานที่ทำงาน" ng-readonly="occFlag" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">กอง/สำนัก/อื่น ๆ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.departmentName.$error.required  && register.departmentName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="departmentName" name="departmentName"
+                                       ng-model="model.DepartmentName" autocomplete="off" placeholder="กอง/สำนัก/อื่น ๆ" ng-readonly="occFlag" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">อัตราเงินเดือน</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.salary.$error.required  && register.salary.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="salary" name="salary"
+                                       ng-model="model.Salary" autocomplete="off" placeholder="อัตราเงินเดือน" ng-readonly="occFlag" required />
+                            </div>
+                            <label for="" class="col-12 col-md-4 text-md-left col-form-label text-danger">(กรณีไม่มีเงินเดือนให้ใส่เลข 0.00)</label>
+                        </div>
+                        @*<div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์เคลื่อนที่</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': (register.officemobile.$error.pattern || register.officemobile.$error.required) && register.officemobile.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="officemobile" name="officemobile"
+                                       maxlength="10" ng-pattern="/^[0-9]{10,10}$/"
+                                       ng-model="model.OfficeMobile" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" ng-readonly="occFlag" required />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">โทรศัพท์ที่ทำงาน</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.officetel.$error.required  && register.officetel.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="officetel" name="officetel"
+                                       maxlength="9" ng-model="model.OfficeTel" autocomplete="off" placeholder="โทรศัพท์ที่ทำงาน" ng-readonly="occFlag" />
+                            </div>
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">ต่อ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.officetelex.$error.required  && register.officetelex.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="officetelex" name="officetelex"
+                                       maxlength="9" ng-model="model.OfficeTelEx" autocomplete="off" placeholder="ต่อ" ng-readonly="occFlag" />
+                            </div>
+                        </div>*@
+                        @*<div class="form-group row my-0">
+                            <label for="" class="col-12 offset-md-2 col-md-8 col-form-label text-danger">หากไม่สามารถระบุเบอร์โทรศัพท์ที่ทำงานได้ ให้ใส่เครื่องหมาย –</label>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">ที่อยู่ตามทะเบียนบ้าน</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="row mt-3">
+                            <label class="col-12 col-md-1 col-form-label text-md-right information"></label>
+                            <label for="" class="col-12 col-md-8 col-form-label text-danger ng-cloak">กรุณาระบุข้อมูลให้ครบถ้วน หากไม่สามารถระบุได้ให้ใส่เครื่องหมาย –</label>
+                        </div>
+                        <div class="form-group row mt-3">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">บ้านเลขที่</label>
+                            <div class="input-group col-12 col-md-2" ng-class="{ 'validation-error': register.tbbaddrNo.$error.required  && register.tbbaddrNo.$dirty }">
+                                <input type="text" class="form-control" id="tbbaddrNo" name="tbbaddrNo"
+                                       ng-model="model.TbbAddrNo" autocomplete="off" placeholder="บ้านเลขที่" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชั้น/อาคาร/หมู่บ้าน</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.tbbvillage.$error.required  && register.tbbvillage.$dirty }">
+                                <input type="text" class="form-control" id="tbbvillage" name="tbbvillage"
+                                       ng-model="model.TbbVillage" autocomplete="off" placeholder="ชั้น/อาคาร/หมู่บ้าน" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-1 text-md-right col-form-label required">หมู่ที่</label>
+                            <div class="input-group col-12 col-md-2" ng-class="{ 'validation-error': register.tbbmoo.$error.required  && register.tbbmoo.$dirty }">
+                                <input type="text" class="form-control" id="tbbmoo" name="tbbmoo"
+                                       ng-model="model.TbbMoo" autocomplete="off" placeholder="หมู่" required />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ตรอก/ซอย/แยก</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.tbbsoi.$error.required  && register.tbbsoi.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="tbbsoi" name="tbbsoi"
+                                       ng-model="model.TbbSoi" autocomplete="off" placeholder="ตรอก/ซอย/แยก" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ถนน</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.tbbroad.$error.required  && register.tbbroad.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="tbbroad" name="tbbroad"
+                                       ng-model="model.TbbRoad" autocomplete="off" placeholder="ถนน" required />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">จังหวัด</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.tbbprovID.$error.required  && register.tbbprovID.$dirty }">
+                                <select id="tbbprovID" name="tbbprovID"
+                                        ng-model="model.TbbProvID"
+                                        ng-change="tbbprovinceChange()"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกจังหวัด</option>
+                                    <option ng-repeat="province in lstProvinces" value="{{province.id}}">{{province.text}}</option>
+                                </select>
+                                <input type="hidden" id="tbbProvName" name="tbbProvName" ng-model="model.TbbProvName" value="{{model.TbbProvName = getNameFromID(lstProvinces, model.TbbProvID)}}" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เขต/อำเภอ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.tbbamphID.$error.required  && register.tbbamphID.$dirty }">
+                                <select id="tbbamphID" name="tbbamphID"
+                                        ng-model="model.TbbAmphID"
+                                        ng-change="tbbamphurChange()"
+                                        class="form-control col-12 col-md-9" required>
+                                    <option value="">กรุณาเลือกอำเภอ</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstTbbAmphs')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="amph in lstTbbAmphs" value="{{amph.id}}">{{amph.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstTbbAmphs" })
+                                <input type="hidden" id="tbbAmphName" name="tbbAmphName" ng-model="model.TbbAmphName" value="{{model.TbbAmphName = getNameFromID(lstTbbAmphs, model.TbbAmphID)}}" />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">แขวง/ตำบล</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.tbbtmblID.$error.required  && register.tbbtmblID.$dirty }">
+                                <select id="tbbtmblID" name="tbbtmblID"
+                                        ng-model="model.TbbTmblID"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกตำบล</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstTbbTmbls')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="tmbl in lstTbbTmbls" value="{{tmbl.id}}">{{tmbl.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstTbbTmbls" })
+                                <input type="hidden" id="tbbTmblName" name="tbbTmblName" ng-model="model.TbbTmblName" value="{{model.TbbTmblName = getNameFromID(lstTbbTmbls, model.TbbTmblID)}}" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">รหัสไปรษณีย์</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': (register.tbbzipcode.$error.pattern ||register.tbbzipcode.$error.required)  && register.tbbzipcode.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="tbbzipcode" name="tbbzipcode"
+                                       maxlength="5" ng-pattern="/^[0-9]{5}$/"
+                                       ng-model="model.TbbZipcode" autocomplete="off" placeholder="รหัสไปรษณีย์" required />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">โทรศัพท์บ้าน</label>
+                            <div class="input-group col-12 col-md-3">
+                                <input type="text" class="form-control col-12 col-md-12" id="tbbtel" name="tbbtel"
+                                       maxlength="9" ng-model="model.TbbTel" autocomplete="off" placeholder="โทรศัพท์บ้าน" />
+                            </div>
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">ต่อ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.tbbtelex.$error.required  && register.tbbtelex.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="tbbtelex" name="tbbtelex"
+                                       maxlength="9" ng-model="model.TbbTelEx" autocomplete="off" placeholder="ต่อ" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">ภูมิลําเนาปัจจุบัน</h5>
+                    <div class="pl-2 pr-2">
+                        @*<div class="row mt-3">
+                            <label class="col-12 col-md-1 col-form-label text-md-right information"></label>
+                            <label for="" class="col-12 col-md-8 col-form-label text-danger ng-cloak">กรุณาระบุข้อมูลให้ครบถ้วน หากไม่สามารถระบุได้ให้ใส่เครื่องหมาย –</label>
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="col-12 col-md-2 text-md-right col-form-label"></label>
+                            <div class="input-group col-12 col-md-8">
+                                <div class="custom-control custom-checkbox custom-control-inline mt-2 ml-2 mr-1 mr-md-0">
+                                    <input class="custom-control-input col-form-label" type="checkbox"
+                                           ng-model="tbbFlag"
+                                           id="tbbFlag" ng-change="tbbFlagChange()">
+                                    <label class="custom-control-label pointer" onclick="" for="tbbFlag">
+                                        &nbsp;ใช้ที่อยู่เดียวกับที่อยู่ตามทะเบียนบ้าน
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row mt-3">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">บ้านเลขที่</label>
+                            <div class="input-group col-12 col-md-2" ng-class="{ 'validation-error': register.addrNo.$error.required  && register.addrNo.$dirty }">
+                                <input type="text" class="form-control" id="addrNo" name="addrNo"
+                                       ng-model="model.AddrNo" autocomplete="off" placeholder="บ้านเลขที่" ng-change="tbbFlag=false" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชั้น/อาคาร/หมู่บ้าน</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.village.$error.required  && register.village.$dirty }">
+                                <input type="text" class="form-control" id="village" name="village"
+                                       ng-model="model.Village" autocomplete="off" placeholder="ชั้น/อาคาร/หมู่บ้าน" ng-change="tbbFlag=false" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-1 text-md-right col-form-label required">หมู่ที่</label>
+                            <div class="input-group col-12 col-md-2" ng-class="{ 'validation-error': register.moo.$error.required  && register.moo.$dirty }">
+                                <input type="text" class="form-control" id="moo" name="moo"
+                                       ng-model="model.Moo" autocomplete="off" placeholder="หมู่" ng-change="tbbFlag=false" required />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ตรอก/ซอย/แยก</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.soi.$error.required  && register.soi.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="soi" name="soi"
+                                       ng-model="model.Soi" autocomplete="off" placeholder="ตรอก/ซอย/แยก" ng-change="tbbFlag=false" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ถนน</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.road.$error.required  && register.road.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="road" name="road"
+                                       ng-model="model.Road" autocomplete="off" placeholder="ถนน" ng-change="tbbFlag=false" required />
+                            </div>
+
+                        </div>*@
+                        <div class="form-group row mt-3">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">จังหวัด</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.provID.$error.required  && register.provID.$dirty }">
+                                <select id="provID" name="provID"
+                                        ng-model="model.ProvID"
+                                        ng-change="tbbFlag=false; provinceChange();"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกจังหวัด</option>
+                                    <option ng-repeat="province in lstProvinces" value="{{province.id}}">{{province.text}}</option>
+                                </select>
+                                <input type="hidden" id="provName" name="provName" ng-model="model.ProvName" value="{{model.ProvName = getNameFromID(lstProvinces, model.ProvID)}}" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เขต/อำเภอ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.amphID.$error.required  && register.amphID.$dirty }">
+                                <select id="amphID" name="amphID"
+                                        ng-model="model.AmphID"
+                                        ng-change="tbbFlag=false; amphurChange();"
+                                        class="form-control col-12 col-md-9" required>
+                                    <option value="">กรุณาเลือกอำเภอ</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstAmphs')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="amph in lstAmphs" value="{{amph.id}}">{{amph.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstAmphs" })
+                                <input type="hidden" id="amphName" name="amphName" ng-model="model.AmphName" value="{{model.AmphName = getNameFromID(lstAmphs, model.AmphID)}}" />
+                            </div>
+
+                        </div>
+                        @*<div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">แขวง/ตำบล</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.tmblID.$error.required  && register.tmblID.$dirty }">
+                                <select id="tmblID" name="tmblID"
+                                        ng-model="model.TmblID" ng-change="tbbFlag=false"
+                                        class="form-control col-12 col-md-12" required>
+                                    <option value="">กรุณาเลือกตำบล</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstTmbls')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="tmbl in lstTmbls" value="{{tmbl.id}}">{{tmbl.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstTmbls" })
+                            <input type="hidden" id="tmblName" name="tmblName" ng-model="model.TmblName" value="{{model.TmblName = getNameFromID(lstTmbls, model.TmblID)}}" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">รหัสไปรษณีย์</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': (register.zipcode.$error.pattern ||register.zipcode.$error.required)  && register.zipcode.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="zipcode" name="zipcode"
+                                       maxlength="5" ng-pattern="/^[0-9]{5}$/" ng-change="tbbFlag=false"
+                                       ng-model="model.Zipcode" autocomplete="off" placeholder="รหัสไปรษณีย์" required />
+                            </div>
+
+                        </div>*@
+                        @*<div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์บ้าน</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.tel.$error.required  && register.tel.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="tel" name="tel"
+                                       maxlength="9" ng-model="model.Tel" autocomplete="off" placeholder="โทรศัพท์บ้าน" ng-change="tbbFlag=false" required />
+                            </div>
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">ต่อ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.telex.$error.required  && register.telex.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="telex" name="telex"
+                                       maxlength="9" ng-model="model.TelEx" autocomplete="off" placeholder="ต่อ" ng-change="tbbFlag=false" />
+                            </div>
+
+                        </div>*@
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์เคลื่อนที่</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': (register.mobile.$error.pattern || register.mobile.$error.required) && register.mobile.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="mobile" name="mobile"
+                                       maxlength="10" ng-pattern="/^[0-9]{10,10}$/"
+                                       ng-model="model.Mobile" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">อีเมล</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': (register.email.$error.pattern || register.email.$error.required) && register.email.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="email" name="email"
+                                       ng-pattern="/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*&#64(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$|[-]/i"
+                                       maxlength="100" ng-model="model.Email" autocomplete="off" placeholder="อีเมล" required />
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            @*<div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">ความรู้ความสามารถพิเศษ</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="form-group row mt-3">
+                            <label for="" class="col-12 offset-md-1 col-md-8 col-form-label text-danger">ตัวอย่าง พูด อ่าน เขียน ภาษาอังกฤษ, ใช้งานโปรแกรม Microsoft Office, เป็นพิธีกร, สามารถขับขี่เครื่องบิน หรือ มีความรู้ในการซ่อมรถยนต์ ฯลฯ</label>
+                        </div>
+                        <div class="form-group row mt-0">
+                            <label for="" class="col-12 col-md-1 text-md-right col-form-label"></label>
+                            <div class="input-group col-12 col-md-9" ng-class="{ 'validation-error': register.specialSkills.$error.required  && register.specialSkills.$dirty }">
+                                <input rows="2" type="text" class="form-control col-12 col-md-12" id="specialSkills" name="specialSkills"
+                                       ng-model="model.SpecialSkills" autocomplete="off" placeholder="ความรู้ความสามารถพิเศษ" />
+                            </div>
+                        </div>
+                        @*<div class="form-group row my-0">
+                                <label for="" class="col-12 offset-md-1 col-md-8 col-form-label text-danger">หากไม่สามารถระบุความรู้ความสามารถพิเศษได้ ให้ใส่เครื่องหมาย –</label>
+                            </div>
+                    </div>
+                </div>
+            </div>*@
+
+            @*<div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">บุคคลที่ติดต่อได้ ในกรณีฉุกเฉิน</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="form-group row mt-3">
+
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชื่อ</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.emergencyFirstName.$error.required  && register.emergencyFirstName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="emergencyFirstName" name="emergencyFirstName"
+                                       ng-model="model.EmergencyFirstName" autocomplete="off" placeholder="ชื่อผู้ติดต่อ" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">นามสกุล</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.emergencyLastName.$error.required  && register.emergencyLastName.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="emergencyLastName" name="emergencyLastName"
+                                       ng-model="model.EmergencyLastName" autocomplete="off" placeholder="นามสกุลผู้ติดต่อ" required />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ความสัมพันธ์</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.emergencyRelation.$error.required  && register.emergencyRelation.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="emergencyRelation" name="emergencyRelation"
+                                       ng-model="model.EmergencyRelation" autocomplete="off" placeholder="ความสัมพันธ์" required />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold required">โทรศัพท์เคลื่อนที่</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': (register.emergencyMoblie.$error.pattern || register.emergencyMoblie.$error.required) && register.emergencyMoblie.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="emergencyMoblie" name="emergencyMoblie"
+                                       maxlength="10" ng-pattern="/^[0-9]{10,10}$/"
+                                       ng-model="model.EmergencyMoblie" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label font-weight-bold required">โทรศัพท์บ้าน/สถานที่ทำงาน</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.emergencyTel.$error.required  && register.emergencyTel.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="emergencyTel" name="emergencyTel"
+                                       maxlength="9" ng-model="model.EmergencyTel" autocomplete="off" placeholder="โทรศัพท์บ้าน/สถานที่ทำงาน" />
+                            </div>
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label font-weight-bold">ต่อ</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': register.emergencytelex.$error.required  && register.emergencytelex.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="emergencytelex" name="emergencytelex"
+                                       maxlength="9" ng-model="model.EmergencyTelEx" autocomplete="off" placeholder="ต่อ" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-12 col-md-3 col-form-label text-md-right information"></label>
+                            <label for="" class="col-12 col-md-8 col-form-label text-danger ng-cloak">กรุณาระบุ หมายเลขโทรศัพท์เคลื่อนที่ หรือ โทรศัพท์บ้าน/สถานที่ทำงาน ของบุคคลที่ติดต่อได้ อย่างใดอย่างหนึ่ง</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>*@
+
+            @*<div class="col-12 px-1 px-md-3 ng-cloak">
+                <div class="card mt-3">
+                    <h5 class="card-header header-table">อัปโหลดเอกสาร</h5>
+                    <div class="card-body form-group pl-3 mb-0">
+                        <div class="form-group row">
+                            <label for="" ng-cloak ng-show="model.RegClassID == '0' || model.RegClassID == ''" class="col-12 col-md-12 col-form-label information font-weight-bold text-danger ml-2">กรุณาเลือกตำแหน่งที่จะสมัครก่อนอัปโหลดเอกสาร</label>
+                        </div>
+                        @Html.Partial("_DocumentUploadList")
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="col-12 px-1 px-md-3 ng-cloak">
+                <div class="card mt-3">
+                    <h5 class="card-header header-table">อัปโหลดรูปถ่าย</h5>
+                    <div class="card-body form-group pl-3">
+                        <div class="row mt-4 image-editor">
+                            <div class="col-12 col-md-5">
+                                <div class="row">
+                                    <div class="col-12 col-md-8 offset-md-2 text-center pb-2">
+                                        <div class="mt-2">
+                                            <span class="font-weight-bold information" style="color:red;">เมื่อส่งใบสมัครแล้ว จะไม่อนุญาตให้แก้ไขรูปถ่าย <br />ไม่ว่ากรณีใดๆ ทั้งสิ้น</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="text-center">
+                                        <input type="file" class="cropit-image-input" accept="image/*;capture=camera"
+                                               onchange="angular.element(this).scope().contentChanged(this)"
+                                               ng-model="fileUpload"
+                                               name="files" id="customFile" valid-file>
+                                        <button type="button" class="btn btn-info" id="btnCustomFile" ng-disabled="detecting"><i class="far fa-folder-open"></i>&nbsp;เลือกรูปถ่าย</button>
+                                        <button type="button" class="btn btn-primary capture-button" ng-disabled="detecting" ng-show="takePhoto" data-toggle="modal" data-target="#cameraModal" title="เปิดกล้อง"><i class="fas fa-camera"></i></button>
+                                        @*<label ng-if="files != null">&nbsp;&nbsp;{{files.name}}</label>*@
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12 text-center">
+                                    <div class="cropit-preview mx-auto" ng-class="{'custom-image-valid': (imageValid && hasFile && !detecting && !waitingDetect),'custom-image-invalid': (!imageValid && hasFile && !detecting && !waitingDetect),'custom-image-waiting': (waitingDetect)}"></div>
+                                    <div class="row">
+                                        <div ng-loading="detecting"></div>
+                                        <div class="col-12 col-md-12 text-center mt-2">
+                                            <label class="col-12" ng-if="detecting">&nbsp;&nbsp;</label>
+                                            <label class="text-warning" ng-if="waitingDetect">&nbsp;&nbsp;รอตรวจสอบรูปถ่าย...</label>
+                                            <label class="text-danger" ng-if="detecting">&nbsp;&nbsp;กำลังตรวจสอบรูปถ่าย...</label>
+                                            <label class="text-success" ng-if="imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;รูปถ่ายถูกต้อง</label>
+                                            <label class="text-danger" ng-if="!hasFile && !detecting">&nbsp;&nbsp;ยังไม่ได้เลือกรูปถ่าย</label>
+                                            <label class="text-danger" ng-if="!imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;{{ErrorMessImage}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-8 offset-md-2">
+                                            <div class="image-size-label mt-2">
+                                                ปรับขนาดรูป
+                                            </div>
+                                            <input type="range" class="cropit-image-zoom-input mt-md-2" ng-disabled="detecting || cropitZoomDisable">
+                                        </div>
+                                        @*<div class="col-12 col-md-4">
+                                                <div class="image-size-label mt-2">
+                                                    หมุนรูป
+                                                </div>
+                                                <button type="button" class="rotate-ccw btn p-1" title="หมุนซ้าย 90 องศา" ng-disabled="detecting"><i class="fas fa-undo fa-1x"></i></button>
+                                                <button type="button" class="rotate-cw btn p-1" title="หมุนขวา 90 องศา" ng-disabled="detecting"><i class="fas fa-undo fa-flip-horizontal fa-1x"></i></button>
+                                            </div>*@
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-7">
+                                <div class="font-weight-bold text-danger mt-3">รูปถ่ายที่ถูกต้อง</div>
+                                <div class="font-weight-bold col-12 col-md-12 mt-3">
+                                    1. รูปถ่ายหน้าตรง ไม่สวมแว่นตาดำ ไม่สวมหมวก หรือผ้าคลุมศีรษะใด ๆ ยกเว้นผ้าคลุมผมทางศาสนา<br /><br />
+                                    2. ห้ามตกแต่งภาพ หน้ามองตรง จมูก คิ้ว และปาก จะต้องปรากฏบนภาพภ่าย พื้นหลังไม่มีลวดลาย<br /><br />
+                                    3. ภาพถ่ายจะต้องครอบคลุมถึงศีรษะ และด้านบนของหัวไหล่ โดยให้เห็นใบหน้า 25% ของภาพถ่าย<br /><br />
+                                    4. ถ่ายไว้ไม่เกิน 6 เดือน<br /><br />
+                                    5. ขนาดไฟล์ไม่น้อยกว่า 40KB<br /><br />
+                                    6. ขนาดของรูปถ่าย 1 นิ้ว หรือ 1.5 นิ้ว<br /><br />
+                                    7. ประเภทไฟล์ .jpg หรือ .png เท่านั้น
+                                </div>
+                                <div class="mt-3 text-center text-md-left ml-md-4">
+                                    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">คลิกดูตัวอย่างรูปถ่ายที่ถูกต้อง</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12 offset-md-1 col-md-10" style="border: 2px solid black;">
+                                <div class="p-3 text-danger">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;รูปถ่ายจะปรากฏบนบัตรประจำตัวสอบสำหรับใช้แสดงตนในการเข้าสอบ<br /><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กรณีที่รูปถ่ายไม่ถูกต้องส่งผลต่อการตรวจสอบตัวบุคคลในการเข้าสอบ และหัวหน้าห้องสอบ หรือเจ้าหน้าที่คุมสอบ <span class="font-weight-bold" style="color:red; text-decoration: underline;">อาจไม่อนุญาตให้เข้าสอบ</span> โดยถือเป็นความบกพร่องของผู้สมัครสอบ และจะอ้างว่าระบบรับสมัครสอบได้ทำการรับสมัครสอบไว้แล้วไม่ได้
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row mt-3">
+                                <div class="col-12 col-md-12 text-center">
+                                    <div class="">
+                                        <button type="button" class="btn btn-success" ng-click="confirmUpload()">ยืนยันรูปถ่ายที่ใช้ในการสมัคร</button>
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    @*<div class="form-group row mt-4 mb-0">
+                        <div class="col-12">
+                            <label for="" class="ml-4 ml-md-4 mr-4 mr-md-0">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การสมัครสอบตามขั้นตอนข้างต้น ถือว่าผู้สมัครสอบเป็นผู้ลงลายมือ และรับรองความถูกต้องของข้อมูลดังกล่าว ตามพระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ.2544
+                                และที่แก้ไขเพิ่มเติม ดังนั้น หากผู้สมัครสอบจงใจกรอกข้อมูลอันเป็นเท็จ อาจมีความผิดทางอาญา ฐานแจ้งความเท็จต่อเจ้าพนักงาน
+                            </label>
+                        </div>
+                    </div>
+                    <hr />*@
+                    <div class="form-group row mt-0 mb-4">
+                        <div class="input-group col-12 col-md-12">
+                            <div class="custom-control custom-checkbox custom-control-inline mt-2 ml-2 mr-1 mr-md-0">
+                                <input class="custom-control-input col-form-label" type="checkbox"
+                                       ng-model="confirm"
+                                       id="confirm">
+                                <label class="custom-control-label pointer" onclick="" for="confirm">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="font-weight-bold">ข้าพเจ้าขอให้คำรับรองว่า</span> ข้อมูลข้างต้นเป็นความจริงทุกประการ โดยข้าพเจ้าได้อ่านและเข้าใจประกาศ<span ng-if="model.TestTypeID == 2">รับสมัครสอบแข่งขันเพื่อบรรจุและแต่งตั้งบุคคลเข้ารับราชการในตำแหน่งเจ้าพนักงานปกครองปฏิบัติการ (ปลัดอำเภอ) ประจำปีงบประมาณ พ.ศ. 2564</span><span ng-if="model.TestTypeID == 3">กรมการปกครอง เรื่อง รับสมัครสอบแข่งขันเพื่อบรรจุและแต่งตั้งบุคคลเข้ารับราชการในสังกัดกรมการปกครอง ประจำปี พ.ศ. 2564</span> ซึ่งข้าพเจ้ามีคุณสมบัติทั่วไปครบถ้วนและไม่มีลักษณะต้องห้ามตามมาตรา 36 แห่งพระราชบัญญัติระเบียบข้าราชการพลเรือน พ.ศ. 2551 และมีคุณสมบัติเฉพาะสำหรับตำแหน่งตรงตามประกาศรับสมัครฯ ทุกประการ
+                                    <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทั้งนี้ หากมีการตรวจสอบเอกสารหรือคุณวุฒิของข้าพเจ้าในภายหลัง ปรากฎว่า ข้าพเจ้าไม่มีคุณสมบัติตรงตามประกาศรับสมัครฯ ให้ถือว่าข้าพเจ้าเป็นผู้ขาดคุณสมบัติและไม่มีสิทธิสมัครฯ มาตั้งแต่ต้น และข้าพเจ้าจะไม่ใช้สิทธิเรียกร้องใด ๆ ทั้งสิ้น และหากข้าพเจ้าจงใจกรอกข้อความอันเป็นเท็จ อาจมีความผิดฐานแจ้งความอันเป็นเท็จต่อเจ้าพนักงาน ตามประมวลกฎหมายอาญา มาตรา 137
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div ng-loading="isLoading"></div>
+                    <h5 class="card-header header-table">บริการเสริม SMS</h5>
+                    <div class="pl-2 pr-2">
+                        <div class="form-group row mt-3">
+                            <div class="input-group col-12 col-md-4">
+                                <div class="custom-control custom-checkbox custom-control-inline mt-3 ml-2 mr-1 mr-md-0">
+                                    <input class="custom-control-input col-form-label" type="checkbox"
+                                           ng-model="smsStatus"
+                                           ng-change="smsStatusChange()"
+                                           id="smsService">
+                                    <label class="custom-control-label pointer" onclick="" for="smsService">
+                                        &nbsp;ท่านต้องการรับข่าวสารทาง SMS
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="button" ng-click="(register.$valid || register.$invalid) && openDialogDetail()" class="btn btn-primary ml-5 ml-md-0 mt-3 mt-md-0">คลิกดูรายละเอียด</button>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-12 col-md-11 col-form-label text-danger ml-md-3">(ค่าบริการเสริมจากบริษัท CWN 20 บาท โดยบริการเสริมไม่เกี่ยวข้อง กับ กรมการพัฒนาชุมชน)</label>
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อ</label>
+                            <div class="input-group col-12 col-md-3">
+                                <input type="text" class="form-control col-12 col-md-12" id="smsFirstName" name="smsFirstName"
+                                       ng-model="model.FirstName" autocomplete="off" placeholder="ชื่อ" readonly="readonly" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">นามสกุล</label>
+                            <div class="input-group col-12 col-md-4">
+                                <input type="text" class="form-control col-12 col-md-9" id="smsLastName" name="smsLastName"
+                                       ng-model="model.LastName" autocomplete="off" placeholder="นามสกุล" readonly="readonly" />
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์เคลื่อนที่</label>
+                            <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': (register.smsMobile.$error.pattern || register.smsMobile.$error.required) && register.smsMobile.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-12" id="smsMobile" name="smsMobile"
+                                       maxlength="10" ng-pattern="/^[0-9]{10,10}$/"
+                                       ng-model="model.SMSMobile" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" />
+                            </div>
+
+                            <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">อีเมล</label>
+                            <div class="input-group col-12 col-md-4" ng-class="{ 'validation-error': (register.smsEmail.$error.pattern || register.smsEmail.$error.required) && register.smsEmail.$dirty }">
+                                <input type="text" class="form-control col-12 col-md-9" id="smsEmail" name="smsEmail"
+                                       ng-pattern="/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*&#64(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$|[-]/i"
+                                       ng-model="model.SMSEmail" autocomplete="off" placeholder="อีเมล" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 px-1 px-md-3">
+                <div class="card mt-3">
+                    <div class="row mt-3 justify-content-center">
+                        <button type="submit" ng-disabled="checked || detecting" class="btn btn-success ml-md-5 mb-3">ถัดไป</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/ng-template" id="_SMSDialogModalDetail.html">
+            @Html.Partial("_SMSDialogModalDetail")
+        </script>
+        @Html.HiddenFor(m => m.TestTypeID)
+        @Html.HiddenFor(m => m.ExamType)
+        @Html.HiddenFor(m => m.CitizenID)
+        @Html.HiddenFor(m => m.AgeDay)
+        @Html.HiddenFor(m => m.AgeMonth)
+        @Html.HiddenFor(m => m.AgeYear)
+        @Html.HiddenFor(m => m.BirthDate)
+        @Html.HiddenFor(m => m.BirthDateChar)
+        @Html.HiddenFor(m => m.BirthDateDay)
+        @Html.HiddenFor(m => m.BirthDateMonth)
+        @Html.HiddenFor(m => m.BirthDateYear)
+        <input type="hidden" id="CenterExamID" name="CenterExamID" value="1" />
+        <input type="hidden" id="ConsentDate" name="ConsentDate" value="{{model.ConsentDate}}" />
+        <input type="hidden" id="SMSStatus" name="SMSStatus" value="{{model.SMSStatus}}" />
+        <input type="hidden" id="TbbFlag" name="TbbFlag" value="{{model.TbbFlag}}" />
+        <input type="hidden" id="EduFlag" name="EduFlag" value="{{model.EduFlag}}" />
+        <input type="hidden" id="OCSCFlag" name="OCSCFlag" value="{{model.OCSCFlag}}" />
+        <input type="hidden" id="ImageBase64" name="ImageBase64" value="{{model.ImageBase64}}" />
+    </form>
+
+    <script type="text/ng-template" id="_CheckCitizenWarning.html">
+        @Html.Partial("_CheckCitizenWarning")
+    </script>
+
+    <div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-lightgreen">
+                    <h5 class="modal-title font-weight-bold" id="cameraModalLabel">ถ่ายรูป</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="screenshot">
+                    <video class="w-100" autoplay></video>
+                    <img class="d-none" src="">
+                    <canvas style="display:none;"></canvas>
+                    <label class="text-danger text-center">{{errorText}}</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="screenshot-button">ถ่ายรูป</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-lightgreen">
+                    <h5 class="modal-title font-weight-bold" id="exampleModalLabel">ตัวอย่างรูปถ่ายที่ถูกต้อง</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img src="~/Content/Images/image_1.jpg" style="width: 200px; margin:auto;" />
+                        <img src="~/Content/Images/image_6.jpg" style="width: 200px; margin:auto;" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detectModal" tabindex="-1" role="dialog" aria-labelledby="detectModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @*<div class="modal-header bg-lightgreen">
+                        <h5 class="modal-title font-weight-bold" id="detectModalLabel">ตัวอย่างรูปถ่ายที่ถูกต้อง</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>*@
+                <div class="modal-body">
+                    <div class="text-center">
+                        <label class="text-danger mt-5" ng-if="detecting"></label>
+                        <div ng-loading="detecting"></div>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="text-danger mt-2 ml-5" ng-if="detecting">&nbsp;&nbsp;กำลังตรวจสอบรูปถ่าย...</div>
+                        <div class="text-success" ng-if="imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;รูปถ่ายถูกต้อง</div>
+                        <div class="text-danger" ng-if="!imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;{{ErrorMessImage}}</div>
+                        <button type="button" class="btn btn-secondary mt-3" ng-if="!imageValid && hasFile && !detecting && !waitingDetect" data-dismiss="modal">ตกลง</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/vender/cropit-master/dist/jquery.cropit.js"></script>
+    <script src="~/vender/pica-master/dist/pica.js"></script>
+    <script src="~/Scripts/views/register-master.js?_=20220531"></script>
+    <script>
+        var oldData = @Html.Raw(Model.ToJson());
+        var btnCamera = "@SysParameterHelper.EnableButtonCamera";
+        var detectTimer = "@SysParameterHelper.FaceDetectTimer";
+        var faceApiUrl = "@SysParameterHelper.FaceServiceUrl";
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#gpa").keypress(function (e) { return Character.isKeyPointNumberCharacter(e); });
+            $("#tbbzipcode").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#zipcode").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#tbbtel").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            //$("#tel").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#mobile").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#officemobile").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#salary").keypress(function (e) { return Character.isKeyPointNumberCharacter(e); });
+            //$("#emergencyTel").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#emergencyMoblie").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#examHistoryCount").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            //$("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+
+    </script>
+}
+
+

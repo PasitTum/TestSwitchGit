@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="FaceDetect">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DetectConfig" type="tns:FaceDetectConfig" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="FaceDetectConfig">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AuthenCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="EnableAutoBrightness" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ValidateWidthDivideHeight" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="ValidateFaceRatio" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="MinFacePercent" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxFacePercent" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="MinWidthHeightRatio" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxWidthHeightRatio" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClientIpAddress" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LogRunNo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SourceImage" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="FaceDetectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FaceDetectResult" type="tns:FaceDetectResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="FaceDetectResult">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultImage" type="s:base64Binary" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsFaceDetected" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsBrightnessAdjust" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="AverageBrightness" type="s:float" />
+          <s:element minOccurs="1" maxOccurs="1" name="IncreaseBrightness" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="FacePercent" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsAuthenticated" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="FaceRectangles" type="tns:ArrayOfFaceRectangle" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfFaceRectangle">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FaceRectangle" nillable="true" type="tns:FaceRectangle" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FaceRectangle">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Width" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Height" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="X" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Y" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="FaceDetectSoapIn">
+    <wsdl:part name="parameters" element="tns:FaceDetect" />
+  </wsdl:message>
+  <wsdl:message name="FaceDetectSoapOut">
+    <wsdl:part name="parameters" element="tns:FaceDetectResponse" />
+  </wsdl:message>
+  <wsdl:portType name="FaceDetectionServiceSoap">
+    <wsdl:operation name="FaceDetect">
+      <wsdl:input message="tns:FaceDetectSoapIn" />
+      <wsdl:output message="tns:FaceDetectSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FaceDetectionServiceSoap" type="tns:FaceDetectionServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="FaceDetect">
+      <soap:operation soapAction="http://tempuri.org/FaceDetect" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FaceDetectionServiceSoap12" type="tns:FaceDetectionServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="FaceDetect">
+      <soap12:operation soapAction="http://tempuri.org/FaceDetect" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FaceDetectionService">
+    <wsdl:port name="FaceDetectionServiceSoap" binding="tns:FaceDetectionServiceSoap">
+      <soap:address location="http://localhost/FaceDectCv2/FaceDetectionWS/FaceDetectionService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FaceDetectionServiceSoap12" binding="tns:FaceDetectionServiceSoap12">
+      <soap12:address location="http://localhost/FaceDectCv2/FaceDetectionWS/FaceDetectionService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,133 @@
+[
+  {
+    "varname": "CompCode",
+    "fieldname": "SMS_COMP_CODE",
+    "size": 16,
+    "weight": "bold",
+    "x": 121,
+    "y": 45.5
+  },
+  {
+    "varname": "FullName",
+    "fieldname": "FULLNAME",
+    "objecttype": "fullName",
+    "size": 14,
+    "x": 45,
+    "y": 57.6
+  },
+  {
+    "varname": "RefNo1",
+    "fieldname": "SMS_REF_1",
+    "size": 14,
+    "x": 167,
+    "y": 57.5
+  },
+  {
+    "varname": "AmountTH",
+    "fieldname": "AmountTH",
+    "objecttype": "amountTh",
+    "size": 14,
+    "x": 52,
+    "y": 64.5
+  },
+  {
+    "varname": "Amount",
+    "fieldname": "SMS_AMOUNT",
+    "objecttype": "price",
+    "size": 14,
+    "x": 161,
+    "y": 64.3
+  },
+  {
+    "varname": "BarCode",
+    "fieldname": "SMS_REF_1",
+    "objecttype": "barcode",
+    "size": 12,
+    "x": 57,
+    "y": 82
+  },
+  {
+    "varname": "QRCode",
+    "fieldname": "SMS_REF_1",
+    "objecttype": "qrcode",
+    "x": 87,
+    "y": 123.5
+  },
+  {
+    "varname": "PaymentDate",
+    "fieldname": "PAY_IN_DATE",
+    "size": 14,
+    "weight": "bold",
+    "x": 40,
+    "y": 160
+  },
+  {
+    "varname": "RefNo1Warn",
+    "fieldname": "SMS_REF_1",
+    "size": 14,
+    "x": 55,
+    "y": 197
+  },
+  {
+    "varname": "RefNo2Warn",
+    "fieldname": "SMS_REF_2",
+    "size": 14,
+    "x": 53,
+    "y": 204
+  },
+  {
+    "varname": "fullName",
+    "fieldname": "FULLNAME",
+    "size": 14,
+    "x": 38,
+    "y": 225.5
+  },
+  {
+    "varname": "RefNo1Final",
+    "fieldname": "SMS_REF_1",
+    "size": 14,
+    "x": 55,
+    "y": 232.5
+  },
+  {
+    "varname": "RefNo2Final",
+    "fieldname": "SMS_REF_2",
+    "size": 14,
+    "x": 53,
+    "y": 240
+  },
+  {
+    "varname": "Date",
+    "fieldname": "Date",
+    "objecttype": "date",
+    "size": 14,
+    "weight": "bold",
+    "x": 35,
+    "y": 247
+  },
+  {
+    "varname": "IP",
+    "fieldname": "IP",
+    "objecttype": "ip",
+    "size": 14,
+    "weight": "bold",
+    "x": 100,
+    "y": 247
+  },
+  {
+    "varname": "DateFooter",
+    "fieldname": "Date",
+    "objecttype": "date",
+    "size": 12,
+    "x": 130,
+    "y": 291.7
+  },
+  {
+    "varname": "IPFooter",
+    "fieldname": "IP",
+    "objecttype": "ip",
+    "size": 12,
+    "x": 185,
+    "y": 291.7
+  }
+]

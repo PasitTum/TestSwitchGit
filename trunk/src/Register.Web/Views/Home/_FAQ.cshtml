@@ -1,0 +1,169 @@
+﻿@{
+    var testTypeID = this.ViewContext.RouteData.GetRequiredString("testtypeid");
+    var fileName = "~/Docs/แบบคำร้องขอแก้ไขข้อมูลในใบสมัคร_T" + testTypeID + ".pdf";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body form-group">
+                <h4 class="text-center font-weight-bold">@ViewBag.Title</h4>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 1</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: เปิดรับสมัครสอบทางอินเทอร์เน็ตในวันใด</label><br />
+                                <label class="ml-3">
+                                    A: ผู้ประสงค์จะสมัครสอบ สมัครได้ทางอินเตอร์เน็ต
+                                    <span class="text-blue">ตั้งแต่วันที่ 27 พฤษภาคม 2565 ถึง 10 มิถุนายน 2565</span><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ตลอด 24 ชั่วโมง ไม่เว้นวันหยุดราชการ ทางเว็บไซต์ <a class="text-link" href="http://ops.jobthaigov.com" target="_blank">http://ops.jobthaigov.com</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 2</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ผู้สมัครที่กรอกใบสมัครสอบผิดพลาดในกรณีดังต่อไปนี้ เลขประจำตัวประชาชน คำนำหน้านาม หรือ ชื่อตัว - ชื่อสกุล ต้องดำเนินการอย่างไร</label><br />
+                                <label class="ml-3">
+                                    A: ท่านสามารถเขียนคำร้องขอแก้ไขข้อมูล และยื่นหลักฐาน ดังต่อไปนี้<br />
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) แบบคำร้องขอแก้ไขข้อมูล <a class="text-link" href="@Url.Content(fileName)" target="_blank">(ดาวน์โหลดใบคำร้อง คลิกที่นี่)</a></span><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) แบบฟอร์มการชำระเงิน (ที่ชำระเงินแล้ว) จำนวน 1 ฉบับ<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) สำเนาบัตรประจำตัวประชาชน จำนวน 1 ฉบับ<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยติดต่อ<span class="text-underline">ขอยื่นแบบคำร้อง</span>มาที่<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กรมการพัฒนาชุมชน โทร. 02-280-2861<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;หรือ<span class="text-underline">ส่งไปรษณีย์ลงทะเบียนมาที่</span><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กรมการพัฒนาชุมชน 319 วังจันทรเกษม ถนนราชดำเนินนอก เขตดุสิต กทม. 10300<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue">ไม่เกินวันที่ 10 มิถุนายน 2565</span> ในวันและเวลาราชการ
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 3</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ผู้สมัครที่อัปโหลดเอกสารผิดพลาดและต้องการแก้ไข ต้องดำเนินการแก้ไขอย่างไร</label><br />
+                                <label class="ml-3">
+                                    A: ท่านสามารถอัปโหลดเอกสารได้ใหม่ภายหลังจาก ชำระเงินแล้ว 5 วัน โดยเข้าที่เมนู <span class="text-blue">"อัปโหลดเอกสารใหม่"</span><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กรณีทีผู้สมัครประสงค์อัปโหลดเอกสารใหม่ <span class="text-danger">จะต้องอัปโหลดเอกสารใหม่ที่ถูกต้องครบถ้วนแล้วในทุกฉบับ (ไม่สามารถเลือกอัปโหลดเฉพาะเอกสารที่ต้องการแก้ไขได้)</span> <br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;และผู้สมัครจะไม่สามารถเห็นเอกสารที่เคยอัปโหลดไว้ในการสมัครครั้งก่อนได้
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 4</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: กรณีที่ผู้สมัครกรอกข้อมูลอื่นผิด สามารถยื่นคำร้องขอแก้ไขได้หรือไม่</label><br />
+                                <label class="ml-3">
+                                    A: หากท่านทำการกรอกข้อมูลอื่น ๆ ผิด ไม่ต้องยื่นคำร้องแก้ไขข้อมูล แต่ให้นำเอกสารที่ถูกต้อง ไปยื่นให้กับเจ้าหน้าที่<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ในวันสอบแข่งขันเพื่อวัดความเหมาะสมกับตำแหน่ง
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 5</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: หากมีการเปลี่ยนชื่อตัว หรือชื่อสกุล หลังจากที่ได้สมัครสอบไปแล้วจะยื่นคำร้องขอแก้ไขได้หรือไม่</label><br />
+                                <label class="ml-3">
+                                    A: ในกรณีที่มีการเปลี่ยนคำนำหน้านาม ชื่อตัว หรือชื่อสกุล หลังจากที่ได้สมัครสอบไปแล้ว ไม่ต้องยื่นคำร้องขอแก้ไข<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทั้งนี้ในวันสอบวัดความรู้ความสามารถที่ใช้เฉพาะตำแหน่ง หรือในกรณีที่มีการติดต่อเกี่ยวกับการสอบ จะต้องนำหลักฐานพร้อมสำเนา<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;การเปลี่ยนคำนำหน้านาม ชื่อตัว หรือชื่อสกุล มาแสดงพร้อมบัตรประจำตัวประชาชน
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 6</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: เปิดรับชำระเงินถึงเมื่อไร</label><br />
+                                <label class="ml-3">
+                                    A: ชำระเงินค่าธรรมเนียมการสมัครสอบได้
+                                    <span class="text-blue">ตั้งแต่วันที่ 27 พฤษภาคม 2565 ถึง 11 มิถุนายน 2565 ภายในเวลา 22.00 น.</span><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สามารถนำใบแบบฟอร์มการชำระเงินไปชำระเงินค่าธรรมเนียมการสมัครสอบ ผ่านเคารน์เตอร์ บมจ.ธนาคารกรุงไทย<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ภายในเวลาทำการของธนาคาร หรือผ่านช่องทางแอฟพลิเคชั่น Krungthai Next โดยสแกน QR Code ในแบบฟอร์มการชำระเงิน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทั้งนี้การรับสมัครจะมีผลสมบูรณ์ เมื่อชำระค่าธรรมเนียมการสมัครสอบเรียบร้อยแล้ว
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 7</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ค่าธรรมเนียมในการสมัครสอบเท่าไร</label><br />
+                                <label class="ml-3">
+                                    A: ค่าธรรมเนียมการสมัครสอบ / ค่าธรรมเนียมธนาคารและค่าบริการทางอินเทอร์เน็ต<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ค่าธรรมเนียมการสมัครสอบ 300 บาท / ค่าธรรมเนียมธนาคารและค่าบริการทางอินเทอร์เน็ต คิดสูงสุดไม่เกิน 30 บาท ขึ้นอยู่กับช่องทางการชำระเงิน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยจะไม่จ่ายคืนให้ไม่ว่ากรณีใดๆ ทั้งสิ้น<br />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 8</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ประกาศรายชื่อผู้สมัครสอบ และกำหนดวัน เวลา สถานที่สอบ และระเบียบเกี่ยวกับการสอบเมื่อใด</label><br />
+                                <label class="ml-3">
+                                    A: กรมการพัฒนาชุมชน จะประกาศรายชื่อผู้มีสิทธิ์เข้าสอบแข่งขัน วันที่ XX มิถุนายน 2565<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue">ทางเว็บไซต์</span> <a class="text-link" href="http://ops.jobthaigov.com">http://ops.jobthaigov.com</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 9</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: หากต้องการสอบถามรายละเอียดเกี่ยวกับการสมัครสอบ เช่น การส่งใบสมัคร การพิมพ์ใบสมัคร หรือการค้นหาใบสมัคร สามารถติดต่อได้ที่ใด</label><br />
+                                <label class="ml-3">
+                                    A: ผู้สมัครสามารถติดต่อได้ที่ Call Center
+                                    <span class="text-blue">โทร. 0-2697-0999 กด 1 แล้วกด 901</span> ในวันจันทร์-ศุกร์ เวลา 8.30 - 17.30 น.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 10</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: สามารถพิมพ์ใบสมัครได้เมื่อไร</label><br />
+                                <label class="ml-3">
+                                    A: สำหรับผู้ผ่านการสอบแข่งขันภาคความรู้ความสามารถทั่วไป และภาคความรู้ความสามารถที่ใช้เฉพาะตำแหน่ง แล้วเท่านั้นที่จะต้องพิมพ์ใบสมัคร<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เพื่อนำมาแสดงในวันประเมินสมรรถนะครั้งที่ 2 (สอบสัมภาษณ์)<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยสามารถพิมพ์ใบสมัครได้ทางเว็บไซต์ <a class="text-link" href="http://ops.jobthaigov.com">http://ops.jobthaigov.com</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

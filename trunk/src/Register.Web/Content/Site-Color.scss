@@ -1,0 +1,56 @@
+﻿@function derive-rgb-values-from-hex($hex) {
+    @return red($hex), green($hex), blue($hex);
+}
+
+$site-primary: #2b98d1;
+$site-secondary: #35c6bf;
+$success: #28a745;
+
+:root {
+    --navbarC: saddlebrown;
+    --sidebarHeaderBg: #0088d2;
+    --sidebarBackground: #2b98d1;
+    --sidebarElmC: saddlebrown;
+    --sidebarEleHovC: #fff;
+    --sidebarElmActBg: #6d7fcc;
+    --sidebarElmActC: #fff;
+    --sidbarMenuElmHovBg: #f8e3a2;
+    --site-bannerBg: #2b98d1;
+    --site-bannerC: saddlebrown;
+    --footerBg: #2b98d1;
+    --btnHovBg: #006da4;
+    --tabHeaderBg: #d9e1fb;
+    --headerMenuBg: #d9fc3e;
+    --btnIconBg: #a44e17;
+    --btnIconBdc: #e6cebb;
+    --bgWhite: #ffffff;
+    --bgDark: #000000;
+    --bgGray: #f0f4f8;
+    --bg-card-primary: #2b98d1;
+    --normal-text-color: #fff;
+    --bg-darkgreen: #094232;
+    // Brand colors as RGB values
+    // This allows consumers to leverage opacity when working with colors, i.e.
+    //   --my-var-name: 255, 161, 20;
+    // Can be used like:
+    //   background-color: rgba(var(--my-var-name), .5)
+    --menu-item-background-active : #35c6bf;
+    --menu-item-background-hover : #283890;
+    --site-primary-rgb: #{derive-rgb-values-from-hex($site-primary)};
+    --site-secondary-rgb: #{derive-rgb-values-from-hex($site-secondary)};
+    --site-primary: rgb(red($site-primary), green($site-primary), blue($site-primary));
+    --success-rgb: #{derive-rgb-values-from-hex($success)};
+    --testtype-header: #0088d2;
+}
+
+.bg-sidebar-header {
+    background-color: var(--sidebarHeaderBg);
+}
+
+.text-dark-gray {
+    color: darkgray;
+}
+
+.bg-success-light {
+    background-color: rgba(red($success), green($success), blue($success),0.5);
+}

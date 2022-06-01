@@ -1,0 +1,32 @@
+﻿[
+  {
+    "productGroupId": "DEFAULT",
+    "reports": [
+      {
+        "reportName": "SMSPayinReport",
+        "reportNameSpace": "CSP.OSAT.Reports",
+        "apiUrl": "http://localhost/OSAT/OSAT.Api/api/Report/SmsPayIn/{productgroupid}/{citizenid}"
+      },
+      {
+        "reportName": "PayinReport",
+        "reportNameSpace": "CSP.OSAT.Reports",
+        "apiUrl": "http://localhost/OSAT/OSAT.Api/api/Report/PayIn/{productgroupid}/{citizenid}"
+      }
+    ]
+  },
+  {
+    "productGroupId": "1f11db5d-edbf-e911-b67f-180373ca14a8",
+    "reports": [
+      {
+        "reportName": "ApplicationDocReport",
+        "reportNameSpace": "OSAT.CUS.Reports",
+        "apiUrl": "http://localhost/OSAT/OSAT.Api/api/Report/ApplicationDoc/{productgroupid}/{citizenid}"
+      },
+      {
+        "reportName": "ExamIDCardReport",
+        "reportNameSpace": "OSAT.CUS.Reports",
+        "apiUrl": "http://localhost/OSAT/OSAT.Api/api/Report/ExamIDCard/{productgroupid}/{citizenid}"
+      }
+    ]
+  }
+]

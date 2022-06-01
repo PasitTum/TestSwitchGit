@@ -1,0 +1,48 @@
+﻿<div class="modal-header bg-lightgreen" ng-init="init()">
+    <h5 class="modal-title header-table font-weight-bold" id="projectEventModalLabel">ผู้สมัครโปรดทราบ</h5>
+    <button type="button" class="close" aria-label="Close" ng-click="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body pb-0">
+    <div ng-loading="isLoading"></div>
+    <div class="row mb-2">
+        <h6 class="ml-3 font-weight-bold information">ขั้นตอนการรับสมัครสอบ</h6>
+        <div id="registerStep-md" class="col-12 col-md-12 col-form-label px-3" style="border: solid 1px lightgray;">
+            <div class="row">
+                <div class="col-6 col-md-3 text-center">
+                    
+                    <img src="~/Content/Images/announce.png" style="height: 110px;" />
+                    <label class="col-12 font-weight-bold">ขั้นตอนที่ 1</label>
+                    <label class="font-weight-bold">อ่านประกาศรับสมัครสอบ<br /></label>
+                </div>
+                <div class="col-6 col-md-3 text-center">
+                    <img src="~/Content/Images/register-12.png" style="height: 110px;" />
+                    
+                    <label class="col-12 font-weight-bold">ขั้นตอนที่ 2</label>
+                    <label class="font-weight-bold">สมัครสอบ</label><br />( <span class="text-danger" ng-bind-html="getRegConfig('POPUP_ENROLL_DATE')"></span> )
+                </div>
+                <div class="col-6 col-md-3 text-center">
+                    <img src="~/Content/Images/payment.png" style="height: 110px;" />
+                    <label class="col-12 font-weight-bold">ขั้นตอนที่ 3</label>
+                    <label class="font-weight-bold">ชำระเงิน</label><br />( <span class="text-danger" ng-bind-html="getRegConfig('POPUP_PAY_DATE')"></span> )
+                </div>
+                <div class="col-6 col-md-3 text-center">
+                    <img src="~/Content/Images/announce.png" style="height: 110px;" />
+                    <label class="col-12 font-weight-bold">ขั้นตอนที่ 4</label>
+                    <label class="font-weight-bold">ตรวจสอบสถานะการสมัครสอบ</label><br />( <span class="text-danger" ng-bind-html="getRegConfig('POPUP_PRINTAPPLICATION_DATE')"></span> )
+                </div>
+            </div>
+        </div>
+        @*<div class="col-12 font-weight-bold text-center mt-2">ผู้ที่ประสงค์จะสมัครสอบ หากมีปัญหาเกี่ยวกับการสมัครสอบ สามารถอ่านแนวทางการแก้ไขปัญหา ในเมนู "คำถามที่พบบ่อย"</div>*@
+        <div class="col-8 offset-md-2 font-weight-bold text-center mt-2 text-danger border border-danger">
+            ระบบไม่รองรับการเปิดใช้งาน Browser พร้อมกันหลาย Tab/Windows<br />
+            เพื่อความถูกต้องของข้อมูล ระหว่างขั้นตอนการสมัครสอบ กรุณาเปิดใช้งาน Browser เพียง Tab เดียวเท่านั้น
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    
+    <button id="agree" type="button" class="btn btn-success btn-standard-size" ng-click="ok()">ข้าพเจ้ารับทราบ</button>
+    <button type="button" class="btn btn-danger btn-standard-size ml-2" ng-click="cancel()">ออกจากระบบ</button>
+</div>

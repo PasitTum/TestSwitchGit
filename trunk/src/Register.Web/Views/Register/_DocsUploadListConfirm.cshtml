@@ -1,0 +1,47 @@
+﻿@model List<DocToUploadModel>
+
+@if (Model != null)
+{
+    <div id="divUploadDoc" ng-controller="uploadDocsController" class="table-responsive">
+        <table id="tbDocument" class="table">
+            <thead>
+                <tr>
+                    <th>เอกสาร</th>
+                    @*<th class="text-center" style="max-width: 150px;">สถานะการอัปโหลด</th>*@
+                    <th class="text-center" style="max-width: 250px;">อัปโหลด</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@for (var index = 0; index < Model.Count; index++)
+                    {
+                        var line = Model[index];*@
+                <tr ng-repeat="line in documentList">
+                    <td class="text-left">
+                        <span class="font-weight-600">{{line.DOC_TYPE_NAME}}</span>
+                    </td>
+                    @*<td class="text-center">
+                            <span class="text-danger" ng-hide="line.UPLOAD_STATUS">ยังไม่ส่งเอกสาร</span>
+                            <span class="text-warning" ng-show="line.UPLOAD_STATUS === 'N'">อัปโหลดเอกสารไม่สำเร็จ</span>
+                            <span class="text-success" ng-show="line.UPLOAD_STATUS === 'Y'">อัปโหลดเอกสารสำเร็จ</span>
+                            <span class="text-info" ng-show="line.UPLOAD_STATUS === 'W'">กำลังอัปโหลดเอกสาร...</span>
+                        </td>*@
+                    <td class="text-center" ng-show="line.UPLOAD_STATUS === 'Y'">
+                        <a class="ml-1 btn btn-outline-success"
+                           target="_blank"
+                           href="#"
+                           ng-href='@Url.Action("DownloadFromTemp","Upload")?testtypeid={{line.TEST_TYPE_ID}}&fileName={{line.FILE_NAME}}&fileType={{line.FILE_TYPE}}&docguid={{line.DOC_GUID}}'>
+                            <i class="far fa-file-pdf"></i>&nbsp;
+                            ดูเอกสาร
+                        </a>
+                    </td>
+                    <td class="text-center" ng-show="line.UPLOAD_STATUS !== 'Y'">
+
+                    </td>
+                </tr>
+                @* }*@
+            </tbody>
+        </table>
+    </div>
+}
+
+<script src="~/Scripts/views/upload-docs.js?_=20220512"></script>

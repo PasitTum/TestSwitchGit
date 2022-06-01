@@ -1,0 +1,152 @@
+﻿@model Register.Web.Models.LandingPageViewModel
+@{
+    Layout = null;
+    var title = (string.IsNullOrWhiteSpace(ViewBag.Title) ? SysParameterHelper.ApplicationName : ViewBag.Title);
+}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="~/Content/Images/favicon.ico?@Html.GetAppVersion()">
+    <title>@title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="~/Content/site.css?id=20220513" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <style>
+        .top-header {
+            background: var(--sidebarBackground);
+            color: var(--normal-text-color);
+            height: 15vh;
+            width: 100%;
+            min-height: 120px;
+        }
+
+        /*.footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+        }*/
+
+        /*.devHeader-main {
+                width: 100%;
+                height: 125px;
+                background-size: cover;
+                color: var(--devHeaderC);
+                font-weight: bold;
+                margin-left: 2px;
+                background-image: url(../Content/Images/Header-OCS-Main.jpg);
+            }*/
+        .container-fluid {
+            padding: 0;
+            margin: 0;
+        }
+
+        .row {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+
+        /*.blog-thumbnail img {
+            max-height:20vh;
+        }*/
+        .fadeInUpBig {
+            -webkit-transition-duration: 500ms;
+            transition-duration: 500ms;
+        }
+
+            .fadeInUpBig:hover {
+                -webkit-transform: scale(1.05);
+                transform: scale(1.05);
+                -webkit-transition-duration: 1000ms;
+                transition-duration: 1000ms;
+            }
+
+        #content {
+            min-height: 65vh;
+        }
+
+        .listing-text {
+            top: 10%;
+            left: 30%;
+            position: absolute;
+            font-size: 1.5rem;
+            color: white;
+            width: 70%;
+        }
+
+        .listing-image {
+            max-height: 150px;
+            width: auto;
+        }
+
+        .listing-line {
+        }
+
+            .listing-line:hover {
+            }
+
+        .listing-testtype-4 {
+            background-color: #f8e08e !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row top-header d-flex align-items-center m-0 p-0">
+            <div class="col-12">
+                <img class="img-fluid align-items-center" src="~/Content/Images/logo.png?_=20220511" />
+            </div>
+        </div>
+        <div id="content" class="row">
+            <div class="col-12 col-md-10 mx-auto py-3">
+                @if (Model.TesttypeList != null)
+            {
+                foreach (var line in Model.TesttypeList)
+                {
+                    var imgUrl = Url.Content(string.Format("~/Content/Images/testtype-{0}-thumbnail.jpg", line.TEST_TYPE_ID));
+                        <a href="@Url.Action("Index", "Home", new { testtypeid = line.TEST_TYPE_ID })">
+                            <div class="row news-card py-3 my-3 bg-white border border-site-primary rounded listing-line listing-testtype-@line.TEST_TYPE_ID">
+                                <div class="col-md-4">
+                                    <div class="feed-image">
+                                        <img class="news-feed-image rounded img-fluid img-responsive img-thumbnail" src="@imgUrl">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="news-feed-text">
+                                        <h5 class="font-weight-bold text-danger text-center">ประกาศ</h5>
+                                        <div class="text-center">
+                                            @Html.Raw(line.REMARK)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="footer pt-0">
+        @Html.Partial("_Footer")
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".listing-line").hover(function () {
+                $(this).addClass('shadow-lg').css('cursor', 'pointer');
+            }, function () {
+                $(this).removeClass('shadow-lg');
+            }
+          );
+        });
+    </script>
+</body>
+</html>

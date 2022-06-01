@@ -1,0 +1,228 @@
+<html>
+<head>
+    <title>cropit</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="../dist/jquery.cropit.js"></script>
+    <script src="../../pica-master/dist/pica.js"></script>
+
+    <style>
+        .cropit-preview {
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 7px;
+            width: 198px;
+            height: 248px;
+        }
+
+        .cropit-preview-image-container {
+            cursor: move;
+        }
+
+        .image-size-label {
+            margin-top: 10px;
+        }
+
+        input {
+            display: block;
+        }
+
+        .export {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-editor">
+        <input type="file" class="cropit-image-input">
+        <div class="cropit-preview"></div>
+        <div class="image-size-label">
+            Resize image
+        </div>
+        <input type="range" class="cropit-image-zoom-input">
+        <button class="export">Export</button>
+    </div>
+    <button type="button" class="rotate-ccw btn p-1" title="หมุนซ้าย 90 องศา" ng-disabled="detecting">CCW<i class="fas fa-undo fa-1x"></i></button>
+    <button type="button" class="rotate-cw btn p-1" title="หมุนขวา 90 องศา" ng-disabled="detecting">CW<i class="fas fa-undo fa-flip-horizontal fa-1x"></i></button>
+
+    <script>
+        $(function () {
+            var $editor = $('.image-editor');
+            $editor.cropit({
+                maxZoom: 1,
+                minZoom: 'fit',
+                smallImage: 'stretch',
+                previewSize: { width: 198, height: 258 },
+            });
+            var $scope = {};
+            $scope.rotationDegree = 0;
+            //$editor.cropit({
+            //    onImageLoaded: function () {
+            //        console.log("onImageLoaded");
+            //    },
+            //    onOffsetChange: function () {
+            //        console.log("onOffsetChange");
+            //        // Set imageValid = false;
+            //    },
+            //    maxZoom: 0.3,
+            //    minZoom: 'fit',
+            //});
+
+            $('.rotate-cw').click(function () {
+                $editor.cropit('rotateCW');
+                $scope.rotationDegree = $scope.rotationDegree + 90;
+            });
+
+            $('.rotate-ccw').click(function () {
+                $editor.cropit('rotateCCW');
+                $scope.rotationDegree = $scope.rotationDegree - 90;
+            });
+
+            var TO_RADIANS = Math.PI / 180;
+            function drawRotatedImage(context, image, x, y, angle) {
+
+                // save the current co-ordinate system 
+                // before we screw with it
+                context.save();
+
+                // move to the middle of where we want to draw our image
+                context.translate(x, y);
+
+                // rotate around that point, converting our 
+                // angle from degrees to radians 
+                context.rotate(angle * TO_RADIANS);
+
+                // draw it up and to the left by half the width
+                // and height of the image 
+                context.drawImage(image, -(image.width / 2), -(image.height / 2));
+
+                // and restore the co-ords to how they were when we began
+                context.restore();
+            }
+
+
+            $('.export').click(function () {
+                // Get cropping information
+                var imgSrc = $editor.cropit('imageSrc');    
+                var offset = $editor.cropit('offset');
+                var zoom = $editor.cropit('zoom');
+                var previewSize = $editor.cropit('previewSize');
+                // var exportZoom = $editor.cropit('exportZoom');
+                var cropitImage = document.querySelector(".cropit-preview-image");
+
+                var img = new Image();
+                img.src = imgSrc;
+                //if ($scope.rotationDegree != 0) {
+                //    $scope.rotationDegree = $scope.rotationDegree % 360;
+                //    img.style.transform = "rotate(" + $scope.rotationDegree + "deg)";
+                //}
+                
+                // Draw image in original size on a canvas
+                var originalCanvas = document.createElement('canvas');
+                originalCanvas.width = previewSize.width / zoom;
+                originalCanvas.height = previewSize.height / zoom;
+                var ctx = originalCanvas.getContext('2d');
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, originalCanvas.width, originalCanvas.height);
+                
+                console.log(offset);
+                if ($scope.rotationDegree != 0) {
+                    $scope.rotationDegree = $scope.rotationDegree % 360;
+                    if ($scope.rotationDegree < 0) $scope.rotationDegree = 360 - $scope.rotationDegree;
+                    alert("final " + $scope.rotationDegree);
+                    /*ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    drawImage(image, canvas.width / 2, canvas.height / 2, 1, -Math.PI / 2);
+                    ctx.rotate($scope.rotationDegree * Math.PI / 180);*/
+                    if ($scope.rotationDegree == 90 || $scope.rotationDegree == 270) {
+                        var x = (cropitImage.height - originalCanvas.height) / zoom;
+                        var y = (cropitImage.width - originalCanvas.width) / zoom;
+                        var x = ((cropitImage.height - offset.x) / zoom) + (originalCanvas.height / 2);
+                        
+                        // drawRotatedImage(ctx, img, x, y, $scope.rotationDegree)
+                        //drawRotatedImage(ctx, img, 304.188, 0, $scope.rotationDegree)
+                        var x = (cropitImage.height + ((offset.x / zoom) * -1));
+                        // var y = (cropitImage.width + (offset.y / zoom));
+                        var y = (offset.y / zoom);
+                        console.log("x = ", x, " y=", y);
+                        ctx.translate(x, y);
+                       // ctx.translate(x / zoom, y / zoom);
+
+                        // rotate around that point, converting our 
+                        // angle from degrees to radians 
+                        ctx.rotate($scope.rotationDegree * Math.PI / 180);
+                        ctx.drawImage(img, 0,0);
+                        // drawRotatedImage(ctx, img, cropitImage.height - ((originalCanvas.height / 2) - offset.x), cropitImage.width - ((originalCanvas.width / 2) - offset.y), $scope.rotationDegree)
+                    } else {
+                        drawRotatedImage(ctx, img, (originalCanvas.width / 2) - offset.x, (originalCanvas.height / 2) - offset.y, $scope.rotationDegree)
+                    }
+                } else {
+                    ctx.drawImage(img, offset.x / zoom, offset.y / zoom);
+                }
+
+
+
+                // Use pica to resize image and paint on destination canvas
+                var zoomedCanvas = document.createElement('canvas');
+                // zoomedCanvas.width = previewSize.width * exportZoom;
+                // zoomedCanvas.height = previewSize.height * exportZoom;
+                zoomedCanvas.width = previewSize.width * 3;
+                zoomedCanvas.height = previewSize.height * 3;
+                // var zctx = zoomedCanvas.getContext('2d');
+                
+
+                var resizer_mode = {
+                    js: true,
+                    wasm: true,
+                    cib: true,
+                    ww: true
+                };
+                var opts = [];
+
+                Object.keys(resizer_mode).forEach(function (k) {
+                    if (resizer_mode[k]) opts.push(k);
+                });
+
+                resizer = window.pica({ features: opts });
+
+                resizer.resize(originalCanvas, zoomedCanvas, {
+                    unsharpAmount: 80,
+                    unsharpRadius: 0.6,
+                    unsharpThreshold: 2
+                })
+                .then(result => {
+                //.then(result => resizer.toBlob(result, 'image/jpeg', 0.95))
+                //.then(blob => {
+                    console.log('resized to canvas & created blob!');
+                    // Resizing completed
+                    // Read resized image data
+                    var picaImageData = zoomedCanvas.toDataURL("image/jpeg"); // data Base 64 ที่ต้องเอาไปใช้  จบแค่ตรงนี้
+                    var $picaImg = $('<img style="border:solid 1px red" src="' + picaImageData + '" />'); 
+
+                    // Compare to original canvas export
+                    var canvasImageData = $editor.cropit('export');
+                    var $canvasImg = $('<img style="border:solid 1px red" src="' + canvasImageData + '" />');
+
+                    // Render on page
+                    $('<div />').css('margin', '20px 0').append($picaImg, $canvasImg).appendTo('body');
+                });
+                //}).then(result => {
+                //    console.log('resize done!')
+
+                //    // Resizing completed
+                //    // Read resized image data
+                //    var picaImageData = zoomedCanvas.toDataURL();
+                //    var $picaImg = $('<img src="' + picaImageData + '" />');
+
+                //    // Compare to original canvas export
+                //    var canvasImageData = $editor.cropit('export');
+                //    var $canvasImg = $('<img src="' + canvasImageData + '" />');
+
+                //    // Render on page
+                //    $('<div />').css('margin', '20px 0').append($picaImg, $canvasImg).appendTo('body');
+                //});
+            });
+        });
+    </script>
+</body>
+</html>

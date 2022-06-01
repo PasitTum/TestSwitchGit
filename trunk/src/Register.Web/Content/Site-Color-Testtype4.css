@@ -1,0 +1,31 @@
+﻿:root {
+    --sidebarBackground: #fbb416;
+    --sidebarHeaderBg: var(--sidebarBackground);
+    --footerBg: var(--sidebarBackground);
+    --bg-card-primary: var(--sidebarBackground);
+    --testtype-header: #fbb416;
+    --sidebarEleHovC: #f8e08e;
+    --menu-item-background-active: #f8e08e;
+    --menu-item-background-hover: #f8c58e;
+    --text-color-on-background: black; /* #023b82; */
+    --normal-text-color: black;
+    --sidebarElmActC: black;
+}
+
+.site-banner {
+    background-image: url(../Content/Images/header-bg-testtype4.jpg) !important;
+}
+
+.testtype-header, .site-banner, .header-table, .footer, .modal-title.text-light {
+    color: var(--text-color-on-background) !important;
+}
+
+.button-icon {
+    background-color: var(--menu-item-background-active) !important;
+    color: var(--text-color-on-background) !important;
+}
+
+    .button-icon:hover {
+        background-color: var(--menu-item-background-hover) !important;
+    }
+

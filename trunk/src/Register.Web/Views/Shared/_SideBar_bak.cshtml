@@ -1,0 +1,109 @@
+﻿<script src="~/Scripts/views/sidebar.js"></script>
+<nav id="sidebar" ng-app="ocsApp" ng-controller="sideBarController">
+    <div class="sidebar-header text-center">
+        <a href="@Url.Action("Index","Home",new { Area = "Enroll" })">
+            <img class="sidebar-logo" src="~/Content/Images/logo.png" />
+        </a>
+    </div>
+    <ul class="sidebar-menu" data-widget="tree">
+        <li>
+            <a class="menu-item" href='@Url.Action("Index","Home")?testTypeID={{TestTypeID}}'>
+                <div class="menu-item-icon"><i class="align-self-center fas fa-home"></i></div>
+                <div class="menu-item-text">หน้าหลัก</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-book"></i></div>
+                <div class="menu-item-text">คู่มือแนะนำการสมัครสอบ</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-registered"></i></div>
+                <div class="menu-item-text">สมัครสอบแข่งขัน อปท.</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-search-dollar"></i></div>
+                <div class="menu-item-text">ค้นหาแบบฟอร์ม การชำระเงิน</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-tasks"></i></div>
+                <div class="menu-item-text">ตรวจสอบสถานะ<br />การสมัครสอบ</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-portrait"></i></div>
+                <div class="menu-item-text">อัปโหลด (Upload) รูปถ่าย</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-search"></i></div>
+                <div class="menu-item-text">พิมพ์ใบสมัคร<br />และเลขประจำตัวสอบ</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-search-location"></i></div>
+                <div class="menu-item-text">ตรวจสอบรายชื่อ<br />และสถานที่สอบ</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-search-plus"></i></div>
+                <div class="menu-item-text">ค้นหารายชื่อ<br />ผู้สอบผ่านข้อเขียน</div>
+            </a>
+        </li>
+        @*<li>
+                <a class="menu-item" href="#">
+                    <div class="menu-item-icon"><i class="far fa-file-pdf"></i></div>
+                    <div class="menu-item-text">บัญชีรายชื่อผู้สอบแข่งขันได้</div>
+                </a>
+            </li>*@
+        <li>
+            <a class="menu-item" href="#" data-toggle="tooltip" data-placement="right" title="ระบบยังไม่เปิดให้บริการ !">
+                <div class="menu-item-icon"><i class="fas fa-scroll"></i></div>
+                <div class="menu-item-text">ดูผลคะแนนสอบ</div>
+            </a>
+        </li>
+        @*<li>
+                <a class="menu-item" href="#">
+                    <div class="menu-item-icon"><i class="fas fa-poll"></i></div><div class="menu-item-text">กำหนดวัน เวลา สถานที่สอบ ภาค ค.</div>
+                </a>
+            </li>*@
+
+        <li>
+            <a class="menu-item" href="http://e-accreditation.ocsc.go.th/acc/index.html" target="_blank">
+                <div class="menu-item-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="menu-item-text">ตรวจสอบวุฒิการศึกษา</div>
+            </a>
+        </li>
+        <li>
+            <a class="menu-item" href="http://qualification60.otepc.go.th/login.php" target="_blank">
+                <div class="menu-item-icon"><i class="fas fa-stamp"></i></div>
+                <div class="menu-item-text">ตรวจสอบคุณวุฒิที่รับรองเป็นข้าราชการครู</div>
+            </a>
+        </li>
+
+        @*<li>
+                <a class="menu-item" href="#" target="_blank"><div class="menu-item-icon"><i class="fas fa-file-invoice-dollar"></i></div><div class="menu-item-text">คู่มือการชำระเงิน</div></a>
+            </li>
+            <li>
+                <a class="menu-item" href="#">
+                    <div class="menu-item-icon"><i class="fas fa-sms"></i></div>
+                    <div class="menu-item-text">สมัคร SMS แจ้งเตือน</div>
+                </a>
+            </li>*@
+    </ul>
+</nav>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

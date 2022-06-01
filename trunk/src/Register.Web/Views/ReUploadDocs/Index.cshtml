@@ -1,0 +1,205 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    var Model = new RegisterModel();
+    ViewBag.Title = "อัปโหลดเอกสารใหม่";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="registerApp" ng-controller="newDocsUploadController">
+    <div class="col-12">
+        <form name="newDocsUpload" novalidate ng-submit="submit()">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">อัปโหลดเอกสารใหม่</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (newDocsUpload.citizenID.$error.pattern || newDocsUpload.citizenID.$error.required) && searchPayin.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right required">วัน/เดือน/ปี เกิด (พ.ศ.)</label>
+                        <div class="input-group col-12 col-md-8 pointer">
+                            <div class="col-12 px-0">
+                                <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">วัน</label>
+                                <select ng-model="model.BirthDateDay" ng-change="validateAge()" style="min-width: 70px;"
+                                        class="form-control col-8 col-md-1 d-inline-flex" id="birthdateDay" name="birthdateDay">
+                                    <option class="custom-option" value="--">--</option>
+                                    <option class="custom-option" ng-repeat="option in lstDay" value="{{option}}">
+                                        {{option}}
+                                    </option>
+                                </select> <label for="" class="col-form-label mx-1 d-none d-md-inline">/</label>
+                                <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">เดือน</label>
+                                <select ng-model="model.BirthDateMonth" ng-change="validateAge()" style="min-width: 70px;"
+                                        class="form-control col-8 col-md-1 d-inline-flex" id="birthdateMonth" name="birthdateMonth">
+                                    <option class="custom-option" value="--">--</option>
+                                    <option class="custom-option" ng-repeat="option in lstMonth" value="{{option}}">
+                                        {{option}}
+                                    </option>
+                                </select> <label for="" class="col-form-label mx-1 d-none d-md-inline">/</label>
+                                <label for="" class="col-form-label mt-1 col-3 control-label d-inline-flex d-md-none">ปี</label>
+                                <select ng-model="model.BirthDateYear" ng-change="validateAge()" style="min-width: 85px;"
+                                        class="form-control col-8 col-md-1 d-inline-flex" id="birthdateYear" name="birthdateYear" required>
+                                    <option class="custom-option" value="0000">--</option>
+                                    <option class="custom-option" ng-repeat="option in lstYear" value="{{option}}">
+                                        {{option}}
+                                    </option>
+                                </select>
+                                <label for="" class="col-form-label mt-1 col-3 d-inline-flex d-md-none" ng-if="showAges"></label>
+                                <label for="" class="col-form-label text-danger ml-2" ng-if="showAges" ng-cloak>อายุ {{model.AgeYear}} ปี {{model.AgeMonth}} เดือน</label>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="form-group row mt-2">
+                            <label for="" class="col-12 col-md-4 text-md-right control-label col-form-label required">กลุ่มวิชาที่สมัครสอบ</label>
+                            <div class="input-group col-12 col-md-8">
+                                <div class="custom-control custom-radio mt-2 ml-2 mr-0 col-12 col-md-12" ng-repeat="classGrp in lstClassGroups">
+                                    <input class="custom-control-input col-form-label" type="radio" name="classGroupID"
+                                           ng-model="model.ClassGroupID"
+                                           ng-change="classGroupChange()"
+                                           id="classGrp_{{classGrp.id}}"
+                                           value="{{classGrp.id}}" required>
+                                    <label class="custom-control-label pointer" onclick="" for="classGrp_{{classGrp.id}}">{{classGrp.text}}</label>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="form-group row mt-3">
+                        <label for="" class="control-label col-12 col-md-4 text-md-right col-form-label required">ตำแหน่งที่สมัครสอบ</label>
+                        <div class="input-group col-12 col-md-8" ng-class="{ 'validation-error': newDocsUpload.testingClassID.$error.required && newDocsUpload.testingClassID.$dirty }">
+                            <select class="form-control col-12 col-md-5" id="testingClassID" name="testingClassID"
+                                    ng-model="model.TestingClassID" required>
+                                <option value="">กรุณาเลือกตำแหน่งที่สมัครสอบ</option>
+                                <option ng-repeat="className in lstClasses | unique: 'name'" value="{{className.id}}">{{className.name}}</option>
+                            </select>
+                            @Html.Partial("_LoadingNextTo", new { ng_model = "lstClasses" })
+                        </div>
+                    </div>
+                    @*<div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-4 text-md-right col-form-label required">รหัสวิชา/กลุ่มวิชา</label>
+                            <div class="input-group col-12 col-md-8" ng-class="{ 'validation-error': newDocsUpload.testingClassID.$error.required && newDocsUpload.testingClassID.$dirty }">
+                                <select id="testingClassID" name="testingClassID"
+                                        ng-model="model.TestingClassID"
+                                        ng-change="regClassChange()"
+                                        class="form-control col-12 col-md-5" required>
+                                    <option value="">กรุณาเลือกรหัสวิชา/กลุ่มวิชา</option>
+                                    <option value="-" ng-cloak ng-show="getLoading('lstClasses')">กำลังอ่านข้อมูล กรุณารอสักครู่...</option>
+                                    <option ng-repeat="class in lstClasses" value="{{class.id}}">{{class.text}}</option>
+                                </select>
+                                @Html.Partial("_LoadingNextTo", new { ng_model = "lstClasses" })
+                            </div>
+                            <input type="hidden" id="regClassName" name="regClassName" value="{{model.RegClassName}}" />
+                        </div>*@
+                    <div class="form-group row">
+
+                        <label for="" class="control-label col-12 col-md-4 text-md-right col-form-label required">โทรศัพท์เคลื่อนที่</label>
+                        <div class="input-group col-12 col-md-8" ng-class="{ 'validation-error': (newDocsUpload.mobile.$error.pattern || newDocsUpload.mobile.$error.required) && newDocsUpload.mobile.$dirty }">
+                            <input type="text" class="form-control col-12 col-md-5" id="mobile" name="mobile"
+                                   maxlength="10" ng-pattern="/^[0-9]{10,10}$/"
+                                   ng-model="model.Mobile" autocomplete="off" placeholder="โทรศัพท์เคลื่อนที่" required />
+                        </div>
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="show">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information" id="boxResult">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อตัว-ชื่อสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{newDocsUpload.TITLE_NAME}}{{newDocsUpload.FNAME_TH}} {{newDocsUpload.LNAME_TH}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{newDocsUpload.CLASS_NAME_TH}}
+                    </div>
+                </div>
+                @*<div class="row information">
+                        <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ภาค/เขต</label>
+                        <div class="col-12 col-md-8 col-form-label">
+                            {{newDocsUpload.CENTER_EXAM_NAME}}
+                        </div>
+                    </div>*@
+                <form name="newUploadDoc" ng-submit="submitUpload($event)">
+                    <div class="row mt-3" ng-show="newDocsUpload.UPLOAD_DOC_FLAG != 'Y' || newDocsUpload.UPLOAD_DOC_FLAG != 'W'">
+                        <div class="col-12" style="overflow-x: auto;">
+                            @Html.Partial("_DocReUploadList")
+                        </div>
+                    </div>
+                    <div class="row mt-3" ng-show="newDocsUpload.UPLOAD_DOC_FLAG != 'Y' || newDocsUpload.UPLOAD_DOC_FLAG != 'W'">
+                        <div class="col-12 col-md-12 text-center">
+                            <button type="submit" class="btn btn-success" ng-disabled="checked">
+                                <i class="fas fa-save"></i>&nbsp;&nbsp;ยืนยันอัปโหลดเอกสาร
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row mt-3" ng-show="newDocsUpload.UPLOAD_DOC_FLAG == 'Y'">
+                    <div class="col-12 col-md-12 text-center">
+                        <label class="col-form-label information font-weight-bold text-success">ท่านได้อัปโหลดเอกสารแล้ว</label>
+                    </div>
+                </div>
+                <div class="row mt-3" ng-show="newDocsUpload.UPLOAD_DOC_FLAG == 'W'">
+                    <div class="col-12 col-md-12 text-center">
+                        <label class="col-form-label information font-weight-bold text-warnung">ท่านอยู่ระหว่างรอตรวจสอบเอกสาร</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center">ไม่พบข้อมูลการสมัครสอบ หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/reuploaddocs-index.js?_=20220531"></script>
+    <script>
+        var oldData = @Html.Raw(Model.ToJson());
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

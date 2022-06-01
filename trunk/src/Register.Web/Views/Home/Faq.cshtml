@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "สารพันปัญหา";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var testTypeID = this.ViewContext.RouteData.GetRequiredString("testtypeid");
+}
+
+@{
+    var faqFileName = String.Format("_FAQ_TestType{0}", testTypeID);
+    var faqFile = "~/Views/Home/" + faqFileName + ".cshtml";
+    var absolutePathFaq = HttpContext.Current.Server.MapPath(faqFile);
+    if (System.IO.File.Exists(absolutePathFaq))
+    {
+        @Html.Partial(faqFileName)
+    }
+    else
+    {
+        @Html.Partial("_FAQ")
+    }
+}

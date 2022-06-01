@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "Content/Site-Color.css",
+    "inputFile": "Content/Site-Color.scss"
+  },
+  {
+    "outputFile": "Content/Site-Alert.css",
+    "inputFile": "Content/Site-Alert.less"
+  }
+]

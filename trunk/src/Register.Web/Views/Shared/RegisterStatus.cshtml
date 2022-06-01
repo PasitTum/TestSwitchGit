@@ -1,0 +1,256 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "ตรวจสอบสถานะการสมัครสอบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="registerApp" ng-controller="searchStatusController">
+    <div class="col-12">
+        <form name="searchStatus" ng-submit="submit()">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">ตรวจสอบสถานะการสมัครสอบ</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row ">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchStatus.citizenID.$error.pattern || searchStatus.citizenID.$error.required) && searchStatus.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-12 ng-cloak" ng-show="show">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อตัว-ชื่อสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{registerStatus.FULLNAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{registerStatus.CLASS_NAME_TH}}
+                    </div>
+                </div>
+                <div class="row information">
+        @*<label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">จังหวัดที่ประสงค์จะเข้าสอบ</label>
+        <div class="col-12 col-md-8 col-form-label">
+            {{registerStatus.EXAM_SITE_NAME}}
+        </div>*@
+    </div>
+                <div class="row mt-3 d-none d-md-block">
+                    <div class="col-12" style="overflow-x: auto;">
+                        <table class="table w-100 table-bordered">
+                            <thead>
+                                <tr class="text-center bg-light">
+                                    <th>
+                                        สถานะ
+                                    </th>
+                                    <th>
+                                        หมายเหตุ
+                                    </th>
+                                    <th ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                        แบบฟอร์มการชำระเงิน
+                                    </th>
+                                    <th ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                        QR Code ค่าสมัครสอบ
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <td class="vertical-align-middle">
+                                        <i class="fas fa-check fa-2x text-success"></i>
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        <lebel class="font-weight-bold">สมัครสอบ</lebel>
+                                    </td>
+                                    <th ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                        
+                                    </th>
+                                    <th ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                       
+                                    </th>
+                                </tr>
+                                <tr class="text-center">
+                                    <td class="vertical-align-middle">
+                                        <i class="fas fa-question fa-2x text-danger" ng-if="registerStatus.PAYMENT_STATUS == 'ยังไม่ชำระเงิน'"></i>
+                                        <i class="fas fa-check fa-2x text-success" ng-if="registerStatus.PAYMENT_STATUS != 'ยังไม่ชำระเงิน'"></i>
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        <lebel class="font-weight-bold text-danger" ng-if="registerStatus.PAYMENT_STATUS == 'ยังไม่ชำระเงิน'">{{registerStatus.PAYMENT_STATUS}}</lebel>
+                                        <lebel class="font-weight-bold text-success" ng-if="registerStatus.PAYMENT_STATUS != 'ยังไม่ชำระเงิน'">{{registerStatus.PAYMENT_STATUS}}</lebel>
+                                    </td>
+                                    <td class="vertical-align-middle" ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                        @using (Html.BeginForm("PrintPayIn", "Reports", FormMethod.Post, new { area = "", enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.Hidden("ReportName", "PayinReport")
+                                            <input type="hidden" id="TestTypeID" name="TestTypeID" value="{{testTypeID}}" />
+                                            <input type="hidden" id="CitizenID" name="CitizenID" value="{{model.CitizenID}}" />
+                                            <button type="submit" target="_blank" class="btn btn-info ng-cloak"><i class="far fa-file-pdf fa-1x"></i>&nbsp;&nbsp;พิมพ์แบบฟอร์มการชำระเงิน</button>
+                                        }
+                                    </td>
+                                    <td ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                        <div class="col-12 text-center">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">QR Code ค่าสมัครสอบ</button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row information d-block d-md-none">
+                    <div class="card card-body border-success col-12 mx-1">
+                        <div class="row information d-block d-md-none">
+                            <div class="col-12 col-md-12 col-form-label text-center">
+                                <i class="fas fa-check fa-2x text-success"></i>
+                            </div>
+                        </div>
+                        <div class="row information d-block d-md-none">
+                            <label class="font-weight-bold col-12 col-md-4 col-form-label"></label>
+                            <div class="col-12 col-md-8 col-form-label text-center">
+                                <lebel class="font-weight-bold">สมัครสอบ</lebel>
+                            </div>
+                        </div>
+                    </div>
+                </div>        
+                <div class="row information mt-2 d-block d-md-none">
+                    <div class="card card-body col-12 mx-1" ng-class="{'border-success': (registerStatus.PAYMENT_STATUS != 'ยังไม่ชำระเงิน'), 'border-danger': (registerStatus.PAYMENT_STATUS == 'ยังไม่ชำระเงิน')}">
+                        <div class="row information d-block d-md-none">
+                            <div class="col-12 col-md-12 col-form-label text-center">
+                                <i class="fas fa-question fa-2x text-danger" ng-if="registerStatus.PAYMENT_STATUS == 'ยังไม่ชำระเงิน'"></i>
+                                <i class="fas fa-check fa-2x text-success" ng-if="registerStatus.PAYMENT_STATUS != 'ยังไม่ชำระเงิน'"></i>
+                            </div>
+                        </div>
+                        <div class="row information d-block d-md-none">
+                            <label class="font-weight-bold col-12 col-md-4 col-form-label"></label>
+                            <div class="col-12 col-md-8 col-form-label text-center">
+                                <lebel class="font-weight-bold text-danger" ng-if="registerStatus.PAYMENT_STATUS == 'ยังไม่ชำระเงิน'">{{registerStatus.PAYMENT_STATUS}}</lebel>
+                                <lebel class="font-weight-bold text-success" ng-if="registerStatus.PAYMENT_STATUS != 'ยังไม่ชำระเงิน'">{{registerStatus.PAYMENT_STATUS}}</lebel>
+                            </div>
+                        </div>
+                        <div class="row information d-block d-md-none" ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                            <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">แบบฟอร์มการชำระเงิน</label>
+                            <div class="col-12 col-md-8 col-form-label">
+                                @using (Html.BeginForm("PrintPayIn", "Reports", FormMethod.Post, new { area = "", enctype = "multipart/form-data", @target = "_blank" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("ReportName", "PayinReport")
+                                    <input type="hidden" id="TestTypeID" name="TestTypeID" value="{{testTypeID}}" />
+                                    <input type="hidden" id="CitizenID" name="CitizenID" value="{{model.CitizenID}}" />
+                                    <button type="submit" target="_blank" class="btn btn-info"><i class="far fa-file-pdf fa-1x"></i>&nbsp;&nbsp;พิมพ์แบบฟอร์มการชำระเงิน</button>
+                                }
+                            </div>
+                        </div>
+                        <div class="row information d-block d-md-none" ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                            <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">QR Code ค่าสมัครสอบ</label>
+                            <div class="col-12 col-md-8 col-form-label">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">QR Code ค่าสมัครสอบ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>       
+                
+                <div class="row mt-3" ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                    <div class="col-12">
+                        <div class="text-danger text-center information font-weight-bold">หลังจากที่ผู้สมัครได้ชำระเงินค่าธรรมเนียมการสมัครสอบไปแล้ว 1 วันทำการ<br />ผู้สมัครสามารถเข้ามาตรวจสอบสถานะการชำระเงิน โดยคลิกที่ปุ่มเมนู "ตรวจสอบสถานะการสมัครสอบ"</div>
+                    </div>
+                </div>
+                @*<div class="row mt-4" ng-if="registerStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                    <div class="col-12 offset-md-1 col-md-10 text-center">
+                        <img src="~/Content/Images/banklist3.png" style="max-width: 100%; border: solid 1px black" />
+                    </div>
+
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center">ไม่พบข้อมูลการสมัครสอบ หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-lightgreen">
+                    <h5 class="modal-title header-table font-weight-bold" id="exampleModalLabel">QR Code ค่าสมัครสอบ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6 text-center">
+                            <label class="font-weight-bold information">ค่าธรรมเนียมการสอบ 300 บาท</label><br /><label class="font-weight-bold">และค่าธรรมเนียมธนาคาร 30 บาท</label><br />
+                            <a id="imgQrRegister" href="{{qrcodeInfo.QRCode}}" target="_blank" download="QrCode.jpg">
+                                <img ng-src="{{qrcodeInfo.QRCode}}" style="max-width: 250px; border: solid 1px black" />
+                            </a><br />
+                            <button type="button" class="btn btn-outline-info mt-2" onclick="imgQrRegister.click()">ดาวน์โหลด QR Code</button>
+                        </div>
+                        <div class="col-12 col-md-6 text-center" ng-if="qrcodeInfo.SmsStatus == 'Y'">
+                            <label class="font-weight-bold">ค่าบริการ SMS 20 บาท</label><br /><label class="font-weight-bold text-danger">**ไม่ใช่ค่าสมัครสอบ**</label><br />
+                            <a id="imgQrSMS" href="{{qrcodeInfo.SMSQRCode}}" target="_blank" download="QrCode-SMS.jpg">
+                                <img ng-src="{{qrcodeInfo.SMSQRCode}}" style="max-width: 250px; border: solid 1px black" />
+                            </a><br />
+                            <button type="button" class="btn btn-outline-info mt-2" onclick="imgQrSMS.click()">ดาวน์โหลด QR Code</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/register-status.js?_=2021072101"></script>
+    <script>
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+    </script>
+}
+
+

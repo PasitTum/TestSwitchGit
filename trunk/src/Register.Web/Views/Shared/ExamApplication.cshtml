@@ -1,0 +1,138 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "พิมพ์ใบสมัคร";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="registerApp" ng-controller="printApplicationController">
+    <div class="col-12">
+        <form name="searchEnroll" ng-submit="submit()">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">@ViewBag.Title</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchEnroll.citizenID.$error.pattern || searchEnroll.citizenID.$error.required) && searchEnroll.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    @*<div class="row mt-2">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">เบอร์โทรศัพท์มือถือ</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchEnroll.mobileNo.$error.pattern || searchEnroll.mobileNo.$error.required) && searchEnroll.mobileNo.$dirty }">
+                            <input type="text" class="form-control col-md-5 d-inline" id="mobileNo" name="mobileNo"
+                                   ng-model="model.Mobile"
+                                   ng-pattern="/^[0-9]{10}$/"
+                                   maxlength="10" autocomplete="off" placeholder="เบอร์โทรศัพท์มือถือ" required />
+                        </div>
+                    </div>*@
+                    @*<div class="row mt-2">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">เลขหลังบัตรประจำตัวประชาชน (12 หลัก)</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchEnroll.laserCode.$error.pattern || searchEnroll.laserCode.$error.required) && searchEnroll.laserCode.$dirty }">
+                            <input type="text" class="form-control col-md-5 d-inline" id="laserCode" name="laserCode"
+                                   ng-model="model.LaserCode"
+                                   ng-pattern="/^[a-zA-Z]{2}[0-9]{10}$/"
+                                   maxlength="12" autocomplete="off" placeholder="ตัวอย่าง JT9999999999" required />
+                            <button type="button" ng-click="(searchEnroll.$valid || searchEnroll.$invalid) && openDialog()" class="btn btn-info d-inline ml-2">คลิกดูตัวอย่าง</button>
+                        </div>
+                    </div>*@
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="show">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อตัว-ชื่อสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{enrollInfo.FULL_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{enrollInfo.TESTING_CLASS_NAME}}
+                    </div>
+                </div>
+                @*<div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ภาค/เขต</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{enrollInfo.CENTER_EXAM_NAME}}
+                    </div>
+                </div>*@
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 col-form-label text-md-right"></label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        @using (Html.BeginForm("PrintApplication", "Reports", FormMethod.Post, new { area = "", enctype = "multipart/form-data", @target = "_blank" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("ReportName", "ApplicationReport")
+                            <input type="hidden" id="TestTypeID" name="TestTypeID" value="{{testTypeID}}" />
+                            <input type="hidden" id="CitizenID" name="CitizenID" value="{{model.CitizenID}}" />
+                            <input type="hidden" id="MobileNo" name="MobileNo" value="{{model.Mobile}}" />
+                            @*<input type="hidden" id="LaserCode" name="LaserCode" value="{{model.LaserCode}}" />*@
+                            <button type="submit" target="_blank" class="btn btn-info"><i class="far fa-file-pdf fa-1x"></i>&nbsp;&nbsp;พิมพ์ใบสมัคร</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center" ng-if="testTypeID == '1'">ไม่พบข้อมูลการสมัครสอบ หรือ ท่านกรอกข้อมูลไม่ถูกต้อง หรือท่านเป็นผู้ขาดคุณสมบัติในการสมัครสอบ</div>
+                <div style="font-size: 2rem;" class="text-danger text-center" ng-if="testTypeID != '1'">ไม่พบข้อมูลการสมัครสอบ หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="_CitizenDialogModal.html">
+        @Html.Partial("_CitizenDialogModal")
+    </script>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/exam-application.js?_=2022012501"></script>
+    <script>
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+        $("#laserCode").attr("style", "text-transform:uppercase;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+            $("#laserCode").keypress(function (e) { return Character.isKeyEngNumCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

@@ -1,0 +1,469 @@
+﻿@model OSC.Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "สมัครสอบ";
+    Layout = "";
+}
+
+@*@using (Html.BeginForm("SearchPayin", "EExamRegister", FormMethod.Post, new { @id = "CheckCitizenID", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()*@
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">การสอบเพื่อวัดความรู้ความสามารถทั่วไป 2563</h5>
+        <div class="pl-2 pr-2">
+            <div class="row">
+                <div class="col-12 col-md-4 col-form-label text-danger information">หมายเหตุ</div>
+            </div>
+            <div class="row" ng-repeat="remark in remarks">
+                <div class="col-10 col-md-12 text-danger col-form-label ml-5">{{remark.Detail}}</div>
+            </div>
+            <div class="form-group row mt-3">
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required ">ศูนย์สอบ</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-8 col-form-label">{{getNameFromID(examCenters, model.ExamCenterID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right pt-md-2 col-form-label font-weight-bold">เลขประจำตัวประชาชน</label>
+                <div class="col-12 col-md-4 pt-md-1 col-form-label style-citizenid">
+                    <label>@Model.CitizenID</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">บัตรประชาชนออกให้ ณ จังหวัด</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstProvinces, model.CardProvinceID)}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">คำนำหน้า</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-11 col-md-8 col-form-label">{{getNameFromID(prefixes, model.PrefixID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อ</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.FirstName}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">นามสกุล</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.LastName}}</label>
+                </div>
+
+            </div>
+            @*<div class="form-group row text-md-center">
+                <label for="" class="col-12 col-md-12 col-form-label text-danger">(โปรดระบุชื่อนามสกุลของท่าน ให้ตรงตามที่ปรากฏในบัตรประจำตัวประชาชนโดยไม่ต้องกรอกคำนำหน้าชื่อ)</label>
+            </div>*@
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เพศ</label>
+                <div class="input-group col-12 col-md-8">
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.GenderID == 'M'">ชาย</label>
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.GenderID == 'F'">หญิง</label>
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">สัญชาติ</label>
+                <div class="input-group col-12 col-md-2">
+                    <label for="" class="col-12 col-md-12 col-form-label">{{model.Nationality}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เชื้อชาติ</label>
+                <div class="input-group col-12 col-md-2">
+                    <label for="" class="col-12 col-md-12 col-form-label">{{model.Race}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ศาสนา</label>
+                <div class="input-group col-12 col-md-2">
+                    <label for="" class="col-12 col-md-12 col-form-label">{{getNameFromID(religions, model.ReligionID)}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required ">สถานภาพ</label>
+                <div class="input-group col-12 col-md-8">
+                    <label for="" class="col-11 col-md-8 col-form-label">{{getNameFromID(statuses, model.StatusID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">วัน-เดือน-ปี เกิด</label>
+                <div class="input-group col-6 col-md-6 pointer">
+                    <label for="" class="col-12 col-md-12 col-form-label">{{model.BirthDate}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="col-12 col-md-12 col-form-label text-danger ml-md-3">(อายุต้องไม่ต่ำกว่า 18 ปี นับถึงวัยที่ปิดรับสมัครในวันที่ 29 มีนาคม 2563)</label>
+            </div>
+        </div>
+
+    </div>
+</div>
+@*}*@
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">วุฒิการศึกษา</h5>
+        <div class="pl-2 pr-2">
+            <div class="form-group row mt-3">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วุฒิที่ใช้ในการสมัคร</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstEducationals, model.EducationalID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ประเภทสถานศึกษา</label>
+                <div class="input-group col-12 col-md-8">
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.SchoolType == 'G'">รัฐบาล</label>
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.SchoolType == 'P'">เอกชน</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชื่อสถานศึกษา</label>
+                <div class="input-group col-12 col-md-8">
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.SchoolLocation == 'T'">สถานศึกษาในประเทศ</label>
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.SchoolLocation == 'O'">สถานศึกษาต่างประเทศ</label>
+                </div>
+            </div>
+
+            <div class="form-group row" ng-if="model.SchoolLocation == 'T'">
+                <label for="" class="col-12 col-md-3 text-md-right col-form-label"></label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.SchoolName}}</label>
+                </div>
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">จังหวัด</label>
+                <div class="input-group col-12 col-md-3">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstProvinces, model.SchoolProviceID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row" ng-if="model.SchoolLocation == 'O'">
+                <label for="" class="col-12 col-md-3 text-md-right col-form-label"></label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.SchoolName}}</label>
+                </div>
+
+            </div>
+
+
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชื่อปริญญา/ประกาศนียบัตร</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstDegrees, model.DegreeID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วิชาเอก</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.MajorName}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">สถานะการศึกษา</label>
+                <div class="input-group col-12 col-md-8">
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.EducationStatus == 'G'">จบการศึกษา</label>
+                    <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.EducationStatus == 'S'">กำลังศึกษา</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วัน-เดือน-ปี ที่จบการศึกษา</label>
+                <div class="input-group col-6 col-md-6 pointer">
+                    <label for="" class="col-12 col-md-12 col-form-label">{{model.GraduateDate}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">เกรดเฉลี่ยสะสม</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.GPA}}</label>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="model.EducationStatus == 'S'">
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label required">กำลังศึกษาอยู่ชั้น (คาดว่าจะสำเร็จการศึกษาในปีการศึกษา 2563)</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-md-8 col-form-label">{{getNameFromID(lstDegrees, model.EducationDegreeID)}}</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">ข้อมูลความพิการ (ตามประกาศกระทรวงการพัฒนาสังคมและความมั่นคงของมนุษย์)</h5>
+        <div class="form-group row mt-3">
+            <div class="input-group col-12 col-md-3 ml-md-3">
+                <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.SpcFlag == 'N'">ไม่มีความพิการ</label>
+                <label for="" class="col-11 col-md-8 col-form-label" ng-if="model.SpcFlag == 'S'">มีความพิการ</label>
+            </div>
+            <div class="col-12 col-md-6" ng-show="model.SpcFlag == 'S'">
+                <label for="" class="col-12 col-md-8 col-form-label">ต้องการความช่วยเหลือ {{getNameFromID(lstSpcs, model.SpcCode)}}</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">อาชีพปัจจุบัน</h5>
+        <div class="form-group row mt-3">
+            <div class="input-group col-12 col-md-12 ml-md-3">
+                <label for="" class="col-12 col-md-8 col-form-label">{{getNameFromID(lstOccupation, model.CareerID)}}</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">ที่อยู่ที่สามารถติดต่อได้</h5>
+        <div class="pl-2 pr-2">
+            <div class="form-group row mt-3">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">บ้านเลขที่</label>
+                <div class="input-group col-12 col-md-2">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Addr}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชั้น/อาคาร/หมู่บ้าน</label>
+                <div class="input-group col-12 col-md-3">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Building}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-1 text-md-right col-form-label required">หมู่ที่</label>
+                <div class="input-group col-12 col-md-1">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Moo}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ตรอก/ซอย/แยก</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Soi}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ถนน</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Road}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">จังหวัด</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstProvinces, model.Prov)}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เขต/อำเภอ</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstAmphs, model.Amph)}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">แขวง/ตำบล</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{getNameFromID(lstTmbls, model.Tmbl)}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">รหัสไปรษณีย์</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Zipcode}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Tel}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์เคลื่อนที่</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Mobile}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">อีเมล</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.Email}}</label>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">บุคคลที่ติดต่อได้ ในกรณีฉุกเฉิน</h5>
+        <div class="pl-2 pr-2">
+            <div class="form-group row mt-3">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ชื่อ</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.EmergencyFirstName}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">นามสกุล</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.EmergencyLastName}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ความสัมพันธ์</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.EmergencyRelation}}</label>
+                </div>
+
+            </div>
+            <div class="form-group row">
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์บ้าน/สถานที่ทำงาน</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.EmergencyTel}}</label>
+                </div>
+
+                <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">โทรศัพท์เคลื่อนที่</label>
+                <div class="input-group col-12 col-md-4">
+                    <label for="" class="col-12 col-md-9 col-form-label">{{model.EmergencyMoblie}}</label>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">แบบสอบถาม</h5>
+        <div class="pl-2 pr-2">
+            <div class="form-group row mt-3">
+                <label for="" class="control-label col-11 col-md-6 text-md-right col-form-label required">ท่านเคยสมัครสอบเพื่อวัดความรู้ความสามารถทั่วไปหรือไม่</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-form-label" ng-if="model.ExamHistory == 'Y'">เคย</label>
+                    <label for="" class="col-12 col-form-label" ng-if="model.ExamHistory == 'N'">ไม่เคย</label>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="model.ExamHistory == 'Y'">
+                <label for="" class="control-label col-12 col-md-6 text-md-right col-form-label required">ท่านเคยสมัครสอบเพื่อวัดความรู้ความสามารถทั่วไปมาแล้ว จำนวน </label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-form-label">{{model.ExamHistoryCounrt}} ครั้ง</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="" class="control-label col-12 col-md-6 text-md-right col-form-label required">เหตุผลในการสมัครสอบครั้งนี้</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-12 col-form-label">{{model.ExamReason}}</label>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+</div>
+<div class="col-12 px-2" ng-show="model.SMSService == true">
+    <div class="card mt-3">
+        <h5 class="card-header header-table">บริการเสริม SMS</h5>
+        <div class="pl-2 pr-2">
+            <div class="form-group row">
+                <label for="" class="col-12 col-md-12 col-form-label text-danger">(ค่าบริการเสริมจากบริษัท CWN 20 บาท โดยบริการเสริมไม่เกี่ยวข้อง กับ สำนักงานคณะกรรมการข้าราชการพลเรือน)</label>
+            </div>
+            <div class="form-group row">
+                <div class="input-group col-12 col-md-4">
+                    <div class="custom-control custom-checkbox custom-control-inline mt-2 ml-2 mr-1 mr-md-0">
+                        <input class="custom-control-input col-form-label" type="checkbox"
+                               ng-model="model.SMSService"
+                               id="confirmSMS" disabled="disabled">
+                        <label class="custom-control-label pointer" onclick="" for="confirmSMS">
+                            &nbsp;รับข่าวสารผ่านบริการเสริม SMS / Email
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+     
+    </div>
+</div>
+
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <h5 class="card-header header-table-danger text-white">คำเตือน! กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนกดปุ่มส่งใบสมัคร</h5>
+        <div class="pl-2 pr-2">
+            <div class="form-group row mt-3">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label">เลขประจำตัวประชาชน</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-8 col-form-label ml-3 ml-md-0 text-blue">@Model.CitizenID</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label">ชื่อ - นามสกุล</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-8 col-form-label ml-3 ml-md-0 text-blue">{{getNameFromID(prefixes, model.PrefixeID)}} {{model.FirstName}} {{model.LastName}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label">วุฒิที่ใช้ในการสมัคร</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-8 col-form-label ml-3 ml-md-0 text-blue">{{getNameFromID(lstEducationals, model.EducationalID)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label">ความพิการ</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-4 col-form-label ml-3 ml-md-0 text-blue" ng-if="model.SpcFlag == 'N'">ไม่มีความพิการ</label>
+                    <label for="" class="col-11 col-md-4 col-form-label ml-3 ml-md-0 text-blue" ng-if="model.SpcFlag == 'S'">มีความพิการ</label>
+                    <label for="" class="col-11 col-md-8 col-form-label ml-3 ml-md-0 text-blue" ng-show="model.SpcFlag == 'S'">ต้องการความช่วยเหลือ {{getNameFromID(lstSpcs, model.SpcCode)}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label">รหัสผ่าน เพื่อใช้สำหรับดูคะแนน</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-8 col-form-label ml-3 ml-md-0 text-blue">{{model.Password}}</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12 col-md-1"></div>
+                <label for="" class="control-label col-11 col-md-3 text-md-right col-form-label">ศูนย์สอบ</label>
+                <div class="input-group col-12 col-md-6">
+                    <label for="" class="col-11 col-md-8 col-form-label ml-3 ml-md-0 text-blue">{{getNameFromID(examCenters, model.ExamCenterID)}}</label>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+<div class="col-12 px-2">
+    <div class="card mt-3">
+        <div class="row pt-2">
+            @*<div class="col-3 col-md-5"></div>*@
+            @*<div class="col-9 col-md-7">*@
+            <div class="col-12 text-center mb-2">
+                <a href="@Url.Action("RegisterStep3", "Register")" ng-click="confirmmodel()" class="btn btn-success">ส่งใบสมัคร</a>
+                <button ng-click="edit()" class="btn btn-primary ml-2">แก้ไข</button>
+                @*<a href="@Url.Action("NewsMain","EExamRegister")" class="btn btn-primary ml-1"><i class="fas fa-backward"></i> กลับ</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+

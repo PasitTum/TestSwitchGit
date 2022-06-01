@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "สมัครสอบแข่งขัน อปท. - เลือก ภาค/เขต ที่เปิดรับสมัคร";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center" ng-controller="ChooseRegionControler" ng-cloak>
+    <div class="col-md-10 text-center border rounded py-4">
+        <h4 class="mx-auto animated fadeIn text-info font-weight-bolder">เลือก ภาค/เขต ที่เปิดรับสมัคร</h4>
+        <div ng-loading="isLoading.examCenters"></div>
+        <table class="table table-hover w-100 my-md-2 my-sm-1 animated fadeIn">
+            <thead>
+                <tr>
+                    <th class="text-left" colspan="2">ภาค/เขต ที่เปิดรับสมัคร</th>
+                    @*<th class="text-center" style="width:25%">อัตราว่างที่บรรจุ</th>*@
+                    @*<th class="text-center" style="width:50%"></th>*@
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="vertical-align-middle animated fadeIn" ng-repeat="center in examCenters" >
+                    <td class="text-left vertical-align-middle" style="width: 70%">{{center.CENTER_NAME}}</td>
+                    @*<td class="text-center vertical-align-middle">{{center.QUOTA_QTY}}</td>*@
+                    <td class="text-center vertical-align-middle">                        
+                        <a class="btn btn-success" href='@Url.Action("ChoosePosition")?centerID={{center.CENTER_ID}}&centerName={{center.CENTER_NAME | escape}}'>
+                            <i class="fas fa-mouse"></i>&nbsp;คลิกที่นี่เพื่อสมัคร
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+        <a class="btn btn-secondary mt-4" href="@Url.Action("Index")">ย้อนกลับ</a>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="~/Scripts/views/register-choose-region.js"></script>
+}

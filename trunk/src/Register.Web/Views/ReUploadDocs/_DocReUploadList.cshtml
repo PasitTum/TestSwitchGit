@@ -1,0 +1,82 @@
+﻿<div id="divUploadDoc" ng-controller="uploadDocsController" ng-show="documentList" class="table-responsive">
+    <table ng-show="documentList.length > 0" id="tbDocument" class="table">
+        <thead>
+            <tr>
+                <th>เอกสาร</th>
+                <th class="text-center" style="max-width: 150px;">สถานะการอัปโหลด</th>
+                <th class="text-center" style="max-width: 250px;">อัปโหลด</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="line in documentList">
+                <td class="text-left">
+                    <span class="font-weight-600">{{line.DOC_TYPE_NAME}}</span>
+                    <br />
+                    <span class="text-danger">(ขนาดไฟล์ตั้งแต่ {{line.MIN_LIMITED_SIZE}} {{line.UNIT_MIN_SIZE}} ไม่เกิน {{line.MAX_LIMITED_SIZE}} {{line.UNIT_MAX_SIZE}} และไฟล์นามสกุล {{line.FILE_TYPE_ACCEPT}} เท่านั้น)</span>
+                    <div class="progress" ng-show="line.UPLOAD_STATUS === 'W'">
+                        <div id="progressBar{{$index}}" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                    @*<div class="text-info pt-1 px-3" ng-show="line.UPLOAD_STATUS === 'S'">
+                        <i class="fas fa-inbox"></i>
+                        <span ng-bind-html="showNewLine(line.LAST_UPLOAD_DETAIL)"></span>
+                            ชื่อไฟล์ : <b>{{line.LAST_UPLOAD_FILENAME}}</b>
+                    </div>*@
+                </td>
+                <td class="text-center">
+                    <span class="text-danger" ng-hide="line.UPLOAD_STATUS">ยังไม่ส่งเอกสาร</span>
+                    <span class="text-warning" ng-show="line.UPLOAD_STATUS === 'N'">อัปโหลดเอกสารไม่สำเร็จ</span>
+                    <span class="text-success" ng-show="line.UPLOAD_STATUS === 'Y'">รอยืนยันอัปโหลดเอกสาร</span>
+                    <span class="text-info" ng-show="line.UPLOAD_STATUS === 'W'">กำลังอัปโหลดเอกสาร...</span>
+                    <span class="text-success" ng-show="line.UPLOAD_STATUS === 'S'">
+                        <span class="text-success font-weight-bold">อัปโหลดเอกสารแล้ว</span><br/>
+                        <small>
+                            เมื่อ<span ng-bind-html="showNewLine(line.LAST_UPLOAD_DETAIL)"></span><br />
+                            <b>ชื่อไฟล์ {{line.LAST_UPLOAD_FILENAME}}</b>
+                        </small>
+                    </span>
+                    <span class="text-danger" ng-show="line.UPLOAD_STATUS === 'E'">
+                        <b>การอัปโหลดเอกสารผิดพลาด</b><br />
+                        <small>
+                            เมื่อ<span ng-bind-html="showNewLine(line.LAST_UPLOAD_DETAIL)"></span><br />
+                            <b>ชื่อไฟล์ {{line.LAST_UPLOAD_FILENAME}}</b><br />
+                        </small>
+                        <b>กรุณาอัปโหลดใหม่อีกครั้ง</b>
+                    </span>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-outline-danger"
+                            ng-show="line.UPLOAD_STATUS === 'Y'"
+                            ng-click="cancelUpload($index)">
+                        <i class="far fa-file"></i>&nbsp;
+                        ยกเลิกอัปโหลด
+                    </button>
+                    <a class="ml-1 btn btn-outline-success"
+                       target="_blank"
+                       href="#"
+                       ng-href='@Url.Action("DownloadFromTemp","Upload")?testtypeid={{line.TEST_TYPE_ID}}&fileName={{line.FILE_NAME}}&fileType={{line.FILE_TYPE}}&docguid={{line.DOC_GUID}}'
+                       ng-show="line.UPLOAD_STATUS === 'Y'">
+                        <i class="far fa-file-pdf"></i>&nbsp;
+                        ดูเอกสาร
+                    </a>
+                    <button type="button" class="btn btn-outline-info"
+                            ng-show="!line.UPLOAD_STATUS || line.UPLOAD_STATUS === '' || line.UPLOAD_STATUS !== 'Y' "
+                            ng-click="browseFile($index)">
+                        <i class="fas fa-folder-open"></i>&nbsp;เลือกไฟล์
+                    </button>
+                    <input type="file" class="d-none" id="fileUpload{{$index}}"
+                           data-doctypeid="{{line.DOC_TYPE_ID}}"
+                           data-index="{{$index}}"
+                           ng-file-changed="fileChanged($event, files)" />
+                    <input type="hidden" name="DOCS[{{$index}}][DOC_GUID]" value="{{line.DOC_GUID}}" />
+                    <input type="hidden" name="DOCS[{{$index}}][DOC_TYPE_ID]" value="{{line.DOC_TYPE_ID}}" />
+                    <input type="hidden" name="DOCS[{{$index}}][FILE_NAME]" value="{{line.FILE_NAME}}" />
+                    <input type="hidden" name="DOCS[{{$index}}][FILE_TYPE]" value="{{line.FILE_TYPE}}" />
+                    <input type="hidden" name="DOCS[{{$index}}][TEST_TYPE_ID]" value="{{line.TEST_TYPE_ID}}" />
+                    <input type="hidden" name="DOCS[{{$index}}][REQUIRE_FLAG]" value="{{line.REQUIRE_FLAG}}" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="~/Scripts/views/upload-docs.js?_=2021112201"></script>

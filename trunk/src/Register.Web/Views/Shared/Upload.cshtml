@@ -1,0 +1,297 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "อัปโหลดรูปถ่าย";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" ng-app="registerApp" ng-controller="uploadPhotoController">
+    <div class="col-12">
+        <form name="uploadPhoto">
+            <div class="card">
+                @Html.AntiForgeryToken()
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">อัปโหลดรูปถ่าย / ตรวจสอบสถานะรูปถ่าย</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row ">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (uploadPhoto.citizenID.$error.pattern || uploadPhoto.citizenID.$error.required) && uploadPhoto.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button ng-click="submit()" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="showStatus">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อตัว-ชื่อสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{uploadStatus.FULLNAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{uploadStatus.CLASS_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right text-danger">หมายเหตุ</label>
+                    <div class="col-12 col-md-8 col-form-label text-danger">
+                        {{uploadStatus.UPLOAD_STATUS}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="showUpload">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="row information">
+                            <label class="font-weight-bold col-12 col-md-5 control-label col-form-label text-md-right">ชื่อตัว-ชื่อสกุล</label>
+                            <div class="col-12 col-md-7 col-form-label">
+                                {{uploadStatus.FULLNAME}}
+                            </div>
+                        </div>
+                        <div class="row information">
+                            <label class="font-weight-bold col-12 col-md-5 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                            <div class="col-12 col-md-7 col-form-label">
+                                {{uploadStatus.CLASS_NAME}}
+                            </div>
+                        </div>
+                        <div class="row information">
+                            <label class="font-weight-bold col-12 col-md-5 control-label col-form-label text-md-right text-danger">หมายเหตุ</label>
+                            <div class="col-12 col-md-7 col-form-label text-danger">
+                                {{uploadStatus.UPLOAD_STATUS}}
+                            </div>
+                        </div>
+                        <div class="row information">
+                            <label class="font-weight-bold col-12 col-md-5 col-form-label text-md-right"></label>
+                            <div class="col-12 col-md-7 col-form-label">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="col-12 mx-auto font-weight-bold text-danger text-center">รูปถ่ายของท่าน</div>
+                        <div class="text-center mt-2">
+                            <img ng-src="{{uploadStatus.PHOTO_FILE_BASE64}}" style="width: 125px; margin:auto;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="showUpload">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">อัปโหลดรูปถ่าย</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row mt-4 image-editor">
+                    <div class="col-12 col-md-5">
+                        <div class="row">
+                            <div class="col-12 col-md-8 offset-md-2 text-center pb-2">
+                                <div class="mt-2">
+                                    <span class="font-weight-bold information" style="color:red;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <div class="text-center">
+                                <input type="file" class="cropit-image-input" accept="image/*;capture=camera"
+                                       onchange="angular.element(this).scope().contentChanged(this)"
+                                       ng-model="fileUpload"
+                                       name="files" id="customFile" valid-file>
+                                <button type="button" class="btn btn-info" id="btnCustomFile" ng-disabled="detecting"><i class="far fa-folder-open"></i>&nbsp;เลือกรูปถ่าย</button>
+                                <button type="button" class="btn btn-primary capture-button" ng-disabled="detecting" ng-show="takePhoto" data-toggle="modal" data-target="#cameraModal" title="เปิดกล้อง"><i class="fas fa-camera"></i></button>
+                                @*<label ng-if="files != null">&nbsp;&nbsp;{{files.name}}</label>*@
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-12 text-center">
+                            <div class="cropit-preview mx-auto" ng-class="{'custom-image-valid': (imageValid && hasFile && !detecting && !waitingDetect),'custom-image-invalid': (!imageValid && hasFile && !detecting && !waitingDetect),'custom-image-waiting': (waitingDetect)}"></div>
+                            <div class="row">
+                                <div ng-loading="detecting"></div>
+                                <div class="col-12 col-md-12 text-center mt-2">
+                                    <label class="col-12" ng-if="detecting">&nbsp;&nbsp;</label>
+                                    <label class="text-warning" ng-if="waitingDetect">&nbsp;&nbsp;รอตรวจสอบรูปถ่าย...</label>
+                                    <label class="text-danger" ng-if="detecting">&nbsp;&nbsp;กำลังตรวจสอบรูปถ่าย...</label>
+                                    <label class="text-success" ng-if="imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;รูปถ่ายถูกต้อง</label>
+                                    <label class="text-danger" ng-if="!hasFile && !detecting">&nbsp;&nbsp;ยังไม่ได้เลือกรูปถ่าย</label>
+                                    <label class="text-danger" ng-if="!imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;{{ErrorMessImage}}</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-8 offset-md-2">
+                                    <div class="image-size-label mt-2">
+                                        ปรับขนาดรูป
+                                    </div>
+                                    <input type="range" class="cropit-image-zoom-input mt-md-2" ng-disabled="detecting || cropitZoomDisable">
+                                </div>
+                                @*<div class="col-12 col-md-4">
+                                        <div class="image-size-label mt-2">
+                                            หมุนรูป
+                                        </div>
+                                        <button type="button" class="rotate-ccw btn p-1" title="หมุนซ้าย 90 องศา" ng-disabled="detecting"><i class="fas fa-undo fa-1x"></i></button>
+                                        <button type="button" class="rotate-cw btn p-1" title="หมุนขวา 90 องศา" ng-disabled="detecting"><i class="fas fa-undo fa-flip-horizontal fa-1x"></i></button>
+                                    </div>*@
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-7">
+                        <div class="font-weight-bold text-danger mt-3">รูปถ่ายที่ถูกต้อง</div>
+                        <div class="font-weight-bold col-12 col-md-12 mt-3">
+                            1. รูปถ่ายหน้าตรง ไม่สวมแว่นตาดำ ไม่สวมหมวก หรือผ้าคลุมศีรษะใด ๆ ยกเว้นผ้าคลุมผมทางศาสนา<br /><br />
+                            2. ห้ามตกแต่งภาพ หน้ามองตรง จมูก คิ้ว และปาก จะต้องปรากฏบนภาพภ่าย พื้นหลังไม่มีลวดลาย<br /><br />
+                            3. ภาพถ่ายจะต้องครอบคลุมถึงศีรษะ และด้านบนของหัวไหล่ โดยให้เห็นใบหน้า 25% ของภาพถ่าย<br /><br />
+                            4. ถ่ายไว้ไม่เกิน 6 เดือน<br /><br />
+                            5. ขนาดไฟล์ไม่น้อยกว่า 40KB<br /><br />
+                            6. ขนาดของรูปถ่าย 1 นิ้ว หรือ 1.5 นิ้ว<br /><br />
+                            7. ประเภทไฟล์ .jpg หรือ .png เท่านั้น
+                        </div>
+                        <div class="mt-3 text-center text-md-left ml-md-4">
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">คลิกดูตัวอย่างรูปถ่ายที่ถูกต้อง</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-12 text-center">
+                        <div class="">
+                            <button type="button" ng-disabled="checked || detecting" class="btn btn-success" ng-click="confirmUpload()">ยืนยันอัปโหลดรูปถ่าย</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 1.5rem;" class="text-danger text-center">ไม่พบข้อมูลการสมัครสอบ กรุณาทำการสมัครสอบ และทำการชำระเงินให้เรียบร้อย<br />หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cameraModal" tabindex="-1" role="dialog" aria-labelledby="cameraModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-lightgreen">
+                    <h5 class="modal-title font-weight-bold" id="cameraModalLabel">ถ่ายรูป</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="screenshot">
+                    <video class="w-100" autoplay></video>
+                    <img class="d-none" src="">
+                    <canvas style="display:none;"></canvas>
+                    <label class="text-danger text-center">{{errorText}}</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="button" class="btn btn-primary" id="screenshot-button">ถ่ายรูป</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-lightgreen">
+                    <h5 class="modal-title font-weight-bold" id="exampleModalLabel">ตัวอย่างรูปถ่ายที่ถูกต้อง</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img src="~/Content/Images/image_1.jpg" style="width: 200px; margin:auto;" />
+                        <img src="~/Content/Images/image_6.jpg" style="width: 200px; margin:auto;" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detectModal" tabindex="-1" role="dialog" aria-labelledby="detectModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @*<div class="modal-header bg-lightgreen">
+                        <h5 class="modal-title font-weight-bold" id="detectModalLabel">ตัวอย่างรูปถ่ายที่ถูกต้อง</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>*@
+                <div class="modal-body">
+                    <div class="text-center">
+                        <label class="text-danger mt-5" ng-if="detecting"></label>
+                        <div ng-loading="detecting"></div>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="text-danger mt-2 ml-5" ng-if="detecting">&nbsp;&nbsp;กำลังตรวจสอบรูปถ่าย...</div>
+                        <div class="text-success" ng-if="imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;รูปถ่ายถูกต้อง</div>
+                        <div class="text-danger" ng-if="!imageValid && hasFile && !detecting && !waitingDetect">&nbsp;&nbsp;{{ErrorMessImage}}</div>
+                        <button type="button" class="btn btn-secondary mt-3" ng-if="!imageValid && hasFile && !detecting && !waitingDetect" data-dismiss="modal">ตกลง</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/vender/cropit-master/dist/jquery.cropit.js"></script>
+    <script src="~/vender/pica-master/dist/pica.js"></script>
+    <script src="~/Scripts/views/upload-photo.js?_=2021071901"></script>
+    <script>
+        var btnCamera = "@SysParameterHelper.EnableButtonCamera";
+        var detectTimer = "@SysParameterHelper.FaceDetectTimer";
+        var faceApiUrl = "@SysParameterHelper.FaceServiceUrl";
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

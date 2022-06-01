@@ -1,0 +1,190 @@
+[
+  {
+    "varname": "TestTypeName",
+    "fieldname": "TEST_TYPE_NAME",
+    "size": 16,
+    "objecttype": "manylines-center",
+    "page": 1,
+    "x": 0,
+    "y": 55,
+    "w": 600,
+    "h": 80,
+    "lh": 14
+  },
+  {
+    "varname": "CompCode",
+    "fieldname": "COMP_CODE",
+    "size": 16,
+    "font-style": "bold",
+    "page": 1,
+    "x": 122,
+    "y": 74
+  },
+  {
+    "varname": "FullName",
+    "fieldname": "FULLNAME",
+    "size": 14,
+    "page": 1,
+    "x": 45,
+    "y": 89.2
+  },
+  {
+    "varname": "RefNo1",
+    "fieldname": "REF1",
+    "size": 14,
+    "page": 1,
+    "x": 167,
+    "y": 89.2
+  },
+  {
+    "varname": "AmountTH",
+    "fieldname": "AmountTH",
+    "objecttype": "amountTh",
+    "size": 14,
+    "page": 1,
+    "x": 50,
+    "y": 95.9
+  },
+  {
+    "varname": "Amount",
+    "fieldname": "AMOUNT",
+    "objecttype": "price",
+    "size": 14,
+    "page": 1,
+    "x": 164,
+    "y": 95.9
+  },
+  {
+    "varname": "BarCode",
+    "fieldname": "REFNO1",
+    "objecttype": "barcode",
+    "size": 12,
+    "page": 1,
+    "x": 25,
+    "y": 120
+  },
+  {
+    "varname": "QRCode",
+    "fieldname": "REF1",
+    "objecttype": "qrcode",
+    "size": 15,
+    "page": 1,
+    "x": 155,
+    "y": 138
+  },
+  {
+    "varname": "PaymentDate",
+    "fieldname": "PAY_IN_DATE",
+    "size": 14,
+    "font-style": "bold",
+    "page": 1,
+    "x": 40,
+    "y": 157
+  },
+  {
+    "varname": "RefNo1Warn",
+    "fieldname": "REF1",
+    "size": 14,
+    "page": 1,
+    "x": 55,
+    "y": 197
+  },
+  {
+    "varname": "RefNo2Warn",
+    "fieldname": "REF2",
+    "size": 14,
+    "page": 1,
+    "x": 68,
+    "y": 204
+  },
+  {
+    "varname": "ClassNameWarn",
+    "fieldname": "CLASS_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 45,
+    "y": 211
+  },
+  {
+    "varname": "TFName",
+    "fieldname": "FNAME_TH",
+    "objecttype": "firstname",
+    "size": 14,
+    "page": 1,
+    "x": 27,
+    "y": 233
+  },
+  {
+    "varname": "LastName",
+    "fieldname": "LNAME_TH",
+    "size": 14,
+    "page": 1,
+    "x": 77,
+    "y": 233
+  },
+  {
+    "varname": "RefNo1Final",
+    "fieldname": "REF1",
+    "size": 14,
+    "page": 1,
+    "x": 56,
+    "y": 240
+  },
+  {
+    "varname": "RefNo2Final",
+    "fieldname": "REF2",
+    "size": 14,
+    "page": 1,
+    "x": 68,
+    "y": 246.8
+  },
+
+  {
+    "varname": "ClassNameWarn2",
+    "fieldname": "CLASS_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 48,
+    "y": 253.8
+  },
+
+
+  {
+    "varname": "Date",
+    "fieldname": "Date",
+    "objecttype": "date",
+    "size": 14,
+    "font-style": "bold",
+    "page": 1,
+    "x": 35,
+    "y": 262
+  },
+  {
+    "varname": "IP",
+    "fieldname": "IP",
+    "objecttype": "ip",
+    "size": 14,
+    "font-style": "bold",
+    "page": 1,
+    "x": 100,
+    "y": 262
+  },
+  {
+    "varname": "DateFooterP1",
+    "fieldname": "Date",
+    "objecttype": "date",
+    "size": 12,
+    "page": 1,
+    "x": 130,
+    "y": 291.7
+  },
+  {
+    "varname": "IPFooterP1",
+    "fieldname": "IP",
+    "objecttype": "ip",
+    "size": 12,
+    "page": 1,
+    "x": 185,
+    "y": 291.7
+  }
+]

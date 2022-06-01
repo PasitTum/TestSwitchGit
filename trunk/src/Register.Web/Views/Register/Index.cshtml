@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "คู่มือแนะนำการสอบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_RegisterManual")
+<div class="row my-3">
+    <div class="col-12 col-md-12 text-center">
+        <div class="custom-control custom-checkbox custom-control-inline my-3">
+            <input class="custom-control-input col-form-label" type="checkbox" id="checkbox">
+            <label class="custom-control-label pointer" onclick="" for="checkbox">
+                &nbsp;ข้าพเจ้าได้อ่านคู่มือแนะนำการสมัครสอบ โดยรับทราบและยอมรับเงื่อนไขและขั้นตอนการสมัครสอบแล้ว
+            </label>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center my-3">
+    <div class="col-md-10 text-center">
+        <h5 class="text-danger font-weight-600">
+            เพื่อความถูกต้องในการแสดงผลข้อมูลการสมัครสอบ <br>กรุณาใช้โปรแกรม <img src="~/Content/Images/icon-chrome.png" /> Chrome เวอร์ชั่นล่าสุด            
+            หรือ <img src="~/Content/Images/icon-Edge.png" /> Microsoft Edge ในการสมัครสอบ
+        </h5>
+        <a class="btn btn-success" id="btnNext" href="@Url.Action("ChooseRegion","Register")">ดำเนินการต่อ</a>
+        <a class="ml-4 btn btn-secondary" href="@Url.Action("Index","Home")">กลับหน้าหลัก</a>
+    </div>
+</div>
+<div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-lightgreen">
+                <h5 class="modal-title text-light font-weight-bold" id="warningModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <h5 class="font-weight-bold text-danger">
+                    กรุณายืนยันว่าข้าพเจ้าได้อ่านคู่มือแนะนำการสมัครสอบ
+                    โดยรับทราบและยอมรับเงื่อนไขและขั้นตอนการสมัครสอบแล้ว
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#checkbox").change(function () {
+        if (this.checked) {
+            //$("#btnNext").removeClass('disabled');
+            $("#btnNext").focus();
+        }
+        //else {
+        //    //$("#btnNext").addClass('disabled');
+        //}
+    });
+
+    $("#btnNext").click(function (e) {
+        if (!$("#checkbox").is(":checked")) {
+            e.preventDefault();
+            $("#warningModal").modal("show");
+            //alert("กรุณายืนยันว่าข้าพเจ้าได้อ่านคู่มือแนะนำการสมัครสอบ โดยรับทราบและยอมรับเงื่อนไขและขั้นตอนการสมัครสอบแล้ว");
+        }
+    });
+</script>
+
+

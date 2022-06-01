@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "เลือกตำแหน่งที่เปิดรับสมัคร";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center" ng-controller="ChoosePositionControler" ng-cloak>
+    <div class="col-md-10 text-center border rounded py-4">
+        <h4 class="mx-auto animated fadeIn text-info font-weight-bolder">โปรดเลือกตำแหน่งที่เปิดรับสมัคร <span class="text-danger">{{centerName}}</span></h4>
+        <h5 class="mx-auto animated fadeIn mb-3">{{testingInfo.PROVINCE_DTL}}</h5>
+        <label class="mx-auto animated fadeIn mb-3">กรุณาเลือกประเภทตำแหน่งงาน</label>
+        <div ng-loading="isLoading.classGroups"></div>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation" ng-repeat="group in classGroups">
+                <a class="nav-link custom-nav-link nav-light-green" id="group_{{group.CLASS_GROUP_ID}}-tab"
+                   @*ng-class="{'active': group.CLASS_GROUP_ID == classGroups[0].CLASS_GROUP_ID}"*@
+                   data-toggle="tab" href="#group_{{group.CLASS_GROUP_ID}}" role="tab"
+                   aria-controls="group_{{group.CLASS_GROUP_ID}}" aria-selected="true">
+                    <h5 class="font-weight-bolder">{{group.CLASS_GROUP_NAME_TH}}</h5>
+                    {{group.CLASS_LEVEL_NAME_TH}}
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="myTabContent">
+            <div class="tab-pane fade border p-md-3"
+                 @*ng-class="{'show active': group.CLASS_GROUP_ID == classGroups[0].CLASS_GROUP_ID}"*@
+                 ng-repeat="group in classGroups"
+                 id="group_{{group.CLASS_GROUP_ID}}"
+                 role="tabpanel" aria-labelledby="group_{{group.CLASS_GROUP_ID}}-tab">
+                <div class="row d-none d-md-block">
+                    <div class="col-12">
+                        <table class="table table-hover w-100 my-md-2 my-sm-1 animated fadeIn">
+                            <thead>
+                                <tr>
+                                    <th class="text-left" style="width:50%">ตำแหน่งที่เปิดรับสมัคร</th>
+                                    <th class="text-center" style="width:25%">อัตราว่างที่บรรจุ</th>
+                                    <th class="text-center" style="width:25%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="vertical-align-middle animated fadeIn" ng-repeat="position in testingClasses | filter:{ CLASS_GROUP_ID : group.CLASS_GROUP_ID} ">
+                                    <td class="text-left vertical-align-middle">{{position.CLASS_NAME}}</td>
+                                    <td class="text-center vertical-align-middle">{{position.QUOTA_QTY}}</td>
+                                    <td class="text-center vertical-align-middle">
+                                        <a class="btn btn-success" href="@Url.Action("Register")?testTypeID={{testTypeID}}&centerID={{centerID}}&classID={{position.CLASS_ID}}&centerName={{centerName | escape}}&className={{position.CLASS_NAME | escape}}">
+                                            <i class="fas fa-mouse"></i>&nbsp;คลิกที่นี่เพื่อสมัคร
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot></tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-block d-md-none" ng-repeat="position in testingClasses | filter:{ CLASS_GROUP_ID : group.CLASS_GROUP_ID} ">
+                    <div class="card m-2 p-2">
+                        <div class="row">
+                            <label class="col-auto control-label">ตำแหน่งที่เปิดรับสมัคร</label>
+                            <label class="col-12 font-weight-bold information my-2">{{position.CLASS_NAME}}</label>
+                        </div>
+                        <div class="row">
+                            <label class="col-auto control-label">อัตราว่างที่บรรจุ</label>
+                            <label class="col-auto">{{position.QUOTA_QTY}}</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <a class="btn btn-success" href="@Url.Action("Register")?testTypeID={{testTypeID}}&centerID={{centerID}}&classID={{position.CLASS_ID}}&centerName={{centerName | escape}}&className={{position.CLASS_NAME | escape}}">
+                                    <i class="fas fa-mouse"></i>&nbsp;คลิกที่นี่เพื่อสมัคร
+                                </a>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+        <a class="btn btn-secondary mt-4" href="@Url.Action("Index")">ย้อนกลับ</a>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        var CENTER_ID = "@ViewBag.CenterID";
+        var CENTER_NAME = "@ViewBag.CenterName";
+    </script>
+    <script type="text/javascript" src="~/Scripts/views/register-choose-position.js"></script>
+}

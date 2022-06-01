@@ -1,0 +1,95 @@
+﻿@model NewsViewModel
+<div>
+    @if (Model != null && Model.News != null)
+    {
+        foreach (var nw in Model.News)
+        {
+            <div class="row">
+                <div class="col-12 @nw.CONTAINER_CSS">
+                    @Html.Raw(nw.HEADLINE)
+                    @*<span class="badge badge-danger blink_me" ng-show="new_flag.@("N"+nw.NEWS_ID.ToString())=='Y'">New</span>*@
+                    @Html.Raw(nw.DETAILS)
+                    {{setNewFlag('@("N" + nw.NEWS_ID.ToString())','@nw.NEW_FLAG')}}
+                    @if (Model.SubNews != null)
+                    {
+                        foreach (var sub in Model.SubNews.Where(x => x.PARENT_NEWS_ID == nw.NEWS_ID))
+                        {
+                            @:{{setNewFlag('@("N" + sub.NEWS_ID.ToString())', '@sub.NEW_FLAG')}}
+                            @Html.Raw(sub.HEADLINE)
+                            @*<span class="badge badge-danger blink_me" ng-show="new_flag.@("N"+sub.NEWS_ID.ToString())=='Y'">New</span>*@
+                            @Html.Raw(sub.DETAILS)
+                        }
+                    }                    
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@*<div class="news-container" ng-repeat="newsLine in news">
+        @*<div ng-bind-html="newsLine.HEADLINE_HTML"></div>
+        <div ng-bind-html="newsLine.DETAILS_HTML" ng-show="newsLine.DETAILS_HTML"></div>
+        <a class="text-underline" style="color:var(--purple)" href="{{DOC_ROOT}}/{{newsLine.ATTACHMENT}}" target="_blank" ng-show="newsLine.ATTACHMENT">คลิกที่นี่เพื่ออ่านรายละเอียด</a>
+        <span class="ml-2 right badge badge-danger blink_me" ng-show="newsLine.NEW_FLAG=='Y'">NEW</span>
+        <div class="news-line success bg-success">
+            <div class="mb-2">
+                <div class="mb-2">
+                    <h4 class="d-inline">{{newsLine.HEADLINE_HTML}}</h4>
+                    <span class="ml-2 mt-0 right badge badge-danger blink_me" ng-show="newsLine.NEW_FLAG=='Y'">NEW</span>
+                </div>
+                <a class="text-underline" style="color:var(--purple)" href="{{DOC_ROOT}}/{{newsLine.ATTACHMENT}}" target="_blank" ng-show="newsLine.ATTACHMENT">คลิกที่นี่เพื่ออ่านรายละเอียด</a>
+            </div>
+            <div ng-repeat="dt in details | filter:{ PARENT_NEWS_ID: newsLine.NEWS_ID }">
+                <div ng-bind-html="dt.HEADLINE_HTML"></div>
+            </div>
+        </div>
+    </div>*@
+
+@*<div class="row mt-3" id="news-container">
+        <div class="col-12">
+            <h4 class="font-weight-bold d-inline-block">
+                <i class="fas fa-newspaper"></i>&nbsp;
+                ข่าวสาร
+            </h4>
+            @*<div class="news-line">
+                    <div class="d-inline-block">
+                        <h4 class="d-inline-block">หัวข้อข่าว 1</h4><span class="ml-3 right badge badge-danger blink_me">มาใหม่นะครับท่านผู้ชม</span>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scel<span id="dot-news1">...</span><span style="display:none;" id="more-news1">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span></p>
+                    <a href="#news1" class="btn-readmore" data-toggle="readmore" data-target="news1">อ่านรายละเอียดเพิ่มเติม....</a>
+                </div>
+            <div class="news-line success">
+                <h4>หัวข้อข่าว 3</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et
+                    dictum interdum, nisi lorem egestas vitae scel<span id="dot-news2">...</span><span style="display:none;" id="more-news2">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span>
+                </p>
+                <a href="#news2" class="btn-readmore" data-toggle="readmore" data-target="news2">อ่านรายละเอียดเพิ่มเติม....</a>
+            </div>
+        </div>
+    </div>*@
+
+<script>
+    download = function (file) {
+        alert(file);
+    }
+    $(".news-container").on("click", "a[download]", function () {
+        alert($(this).attr("download"));
+    });
+    $(".news-container").on("click", "[data-toggle='readmore']", function () {
+        var target = $(this).data("target");
+        var dots = $("#dot-" + target);
+        var moreText = $("#more-" + target);
+        var btnText = $(this);
+
+        if (dots.css("display") === "none") {
+            dots.css("display", "inline");
+            btnText.text("อ่านรายละเอียดเพิ่มเติม..");
+            moreText.css("display", "none");
+        } else {
+            dots.css("display", "none");
+            btnText.text("ซ่อนรายละเอียด");
+            moreText.css("display", "inline");
+        }
+    });
+</script>

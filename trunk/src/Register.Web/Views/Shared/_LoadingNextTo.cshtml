@@ -1,0 +1,6 @@
+﻿@{
+    var ngModel = ViewData.Eval("ng_model");
+}
+<div class="text-info my-auto" role="status" ng-show="getLoading('@ngModel')">
+    <span><img src="~/Content/Images/5.gif" style="width: 25px;height:25px;" /></span>
+</div>

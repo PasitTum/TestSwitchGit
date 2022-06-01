@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "สมัครสอบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mt-3" ng-app="registerApp" ng-controller="errorRegisterController">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-danger text-center">ท่านทำรายการไม่สำเร็จภายในเวลาที่กำหนด หรือ เกิดข้อผิดพลาดบางประการ<br />กรุณาลองสมัครสอบใหม่อีกครั้ง</h2>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <h5 class="">กำลังนำท่านกลับสู่หน้าสมัครสอบใน {{CountDown}} วินาที</h5>
+                <a id="btnBack" class="btn btn-danger" href="@Url.Action("ChooseRegion", "Register")">กลับหน้าสมัครสอบ</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var registerUrl = "@Url.Action("Register", "Register")";
+    </script>
+    <script src="~/Scripts/views/error-register-data.js?_=2020051701"></script>
+}

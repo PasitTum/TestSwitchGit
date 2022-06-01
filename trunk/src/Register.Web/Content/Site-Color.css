@@ -1,0 +1,39 @@
+﻿:root {
+  --navbarC: saddlebrown;
+  --sidebarHeaderBg: #0088d2;
+  --sidebarBackground: #2b98d1;
+  --sidebarElmC: saddlebrown;
+  --sidebarEleHovC: #fff;
+  --sidebarElmActBg: #6d7fcc;
+  --sidebarElmActC: #fff;
+  --sidbarMenuElmHovBg: #f8e3a2;
+  --site-bannerBg: #2b98d1;
+  --site-bannerC: saddlebrown;
+  --footerBg: #2b98d1;
+  --btnHovBg: #006da4;
+  --tabHeaderBg: #d9e1fb;
+  --headerMenuBg: #d9fc3e;
+  --btnIconBg: #a44e17;
+  --btnIconBdc: #e6cebb;
+  --bgWhite: #ffffff;
+  --bgDark: #000000;
+  --bgGray: #f0f4f8;
+  --bg-card-primary: #2b98d1;
+  --normal-text-color: #fff;
+  --bg-darkgreen: #094232;
+  --menu-item-background-active: #35c6bf;
+  --menu-item-background-hover: #283890;
+  --site-primary-rgb: 43, 152, 209;
+  --site-secondary-rgb: 53, 198, 191;
+  --site-primary: #2b98d1;
+  --success-rgb: 40, 167, 69;
+  --testtype-header: #0088d2; }
+
+.bg-sidebar-header {
+  background-color: var(--sidebarHeaderBg); }
+
+.text-dark-gray {
+  color: darkgray; }
+
+.bg-success-light {
+  background-color: rgba(40, 167, 69, 0.5); }

@@ -1,0 +1,158 @@
+﻿@model Register.Models.RegisterModel
+@using CaptchaMvc.HtmlHelpers
+@{
+    ViewBag.Title = "ดูผลคะแนนสอบ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" ng-app="searchExamScoreModule" ng-controller="searchExamScoreController">
+    <div class="col-12">
+        <form name="searchExamScore">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div ng-loading="isLoading"></div>
+                <h5 class="card-header header-table">ดูผลคะแนนสอบ</h5>
+                <div class="card-body form-group pl-3 pb-1">
+                    <div class="row ">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">พิมพ์เลขประจำตัวประชาชนของท่าน</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': (searchExamScore.citizenID.$error.pattern || searchExamScore.citizenID.$error.required) && searchExamScore.citizenID.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="citizenID" name="citizenID"
+                                   ng-model="model.CitizenID"
+                                   ng-pattern="/^[0-9]{13}$/"
+                                   maxlength="13" autocomplete="off" placeholder="เลขประจำตัวประชาชน" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information">หมายเลขโทรศัพท์มือถือ</label>
+                        <div class="col-12 col-md-8" ng-class="{ 'validation-error': searchExamScore.mobile.$error.required && searchExamScore.mobile.$dirty }">
+                            <input type="text" class="form-control col-md-5" id="mobile" name="mobile"
+                                   ng-model="model.Mobile"
+                                   maxlength="10"
+                                   autocomplete="off" placeholder="หมายเลขโทรศัพท์มือถือ" required />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-md-4 sty-label-captcha control-label"></div>
+                        <div class="col-12 col-md-8" id="captcha">
+                            @Html.Captcha("เปลี่ยน", "", 5, "Validate your captcha", false)
+                            @Html.ValidationMessageFor(model => model.Captcha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col-12 col-md-4"></div>
+                        <div class="col-12 col-md-8">
+                            <button ng-click="submit()" class="btn btn-success"><i class="fas fa-search"></i>&nbsp;&nbsp;ค้นหา</button>
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i>&nbsp;&nbsp;กลับ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-12 ng-cloak" ng-show="show">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ชื่อตัว-ชื่อสกุล</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{scorInfo.ENROLL_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">ตำแหน่งที่สมัครสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{scorInfo.TESTING_CLASS_NAME}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">เลขประจำตัวประชาชน</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{model.CitizenID}}
+                    </div>
+                </div>
+                <div class="row information">
+                    <label class="font-weight-bold col-12 col-md-4 control-label col-form-label text-md-right">เลขประจำตัวสอบ</label>
+                    <div class="col-12 col-md-8 col-form-label">
+                        {{scorInfo.EXAM_SEAT_NO}}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="table-responsive">
+                        <table class="table w-100 table-bordered">
+                            <thead>
+                                <tr class="text-center bg-light">
+                                    <th>
+                                        <span class="information">
+                                            ความรู้ความสามารถทั่วไป
+                                        </span><br />
+                                        <span class="text-danger">(คะแนนเต็ม 200)</span>
+                                    </th>
+                                    <th>
+                                        <span class="information">
+                                            มาตรฐานความรู้และประสบการณ์วิชาชีพ
+                                        </span><br />
+                                        <span class="text-danger">(คะแนนเต็ม 200)</span>
+                                    </th>
+                                    <th>
+                                        <span class="information">
+                                            ความเหมาะสมกับตำแหน่ง
+                                        </span><br />
+                                        <span class="text-danger">(คะแนนเต็ม 100)</span>
+                                    </th>
+                                    <th class="vertical-align-middle information">
+                                        ผลสอบ
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center font-weight-bold">
+                                    <td class="vertical-align-middle">
+                                        {{scorInfo.SECTION_SCORE_1}}
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        {{scorInfo.SECTION_SCORE_2}}
+                                    </td>
+                                    <td class="vertical-align-middle">
+                                        {{scorInfo.SECTION_SCORE_3}}
+                                    </td>
+                                    <td class="information" ng-class="{'text-success': scorInfo.EXAM_STATUS == 'ผ่าน', 'text-danger': scorInfo.EXAM_STATUS != 'ผ่าน'}">
+                                        {{scorInfo.EXAM_STATUS}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 ng-cloak" ng-show="isInfo">
+        <div class="card mt-3">
+            <h5 class="card-header header-table">ผลของการค้นหา</h5>
+            <div class="card-body form-group pl-3">
+                <div style="font-size: 2rem;" class="text-danger text-center">ไม่พบข้อมูล หรือ ท่านกรอกข้อมูลไม่ถูกต้อง</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/views/search-exam-score.js?_2022041103"></script>
+    <script>
+        $("#CaptchaInputText").addClass("form-control mt-2");
+        $("#CaptchaInputText").attr("placeholder", "กรอกตัวอักษรที่ท่านเห็น");
+        $("#CaptchaInputText").attr("style", "width: 180px; text-transform:uppercase;");
+        $("#CaptchaImage").attr("style", "height: 50px;");
+
+        $(function () {
+            $("#citizenID").keypress(function (e) { return Character.isKeyNumberCharacter(e); });
+            $("#CaptchaInputText").keypress(function (e) { return Character.isKeyEngCharacter(e); });
+        });
+    </script>
+}
+
+
+
+

@@ -1,0 +1,6 @@
+﻿RegisterWeb.v.1.1.0 
+- แก้หน้า Landing ให้เปลี่ยนสีตาม testtype ได้
+- แก้ Layout ให้ Load Stylesheet ตาม testtype มา override ได้ (ถ้ามี)
+- แก้ Layout เพิ่มการแสดง Testtype.AbbrName
+- แก้ Model ของ TestType List เพิ่ม AbbrName
+- แก้ Sidebar ให้ Load Logo ตาม testtype ได้ (ถ้ามี)

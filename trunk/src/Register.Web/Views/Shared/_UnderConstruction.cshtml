@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="~/Content/Images/favicon.ico?1">
+    <title>กรมส่งเสริมการปกครองท้องถิ่น</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/Content/Site.css?id=20220513">
+    <link href="~/Content/fontawesome-all.min.css" rel="stylesheet" />
+</head>
+<body style="margin: 0px;">
+    <div class="site-banner">
+    </div>
+    <div style="width: 100%; height: auto; margin-top: 50px;text-align: center;margin-bottom: 150px;">
+        <img class="img-layout" src="~/Content/Images/logo_l.jpg" style="height: 200px;" /><br /><br /><br />
+        <label style="font-size: 5rem;">ระบบยังไม่เปิดให้บริการ</label>
+    </div>
+    <footer class="footer" style="height: 120px;position: fixed;bottom: 0;">
+        <br />กรมส่งเสริมการปกครองท้องถิ่น ถนนนครราชสีมา แขวงดุสิต เขตดุสิต กรุงเทพ 10300
+        <br />
+        @*สอบถามรายละเอียดเกี่ยวกับข้อมูลด้านการรับสมัคร และรายละเอียดเกี่ยวกับการใช้งานระบบ โทร 02-697-0988 <i class="fas fa-phone"></i>*@<br />
+        Version : @Html.GetAppVersion() [@CSP.Lib.Mvc.SystemHelper.GetServerIPLast3()]<br />
+    </footer>
+</body>
+</html>
