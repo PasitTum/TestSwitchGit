@@ -1,0 +1,123 @@
+﻿<table class="table w-100" id="tableSchPerson">
+    <thead>
+        <tr>
+            <th style="max-width:5px;" rowspan="2"></th>
+            <th class="text-center" colspan="2">ปี พ.ศ.</th>
+            <th class="text-center align-middle" rowspan="2">ตำแหน่ง</th>
+            <th class="text-center align-middle" rowspan="2">สถานที่ทำงาน</th>
+            <th class="text-center align-middle" rowspan="2">เงินเดือนสุดท้าย</th>
+            <th class="text-center align-middle" rowspan="2">วันที่เหตุผล</th>
+            <th class="text-center align-middle" rowspan="2" style="min-width:80px;">แก้ไข/ลบ</th>
+        </tr>
+        <tr>
+            <th class="text-center">จาก</th>
+            <th class="text-center">ถึง</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="pointer"
+            ng-include="getTemplate(member,'gridExperience')"
+            ng-repeat="member in filterData = (model.gridExperience)"></tr>
+    </tbody>
+    <tfoot>
+        <tr ng-include="getTemplateFooter('gridExperience')"></tr>
+    </tfoot>
+</table>
+
+<script type="text/ng-template" id="gridExperienceFooterDisplay">
+    <td colspan="7"></td>
+    <td class="text-center" style="min-width:80px;" ng-show="gridExperience != 'adding' && gridExperience != 'editing'">
+        <button title="เพิ่ม" ng-click="addMember('gridExperience')" class="btn btn-success">
+            <i class="fas fa-plus"></i>&nbsp;&nbsp;เพิ่ม
+        </button>
+    </td>
+</script>
+
+<script type="text/ng-template" id="gridExperienceDisplay">
+    <td class="text-center">{{member.SEQ_NO}}</td>
+    <td class="text-center">{{member.START_DATE}}</td>
+    <td class="text-center">{{member.END_DATE}}</td>
+    <td class="text-center">{{member.POSITION_NAME}}</td>
+    <td class="text-center">{{member.WORKPLACE}}</td>
+    <td class="text-center">{{member.SALARY}}</td>
+    <td class="text-center">{{member.REMARK}}</td>
+
+
+    <td class="text-center" ng-show="gridExperience != 'adding' && gridExperience != 'editing'">
+        <a title="แก้ไข" ng-click="editmember(member,'gridExperience')" class="no-underline">
+            <i class="text-info fas fa-fw fa-pencil-alt fa-1_2x"></i>
+        </a>
+        <a title="ลบ" ng-click="removeMember(member,'gridExperience')" class="ml-1 no-underline">
+            <i class="text-danger fas fa-fw fa-trash-alt fa-1_2x"></i>
+        </a>
+    </td>
+</script>
+
+<script type="text/ng-template" id="gridExperienceEdit">
+    <td colspan="8">
+        <form name="formEdit" class="col-12 col-md-12">
+            <div class="col-12">
+                <div class="form-group row mt-3">
+                    <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ปี พ.ศ. จาก</label>
+                    <div class="input-group col-12 col-md-3 pointer" @*style="max-width: 200px;"*@>
+                        <input type="text" class="form-control datepicker" id="START_DATE" name="START_DATE"
+                               ng-model="model.selected.START_DATE" ng-change="validateAge(model.selected.START_DATE,'')" autocomplete="off" ng-csp-datepicker />
+                        <div class="input-group-append pointer">
+                            <div class="input-group-text dp-icon" ng-click="setFocus('START_DATE')">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ปี พ.ศ. ถึง</label>
+                    <div class="input-group col-12 col-md-3 pointer" @*style="max-width: 200px;"*@>
+                        <input type="text" class="form-control datepicker" id="END_DATE" name="END_DATE"
+                               ng-model="model.selected.END_DATE" ng-change="validateAge(model.selected.END_DATE,'')" autocomplete="off" ng-csp-datepicker />
+                        <div class="input-group-append pointer">
+                            <div class="input-group-text dp-icon" ng-click="setFocus('END_DATE')">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ตำแหน่ง</label>
+                    <div class="col-12 col-md-3" ng-class="{ 'validation-error': formEdit.POSITION_NAME.$error.required }">
+                        <input class="form-control" type="text" name="POSITION_NAME" maxlength="100" ng-model="model.selected.POSITION_NAME" placeholder="ตำแหน่ง" required />
+                    </div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">สถานที่ทำงาน</label>
+
+                    <div class="col-12 col-md-4" ng-class="{ 'validation-error': formEdit.WORKPLACE.$error.required }">
+                        <input class="form-control" type="text" name="WORKPLACE" maxlength="100" ng-model="model.selected.WORKPLACE" placeholder="สถานที่ทำงาน" required />
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">เงินเดือนสุดท้าย</label>
+                    <div class="col-12 col-md-3" ng-class="{ 'validation-error': formEdit.SALARY.$error.required }">
+                        <input class="form-control" type="text" id="SALARY" name="SALARY" maxlength="100" ng-model="model.selected.SALARY" ng-keydown="salaryGrid($event)" ng-click="salaryGrid($event)" placeholder="เงินเดือนสุดท้าย" required />
+                    </div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">เหตุผลที่เปลี่ยนงาน</label>
+
+                    <div class="col-12 col-md-4" ng-class="{ 'validation-error': formEdit.REMARK.$error.required }">
+                        <input class="form-control" type="text" name="REMARK" maxlength="100" ng-model="model.selected.REMARK" placeholder="เหตุผลที่เปลี่ยนงาน" required />
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-form-label pull-right col-md-2 text-right" style="min-width:65px;">
+                        <a title="ยืนยัน" ng-click="savemember(member,'gridExperience')" class="no-underline">
+                            <i class="text-success fas fa-fw fa-check fa-1_5x"></i>
+                        </a>
+                        <a title="ยกเลิก" ng-click="resetListTable('gridExperience')" class="no-underline">
+                            <i class="text-danger fas fa-fw fa-times fa-1_5x"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+</script>
+@section scripts {
+<script>
+    $(function () {
+        $("#SALARY").keypress(function (e) { return Character.isKeyPointNumberCharacter(e); });
+    });
+</script>
+}

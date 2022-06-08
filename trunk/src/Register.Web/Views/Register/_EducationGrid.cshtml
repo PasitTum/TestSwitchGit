@@ -1,0 +1,100 @@
+﻿<table class="table w-100" id="tableSchPerson">
+    <thead>
+        <tr>
+            <th style="max-width:5px;"></th>
+            <th class="text-center">ปริญญา</th>
+            <th class="text-center">ชื่อวุฒิการศึกษา</th>
+            <th class="text-center">สาขา</th>
+            <th class="text-center">โดยได้รับอนุมัติ<br />จากสถานศึกษา</th>
+            @*<th class="text-center">ประเทศ</th>
+                <th class="text-center">วันที่สำเร็จการศึกษา</th>
+                <th class="text-center">หมายเหตุ</th>*@
+            <th class="text-center" style="min-width:80px;">แก้ไข/ลบ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="pointer"
+            ng-include="getTemplate(member,'gridEducation')"
+            ng-repeat="member in filterData = (model.gridEducation)"></tr>
+    </tbody>
+    <tfoot>
+        <tr ng-include="getTemplateFooter('gridEducation')"></tr>
+    </tfoot>
+</table>
+
+<script type="text/ng-template" id="gridEducationFooterDisplay">
+    <td colspan="5"></td>
+    <td class="text-center" style="min-width:80px;" ng-show="gridEducation != 'adding' && gridEducation != 'editing'">
+        <button title="เพิ่ม" ng-click="addMember('gridEducation')" class="btn btn-success">
+            <i class="fas fa-plus"></i>&nbsp;&nbsp;เพิ่ม
+        </button>
+    </td>
+</script>
+
+<script type="text/ng-template" id="gridEducationDisplay">
+    <td class="text-center">{{member.SEQ_NO}}</td>
+    <td class="text-center">{{member.CLASS_LEVEL_Name}}</td>
+    <td class="text-center">{{member.DEGREE_NAME}}</td>
+    <td class="text-center">{{member.MAJOR_NAME}}</td>
+    <td class="text-center">{{member.SCHOOL_NAME}}</td>
+
+
+    <td class="text-center" ng-show="gridEducation != 'adding' && gridEducation != 'editing'">
+        <a title="แก้ไข" ng-click="editmember(member,'gridEducation')" class="no-underline">
+            <i class="text-info fas fa-fw fa-pencil-alt fa-1_2x"></i>
+        </a>
+        <a title="ลบ" ng-click="removeMember(member,'gridEducation')" class="ml-1 no-underline">
+            <i class="text-danger fas fa-fw fa-trash-alt fa-1_2x"></i>
+        </a>
+    </td>
+</script>
+
+<script type="text/ng-template" id="gridEducationEdit">
+    <td colspan="8">
+        <form name="formEdit" class="col-12 col-md-12">
+            <div class="col-12">
+                <div class="form-group row mt-3">
+
+                    <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">ปริญญา</label>
+                    <div class="input-group col-12 col-md-3" ng-class="{ 'validation-error': register.CLASS_LEVEL_ID.$error.required && register.CLASS_LEVEL_ID.$dirty }">
+                        <select id="CLASS_LEVEL_ID" name="CLASS_LEVEL_ID"
+                                ng-model="model.selected.CLASS_LEVEL_ID"
+                                ng-change="eduSertiChange()"
+                                class="form-control col-12 col-md-12" required>
+                            <option value="">กรุณาเลือกปริญญา</option>
+                            <option ng-repeat="eduSerti in lstHighestEducationals" value="{{eduSerti.id}}">{{eduSerti.text}}</option>
+                        </select>
+                    </div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ชื่อวุฒิการศึกษา</label>
+                    <div class="col-12 col-md-4" ng-class="{ 'validation-error': formEdit.DEGREE_NAME.$error.required }">
+                        <input class="form-control" type="text" name="DEGREE_NAME" maxlength="100" ng-model="model.selected.DEGREE_NAME" placeholder="ชื่อวุฒิการศึกษา" required />
+                    </div>
+
+
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="" class="control-label col-12 col-md-2 text-md-right col-form-label required">สาขา</label>
+                    <div class="col-12 col-md-3" ng-class="{ 'validation-error': formEdit.MAJOR_NAME.$error.required }">
+                        <input class="form-control" type="text" name="MAJOR_NAME" maxlength="100" ng-model="model.selected.MAJOR_NAME" placeholder="สาขา" required />
+                    </div>
+                    <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ได้รับอนุมัติจากสถานศึกษา</label>
+
+                    <div class="col-12 col-md-4" ng-class="{ 'validation-error': formEdit.SCHOOL_NAME.$error.required }">
+                        <input class="form-control" type="text" name="SCHOOL_NAME" maxlength="100" ng-model="model.selected.SCHOOL_NAME" placeholder="โดยได้รับอนุมัติจากสถานศึกษา" required />
+                    </div>
+
+
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-form-label pull-right col-md-2 text-right" style="min-width:65px;">
+                        <a title="ยืนยัน" ng-click="savemember(member,'gridEducation')" class="no-underline">
+                            <i class="text-success fas fa-fw fa-check fa-1_5x"></i>
+                        </a>
+                        <a title="ยกเลิก" ng-click="resetListTable('gridEducation')" class="no-underline">
+                            <i class="text-danger fas fa-fw fa-times fa-1_5x"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+</script>
