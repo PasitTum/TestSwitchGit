@@ -821,6 +821,8 @@
     <Content Include="Views\Shared\_SideBar_TestType2.cshtml" />
     <Content Include="Views\Shared\_Footer1.cshtml" />
     <Content Include="Views\Shared\_Footer2.cshtml" />
+    <Content Include="Views\Register\_EducationGrid.cshtml" />
+    <Content Include="Views\Register\_ExperienceGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -77,9 +77,9 @@
                                     <th ng-if="paymentStatus.PAYIN_BUTTON_FLAG == 'Y'">
                                         แบบฟอร์มการชำระเงิน
                                     </th>
-                                    <th ng-if="paymentStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                    @*<th ng-if="paymentStatus.PAYIN_BUTTON_FLAG == 'Y'">
                                         QR Code ค่าสมัครสอบ
-                                    </th>
+                                    </th>*@
                                 </tr>
                             </thead>
                             <tbody>
@@ -102,11 +102,11 @@
                                             <button type="submit" target="_blank" class="btn btn-info"><i class="far fa-file-pdf fa-1x"></i>&nbsp;&nbsp;พิมพ์แบบฟอร์มการชำระเงิน</button>
                                         }
                                     </td>
-                                    <td ng-if="paymentStatus.PAYIN_BUTTON_FLAG == 'Y'">
+                                    @*<td ng-if="paymentStatus.PAYIN_BUTTON_FLAG == 'Y'">
                                         <div class="col-12 text-center">
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">QR Code ค่าสมัครสอบ</button>
                                         </div>
-                                    </td>
+                                    </td>*@
                                 </tr>
                             </tbody>
                         </table>

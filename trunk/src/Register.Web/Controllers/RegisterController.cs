@@ -260,6 +260,8 @@ namespace Register.Web.Controllers
             model.Mode = "Confirm";
 
             model.ImageBase64 = null;
+            model.gridEducations = null;
+            model.gridExperiences = null;
             TempData.Clear();
             TempData["student"] = model;
             ViewBag.ImageBase64 = GetImageBase64(model.CitizenID, model.TestTypeID);
@@ -293,6 +295,8 @@ namespace Register.Web.Controllers
                 ModelState.AddModelError("Captcha", "กรอกตัวอักษรที่อยู่บนหน้าเว็บไม่ถูกต้อง");
                 //var captchaValue = this.GenerateCaptchaValue(5);
                 model.ErrorMessage = "กรอกตัวอักษรที่อยู่บนหน้าเว็บไม่ถูกต้อง";
+                model.gridEducations = null;
+                model.gridExperiences = null;
                 TempData["student"] = model;
                 ViewBag.ImageBase64 = GetImageBase64(model.CitizenID, model.TestTypeID);
                 model.Mode = "Confirm";
@@ -346,6 +350,8 @@ namespace Register.Web.Controllers
                 model.ErrorMessage = "บันทึกข้อมูลไม่สำเร็จ";
                 Log.WriteErrorLog(tsw.TraceError, ex);
                 model.Mode = "Confirm";
+                model.gridEducations = null;
+                model.gridExperiences = null;
                 TempData["student"] = model;
                 ViewBag.ImageBase64 = GetImageBase64(model.CitizenID, model.TestTypeID);
                 if (model.TestTypeID == 1)
@@ -361,6 +367,8 @@ namespace Register.Web.Controllers
             {
                 model.Mode = "Confirm";
                 model.ErrorMessage = "บันทึกข้อมูลไม่สำเร็จ";
+                model.gridEducations = null;
+                model.gridExperiences = null;
                 Log.WriteErrorLog(tsw.TraceError, (result != null ? result.ErrorMessage : ""));
                 TempData["student"] = model;
                 ViewBag.ImageBase64 = GetImageBase64(model.CitizenID, model.TestTypeID);
@@ -375,6 +383,8 @@ namespace Register.Web.Controllers
             }
             model.ErrorMessage = null;
             model.ImageBase64 = null;
+            model.gridEducations = null;
+            model.gridExperiences = null;
             TempData.Clear();
             TempData["student"] = model;
             return RedirectToAction("RegisterFinal", new { testTypeID = model.TestTypeID });

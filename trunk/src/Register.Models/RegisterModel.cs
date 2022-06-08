@@ -176,11 +176,49 @@ namespace Register.Models
 
         public List<DocToUploadModel> DOCS { get; set; }
 
+        public string LineID { get; set; }
+        public string ContactTitle { get; set; }
+        public string ContactTitleName { get; set; }
+        public string ContactFName { get; set; }
+        public string ContactLName { get; set; }
+        public string ContactDetail { get; set; }
+        public string ContactPhoneNo { get; set; }
+        public string ContactPhoneEx { get; set; }
+
+        public string ContactTitle2 { get; set; }
+        public string ContactTitleName2 { get; set; }
+        public string ContactFName2 { get; set; }
+        public string ContactLName2 { get; set; }
+        public string ContactDetail2 { get; set; }
+        public string ContactPhoneNo2 { get; set; }
+        public string ContactPhoneEx2 { get; set; }
+        public List<StudyList> gridEducations { get; set; }
+        public List<ExperienceList> gridExperiences { get; set; }
+
 
         public object Clone()
         {
             return this.MemberwiseClone();
         }
+    }
+    public class StudyList
+    {
+        public int SEQ_NO { get; set; }
+        public string CLASS_LEVEL_ID { get; set; }
+        public string CLASS_LEVEL_Name { get; set; }
+        public string DEGREE_NAME { get; set; }
+        public string MAJOR_NAME { get; set; }
+        public string SCHOOL_NAME { get; set; }
+    }
+    public class ExperienceList
+    {
+        public int SEQ_NO { get; set; }
+        public string START_DATE { get; set; }
+        public string END_DATE { get; set; }
+        public string POSITION_NAME { get; set; }
+        public string WORKPLACE { get; set; }
+        public string SALARY { get; set; }
+        public string REMARK { get; set; }
     }
 
     public class QuestionaireModel

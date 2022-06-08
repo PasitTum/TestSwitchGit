@@ -54,6 +54,25 @@ namespace Register.DAL
                 citizen = encryptHelper.EncryptData(model.CitizenID.ToString());
             }
             model.Salary = model.Salary.Replace(",", "");
+            
+            
+            var gridEducationsXml = model.gridEducations.ObjectToXml();
+
+            if(model.gridExperiences != null) { 
+            model.gridExperiences.ForEach(x =>
+            {
+                var datetimeStart = x.START_DATE.ToDateTimeFromThai() ?? DateTime.Now;
+                x.START_DATE = DateMode(datetimeStart);
+                var datetimeEnd = x.END_DATE.ToDateTimeFromThai() ?? DateTime.Now;
+                x.END_DATE = DateMode(datetimeEnd);
+
+                //x.START_DATE = DateMode(datetimeStart, mode);
+            });
+            }
+            var gridExperienceXml = model.gridExperiences.ObjectToXml();
+
+
+
             try
             {
                 using (var db = new RegisterDB())
@@ -88,6 +107,7 @@ namespace Register.DAL
                     prms.Add(new CommonParameter("@SCHOOL_ID", model.SchoolID));
                     prms.Add(new CommonParameter("@SCHOOL_NAME", model.SchoolName));
                     prms.Add(new CommonParameter("@SCHOOL_PROVINCE_ID", model.SchoolProvinceID));
+                    prms.Add(new CommonParameter("@SCHOOL_PROVINCE_NAME", model.SchoolProvinceName));
                     prms.Add(new CommonParameter("@SCHOOL_COUNTRY_ID", model.SchoolCountryID));
                     prms.Add(new CommonParameter("@DEGREE_ID", model.DegreeID));
                     prms.Add(new CommonParameter("@DEGREE_NAME", model.DegreeName));
@@ -101,7 +121,8 @@ namespace Register.DAL
                     prms.Add(new CommonParameter("@DEFECTIVE_HELP_FLAG", model.DefectiveHelpFlag));
                     prms.Add(new CommonParameter("@DEFECTIVE_HELP_ID", model.DefectiveHelpID));
                     prms.Add(new CommonParameter("@OCCUPATION_ID", model.OccuupationID));
-                    prms.Add(new CommonParameter("@OCCUPATION_NAME", model.OccuupationID == "1" ? model.OccuupationName4Gov : model.OccuupationName));
+                    prms.Add(new CommonParameter("@OCCUPATION_NAME", model.OccuupationName));
+                    //prms.Add(new CommonParameter("@OCCUPATION_NAME", model.OccuupationID == "1" ? model.OccuupationName4Gov : model.OccuupationName));
                     prms.Add(new CommonParameter("@ADDRESS_NO", model.AddrNo));
                     prms.Add(new CommonParameter("@VILLAGE_NAME", model.Village));
                     prms.Add(new CommonParameter("@MOO", model.Moo));
@@ -114,11 +135,20 @@ namespace Register.DAL
                     prms.Add(new CommonParameter("@PHONE_NO", model.Tel));
                     prms.Add(new CommonParameter("@MOBILE_NO", model.Mobile));
                     prms.Add(new CommonParameter("@EMAIL", model.Email));
-                    prms.Add(new CommonParameter("@CONTACT_NAME", model.EmergencyFirstName));
-                    prms.Add(new CommonParameter("@CONTACT_SURNAME", model.EmergencyLastName));
-                    prms.Add(new CommonParameter("@CONTACT_RELATION", model.EmergencyRelation));
-                    prms.Add(new CommonParameter("@CONTACT_PHONE", model.EmergencyTel));
-                    prms.Add(new CommonParameter("@CONTACT_MOBILE", model.EmergencyMoblie));
+                    prms.Add(new CommonParameter("@CONTACT_TITLE", model.ContactTitleName));
+                    prms.Add(new CommonParameter("@CONTACT_NAME", model.ContactFName));
+                    prms.Add(new CommonParameter("@CONTACT_SURNAME", model.ContactLName));
+                    prms.Add(new CommonParameter("@CONTACT_RELATION", model.ContactDetail));
+                    prms.Add(new CommonParameter("@CONTACT_PHONE", ""));
+                    prms.Add(new CommonParameter("@CONTACT_MOBILE", model.ContactPhoneNo));
+
+                    prms.Add(new CommonParameter("@CONTACT_TITLE2", model.ContactTitleName2));
+                    prms.Add(new CommonParameter("@CONTACT_NAME2", model.ContactFName2));
+                    prms.Add(new CommonParameter("@CONTACT_SURNAME2", model.ContactLName2));
+                    prms.Add(new CommonParameter("@CONTACT_RELATION2", model.ContactDetail2));
+                    prms.Add(new CommonParameter("@CONTACT_PHONE2", ""));
+                    prms.Add(new CommonParameter("@CONTACT_MOBILE2", model.ContactPhoneNo2));
+
                     prms.Add(new CommonParameter("@ENROLL_PASSWORD", null));
                     prms.Add(new CommonParameter("@XML_QUESTIONAIRE", model.XMLQuestionaire));
                     prms.Add(new CommonParameter("@CREATE_BY", model.CitizenID));
@@ -200,7 +230,13 @@ namespace Register.DAL
                     var docXml = model.DOCS.ObjectToXml();
                     prms.Add(new CommonParameter("@DOCS_LIST", docXml));
 
-                    var result = db.ExecuteStored("ENR_SP_SET_ENROLL_INFO @TEST_TYPE_ID, @EXAM_TYPE, @CITIZEN_ID, @REAL_CITIZEN_ID, @LASER_CODE, @TITLE_ID, @TITLE_NAME, @FNAME_TH, @LNAME_TH, @BIRTH_DATE, @AGE_DAY, @AGE_MONTH, @AGE_YEAR, @CENTER_EXAM_ID_TMP, @CITIZEN_PROVINCE_ID, @GENDER, @NATION_NAME, @RACE_NAME, @RELIGION_ID, @RELIGION_NAME, @STATUS_ID, @STATUS_NAME, @CLASS_LEVEL_ID, @CLASS_LEVEL_NAME, @SCHOOL_GROUP_ID, @SCHOOL_FLAG, @SCHOOL_ID, @SCHOOL_NAME, @SCHOOL_PROVINCE_ID, @SCHOOL_COUNTRY_ID, @DEGREE_ID, @DEGREE_NAME, @MAJOR_NAME, @GRADUATED_FLAG, @GRADUATE_DATE, @GRADUATE_GPA, @STUDY_YEAR, @EDU_YEAR, @DEFECTIVE_FLAG, @DEFECTIVE_HELP_FLAG, @DEFECTIVE_HELP_ID, @OCCUPATION_ID, @OCCUPATION_NAME, @ADDRESS_NO, @VILLAGE_NAME, @MOO, @SOI, @STREET, @PROVINCE_ID, @AMPHUR_ID, @TUMBON_ID, @POST_CODE, @PHONE_NO, @MOBILE_NO, @EMAIL, @CONTACT_NAME, @CONTACT_SURNAME, @CONTACT_RELATION, @CONTACT_PHONE, @CONTACT_MOBILE, @ENROLL_PASSWORD, @XML_QUESTIONAIRE, @CREATE_BY, @UPDATE_BY, @IP_ADDRESS, @MAC_ADDRESS, @PROGRAM_ID, @ERRORNUM OUTPUT, @ERRORMESS OUTPUT, @REGISTER_NO OUTPUT, @CENTER_EXAM_ID, @TESTING_CLASS_ID, @CARD_DATE_RELEASE, @CARD_DATE_EXPIRE, @CERT_TITLE_ID, @CERT_TITLE_NAME, @CERT_FNAME_TH, @CERT_LNAME_TH, @PPT_EDU_STATUS_HIGHEST_DEGREE_NAME, @PPT_EDU_STATUS_HIGHEST_SCHOOL_NAME, @PPT_SPECIAL_SKILL, @POSITION_NAME, @OFFICE_NAME, @DIVISION_NAME, @OFFICE_PHONE_NO, @OFFICE_PHONE_EX, @OFFICE_MOBILE_NO, @SARALY_AMT, @TBB_ADDRESS_NO, @TBB_BUILDING, @TBB_ROOM, @TBB_MOO, @TBB_VILLAGE_NAME, @TBB_SOI, @TBB_JUNCTION, @TBB_STREET, @TBB_TUMBON_NAME, @TBB_AMPHUR_NAME, @TBB_PROVINCE_ID, @TBB_POST_CODE, @TBB_PHONE_NO, @TBB_PHONE_EX, @PHONE_EX, @CONTACT_PHONE_EX, @BIRTH_DATE_CHAR, @HIGHEST_CLASS_NAME, @HIGHEST_DEGREE_NAME, @HIGHEST_MAJOR_NAME, @HIGHEST_SCHOOL_NAME, @HIGHEST_SCHOOL_PROVINCE, @HIGHEST_SCHOOL_FLAG, @HIGHEST_GRADUATE_DATE, @HIGHEST_GRADUATE_GPA, @OCSC_LEVEL_ID, @OCSC_CERT_NO, @OCSC_EXAM_DTM, @OCSC_PASS_DTM, @PHOTO_FILE, @FACULTY_NAME, @DOCS_LIST, @CLASS_GROUP_ID, @DOC_TYPE_ID, @DIPLOMA_MAJOR, @DIPLOMA_ACADEMY, @DIPLOMA_TEACHER_ACADEMY, @DIPLOMA_TEACHER_GRADUATE_DATE, @CERT_TEACHER_NO, @CERT_TEACHER_ISSUED_DATE, @CERT_TEACHER_EXPIRE_DATE, @TEACH_CLASS_LEVEL_ID, @EXAM_SITE_ID", prms, prmsOut);
+                    // CDD
+                    prms.Add(new CommonParameter("@LINE_ID", model.LineID));
+                    prms.Add(new CommonParameter("@EXPIRED_DATE", model.ExpiredDate));
+                    prms.Add(new CommonParameter("@study_xml", gridEducationsXml));
+                    prms.Add(new CommonParameter("@experience_xml", gridExperienceXml));
+
+                    var result = db.ExecuteStored("ENR_SP_SET_ENROLL_INFO_CDD @TEST_TYPE_ID, @EXAM_TYPE, @CITIZEN_ID, @REAL_CITIZEN_ID, @LASER_CODE, @TITLE_ID, @TITLE_NAME, @FNAME_TH, @LNAME_TH, @BIRTH_DATE, @AGE_DAY, @AGE_MONTH, @AGE_YEAR, @CENTER_EXAM_ID_TMP, @CITIZEN_PROVINCE_ID, @GENDER, @NATION_NAME, @RACE_NAME, @RELIGION_ID, @RELIGION_NAME, @STATUS_ID, @STATUS_NAME, @CLASS_LEVEL_ID, @CLASS_LEVEL_NAME, @SCHOOL_GROUP_ID, @SCHOOL_FLAG, @SCHOOL_ID, @SCHOOL_NAME, @SCHOOL_PROVINCE_ID, @SCHOOL_COUNTRY_ID, @DEGREE_ID, @DEGREE_NAME, @MAJOR_NAME, @GRADUATED_FLAG, @GRADUATE_DATE, @GRADUATE_GPA, @STUDY_YEAR, @EDU_YEAR, @DEFECTIVE_FLAG, @DEFECTIVE_HELP_FLAG, @DEFECTIVE_HELP_ID, @OCCUPATION_ID, @OCCUPATION_NAME, @ADDRESS_NO, @VILLAGE_NAME, @MOO, @SOI, @STREET, @PROVINCE_ID, @AMPHUR_ID, @TUMBON_ID, @POST_CODE, @PHONE_NO, @MOBILE_NO, @EMAIL, @CONTACT_TITLE, @CONTACT_NAME, @CONTACT_SURNAME, @CONTACT_RELATION, @CONTACT_PHONE, @CONTACT_MOBILE, @CONTACT_TITLE2, @CONTACT_NAME2, @CONTACT_SURNAME2, @CONTACT_RELATION2, @CONTACT_PHONE2, @CONTACT_MOBILE2, @ENROLL_PASSWORD, @XML_QUESTIONAIRE, @CREATE_BY, @UPDATE_BY, @IP_ADDRESS, @MAC_ADDRESS, @PROGRAM_ID, @ERRORNUM OUTPUT, @ERRORMESS OUTPUT, @REGISTER_NO OUTPUT, @CENTER_EXAM_ID, @TESTING_CLASS_ID, @CARD_DATE_RELEASE, @CARD_DATE_EXPIRE, @CERT_TITLE_ID, @CERT_TITLE_NAME, @CERT_FNAME_TH, @CERT_LNAME_TH, @PPT_EDU_STATUS_HIGHEST_DEGREE_NAME, @PPT_EDU_STATUS_HIGHEST_SCHOOL_NAME, @PPT_SPECIAL_SKILL, @POSITION_NAME, @OFFICE_NAME, @DIVISION_NAME, @OFFICE_PHONE_NO, @OFFICE_PHONE_EX, @OFFICE_MOBILE_NO, @SARALY_AMT, @TBB_ADDRESS_NO, @TBB_BUILDING, @TBB_ROOM, @TBB_MOO, @TBB_VILLAGE_NAME, @TBB_SOI, @TBB_JUNCTION, @TBB_STREET, @TBB_TUMBON_NAME, @TBB_AMPHUR_NAME, @TBB_PROVINCE_ID, @TBB_POST_CODE, @TBB_PHONE_NO, @TBB_PHONE_EX, @PHONE_EX, @CONTACT_PHONE_EX, @BIRTH_DATE_CHAR, @HIGHEST_CLASS_NAME, @HIGHEST_DEGREE_NAME, @HIGHEST_MAJOR_NAME, @HIGHEST_SCHOOL_NAME, @HIGHEST_SCHOOL_PROVINCE, @HIGHEST_SCHOOL_FLAG, @HIGHEST_GRADUATE_DATE, @HIGHEST_GRADUATE_GPA, @OCSC_LEVEL_ID, @OCSC_CERT_NO, @OCSC_EXAM_DTM, @OCSC_PASS_DTM, @PHOTO_FILE, @FACULTY_NAME, @DOCS_LIST, @CLASS_GROUP_ID, @DOC_TYPE_ID, @DIPLOMA_MAJOR, @DIPLOMA_ACADEMY, @DIPLOMA_TEACHER_ACADEMY, @DIPLOMA_TEACHER_GRADUATE_DATE, @CERT_TEACHER_NO, @CERT_TEACHER_ISSUED_DATE, @CERT_TEACHER_EXPIRE_DATE, @TEACH_CLASS_LEVEL_ID, @EXAM_SITE_ID, @LINE_ID, @EXPIRED_DATE, @study_xml, @experience_xml", prms, prmsOut);
                     rtn.Success = result.Success;
                     rtn.ErrorMessage = result.ErrorMessage;
                     rtn.ReturnValue1 = prmsOut[2].Value.ToString();
@@ -212,6 +248,25 @@ namespace Register.DAL
                 Log.WriteErrorLog(tsw.TraceError, ex);
             }
             return null;
+        }
+        public string DateMode(DateTime date/*, string mode*/)
+        {
+           if(date.Year > 2475)
+            {
+                return date.AddYears(-543).ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                return date.ToString("yyyy-MM-dd");
+            }
+            //if (mode == "PRD")
+            //{
+            //    return date.AddYears(-543).ToString("yyyy-MM-dd");
+            //}
+            //else
+            //{
+            //    return date.ToString("yyyy-MM-dd");
+            //}
         }
 
         public ResultInfo InsertSmsLog(SmsInfo model)

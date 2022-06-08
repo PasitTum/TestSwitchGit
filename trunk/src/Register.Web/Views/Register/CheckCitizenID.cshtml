@@ -56,11 +56,11 @@
                         </div>
                     </div>*@
                     <div class="row mt-3">
-                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">ชื่อตัว</label>
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">ชื่อ</label>
                         <div class="col-12 col-md-6" ng-class="{ 'validation-error': checkCitizenID.firstName.$error.required && checkCitizenID.firstName.$dirty }">
                             <input type="text" class="form-control col-md-5 pr-2" id="firstName" name="firstName"
                                    ng-model="model.FirstName"
-                                   maxlength="255" autocomplete="off" placeholder="ชื่อตัว" required />
+                                   maxlength="255" autocomplete="off" placeholder="ชื่อ" required />
                         </div>
                     </div>
                     <div class="row">
@@ -68,11 +68,11 @@
                         <label for="" class="col-12 col-md-6 col-form-label text-danger ng-cloak">ไม่ต้องใส่ "คำนำหน้า", ไม่ต้องใส่ "ชื่อกลาง"</label>
                     </div>
                     <div class="row mt-3">
-                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">ชื่อสกุล</label>
+                        <label class="col-12 col-md-4 control-label col-form-label text-md-right information required">นามสกุล</label>
                         <div class="col-12 col-md-6" ng-class="{ 'validation-error': checkCitizenID.lastName.$error.required && checkCitizenID.lastName.$dirty }">
                             <input type="text" class="form-control col-md-5" id="lastName" name="lastName"
                                    ng-model="model.LastName"
-                                   maxlength="255" autocomplete="off" placeholder="ชื่อสกุล" required />
+                                   maxlength="255" autocomplete="off" placeholder="นามสกุล" required />
                         </div>
                     </div>
                     <div class="row">

@@ -114,7 +114,27 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
     $scope.smsStatus = $scope.model.SMSStatus == 'Y' ? true : false;
     $scope.occFlag = false;
     $scope.isLoading = false;
+    $scope.confirm2 = false;
+
     //$scope.isInitializing = false;
+
+    $scope.checkModeEditTable = "";
+    $scope.gridPosition = "display";
+    $scope.gridDobleGovernment = "display";
+    $scope.gridModes = { adding: "adding", editing: "editing", display: "display" };
+    var arrQueue = [];
+    $scope.lstEduSerti = [];
+    var arrEducation = sessionStorage.getItem("gridEducation");
+    if (arrEducation != "undefined") {
+        $scope.model.gridEducation = !$CspUtils.IsNullOrEmpty(arrEducation) ? JSON.parse(arrEducation) : [];
+    }
+    var arrExperience = sessionStorage.getItem("gridExperience");
+    if (arrExperience != "undefined") {
+        $scope.model.gridExperience = !$CspUtils.IsNullOrEmpty(arrExperience) ? JSON.parse(arrExperience) : [];
+    }
+
+
+
 
     $scope.ErrorMessImage = "";
     $scope.fileSizeValid = !$CspUtils.IsNullOrEmpty($scope.model.ImageBase64) ? true : false;
@@ -455,25 +475,25 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             }
         }
         // ก.พ.
-        //if (!$scope.ocscFlag) {
-        //    errorList.push("กรุณาระบุ ว่าเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
-        //}
-        //if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCLevelID)) {
-        //    errorList.push("กรุณาระบุ ระดับวุฒิการศึกษา การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
-        //}
-        //if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCCertNo)) {
-        //    errorList.push("กรุณาระบุ เลขที่หนังสือรับรองฯ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
-        //}
-        //if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCExamDate)) {
-        //    errorList.push("กรุณาระบุ วันที่สอบ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
-        //}
+        if (!$scope.ocscFlag) {
+            errorList.push("กรุณาระบุ ว่าเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+        }
+        if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCLevelID)) {
+            errorList.push("กรุณาระบุ ระดับวุฒิการศึกษา การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+        }
+        if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCCertNo)) {
+            errorList.push("กรุณาระบุ เลขที่หนังสือรับรองฯ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+        }
+        if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCExamDate)) {
+            errorList.push("กรุณาระบุ วันที่สอบ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+        }
         //if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCPassDate)) {
         //    errorList.push("กรุณาระบุ วันประกาศขึ้นทะเบียนสอบ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
         //}
         // end ก.พ.
-        //if ($CspUtils.IsNullOrEmpty($scope.model.GPA)) {
-        //    errorList.push("ยังไม่ได้ระบุ เกรดเฉลี่ยสะสม");
-        //}
+        if ($CspUtils.IsNullOrEmpty($scope.model.GPA)) {
+            errorList.push("ยังไม่ได้ระบุ เกรดเฉลี่ยสะสม");
+        }
         //if ($CspUtils.IsNullOrEmpty($scope.model.ClassHighestLavelID)) {
         //    errorList.push("ยังไม่ได้ระบุ วุฒิการศึกษาสูงสุด");
         //}
@@ -550,18 +570,30 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         //        $("input[type=hidden][id='teachClassLevelName']").val($scope.getNameFromID($scope.lstTeachClasses, $scope.model.TeachClassLevelID));
         //    }
         //}
-        if ($CspUtils.IsNullOrEmpty($scope.model.EduPrefixID)) {
-            errorList.push("ยังไม่ได้ระบุ คำนำหน้า ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
-        }
-        if ($scope.model.EduPrefixID == '999999' && $CspUtils.IsNullOrEmpty($scope.model.EduPrefixName)) {
-            errorList.push("ยังไม่ได้ระบุ คำนำหน้าอื่นๆ ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.EduFirstName)) {
-            errorList.push("ยังไม่ได้ระบุ ชื่อตัว ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.EduLastName)) {
-            errorList.push("ยังไม่ได้ระบุ ชื่อสกุล ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
-        }
+        //if ($CspUtils.IsNullOrEmpty($scope.model.EduPrefixID)) {
+        //    errorList.push("ยังไม่ได้ระบุ คำนำหน้า ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
+        //}
+        //if ($scope.model.EduPrefixID == '999999' && $CspUtils.IsNullOrEmpty($scope.model.EduPrefixName)) {
+        //    errorList.push("ยังไม่ได้ระบุ คำนำหน้าอื่นๆ ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.EduFirstName)) {
+        //    errorList.push("ยังไม่ได้ระบุ ชื่อตัว ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.EduLastName)) {
+        //    errorList.push("ยังไม่ได้ระบุ ชื่อสกุล ในคุณวุฒิการศึกษาที่ใช้สมัครสอบ");
+        //}
+
+        //--------
+        //if ($CspUtils.IsNullOrEmpty($scope.model.gridEducation) || $scope.model.gridEducation.length==0) {
+        //    errorList.push("ยังไม่ได้ระบุ วุฒิการศึกษา");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.gridExperience) || $scope.model.gridExperience.length == 0) {
+        //    errorList.push("ยังไม่ได้ระบุ ประสบการณ์การทำงาน");
+        //} 
+
+        //--------
+
+
         if ($CspUtils.IsNullOrEmpty($scope.model.OccuupationID)) {
             errorList.push("ยังไม่ได้ระบุ อาชีพปัจจุบัน");
         }
@@ -602,54 +634,54 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }
 
 
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbAddrNo)) {
-            errorList.push("ยังไม่ได้ระบุ บ้านเลขที่");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbVillage)) {
-            errorList.push("ยังไม่ได้ระบุ ชั้น/อาคาร/หมู่บ้าน");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbMoo)) {
-            errorList.push("ยังไม่ได้ระบุ หมู่ที่");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbSoi)) {
-            errorList.push("ยังไม่ได้ระบุ ตรอก/ซอย/แยก");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbRoad)) {
-            errorList.push("ยังไม่ได้ระบุ ถนน");
-        }
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbAddrNo)) {
+        //    errorList.push("ยังไม่ได้ระบุ บ้านเลขที่");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbVillage)) {
+        //    errorList.push("ยังไม่ได้ระบุ ชั้น/อาคาร/หมู่บ้าน");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbMoo)) {
+        //    errorList.push("ยังไม่ได้ระบุ หมู่ที่");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbSoi)) {
+        //    errorList.push("ยังไม่ได้ระบุ ตรอก/ซอย/แยก");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbRoad)) {
+        //    errorList.push("ยังไม่ได้ระบุ ถนน");
+        //}
         if ($CspUtils.IsNullOrEmpty($scope.model.TbbProvID)) {
             errorList.push("ยังไม่ได้ระบุ จังหวัด");
         }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbAmphID)) {
-            errorList.push("ยังไม่ได้ระบุ เขต/อำเภอ");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbTmblID)) {
-            errorList.push("ยังไม่ได้ระบุ แขวง/ตำบล");
-        }
-        if ($CspUtils.IsNullOrEmpty($scope.model.TbbZipcode)) {
-            errorList.push("กรุณาระบุ รหัสไปรษณีย์ ให้ถูกต้อง");
-        }
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbAmphID)) {
+        //    errorList.push("ยังไม่ได้ระบุ เขต/อำเภอ");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbTmblID)) {
+        //    errorList.push("ยังไม่ได้ระบุ แขวง/ตำบล");
+        //}
+        //if ($CspUtils.IsNullOrEmpty($scope.model.TbbZipcode)) {
+        //    errorList.push("กรุณาระบุ รหัสไปรษณีย์ ให้ถูกต้อง");
+        //}
 
 
         //if ($CspUtils.IsNullOrEmpty($scope.model.TbbTel)) {
         //    errorList.push("ยังไม่ได้ระบุ โทรศัพท์");
         //}
 
-        //if ($CspUtils.IsNullOrEmpty($scope.model.AddrNo)) {
-        //    errorList.push("ยังไม่ได้ระบุ บ้านเลขที่");
-        //}
-        //if ($CspUtils.IsNullOrEmpty($scope.model.Village)) {
-        //    errorList.push("ยังไม่ได้ระบุ ชั้น/อาคาร/หมู่บ้าน");
-        //}
-        //if ($CspUtils.IsNullOrEmpty($scope.model.Moo)) {
-        //    errorList.push("ยังไม่ได้ระบุ หมู่ที่");
-        //}
-        //if ($CspUtils.IsNullOrEmpty($scope.model.Soi)) {
-        //    errorList.push("ยังไม่ได้ระบุ ตรอก/ซอย/แยก");
-        //}
-        //if ($CspUtils.IsNullOrEmpty($scope.model.Road)) {
-        //    errorList.push("ยังไม่ได้ระบุ ถนน");
-        //}
+        if ($CspUtils.IsNullOrEmpty($scope.model.AddrNo)) {
+            errorList.push("ยังไม่ได้ระบุ บ้านเลขที่");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.Village)) {
+            errorList.push("ยังไม่ได้ระบุ ชั้น/อาคาร/หมู่บ้าน");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.Moo)) {
+            errorList.push("ยังไม่ได้ระบุ หมู่ที่");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.Soi)) {
+            errorList.push("ยังไม่ได้ระบุ ตรอก/ซอย/แยก");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.Road)) {
+            errorList.push("ยังไม่ได้ระบุ ถนน");
+        }
         if ($CspUtils.IsNullOrEmpty($scope.model.ProvID)) {
             errorList.push("ยังไม่ได้ระบุ จังหวัด");
         }
@@ -666,27 +698,69 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
                 $("input[type=hidden][id='amphName']").val($scope.getNameFromID($scope.lstAmphs, $scope.model.AmphID));
             }
         }
-        //if ($CspUtils.IsNullOrEmpty($scope.model.TmblID)) {
-        //    errorList.push("ยังไม่ได้ระบุ แขวง/ตำบล");
-        //}
-        //else {
-        //    if ($CspUtils.IsNullOrEmpty($scope.model.TmblName)) {
-        //        $("input[type=hidden][id='tmblName']").val($scope.getNameFromID($scope.lstTmbls, $scope.model.TmblID));
-        //    }
-        //}
-        //if ($CspUtils.IsNullOrEmpty($scope.model.Zipcode)) {
-        //    errorList.push("กรุณาระบุ รหัสไปรษณีย์ ให้ถูกต้อง");
-        //}
+        if ($CspUtils.IsNullOrEmpty($scope.model.TmblID)) {
+            errorList.push("ยังไม่ได้ระบุ แขวง/ตำบล");
+        }
+        else {
+            if ($CspUtils.IsNullOrEmpty($scope.model.TmblName)) {
+                $("input[type=hidden][id='tmblName']").val($scope.getNameFromID($scope.lstTmbls, $scope.model.TmblID));
+            }
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.Zipcode)) {
+            errorList.push("กรุณาระบุ รหัสไปรษณีย์ ให้ถูกต้อง");
+        }
         //if ($CspUtils.IsNullOrEmpty($scope.model.Tel)) {
         //    errorList.push("ยังไม่ได้ระบุ โทรศัพท์");
         //}
         if ($CspUtils.IsNullOrEmpty($scope.model.Mobile)) {
             errorList.push("กรุณาระบุ หมายเลขโทรศัพท์เคลื่อนที่ ให้ถูกต้อง");
         }
-        if ($CspUtils.IsNullOrEmpty($scope.model.Email)) {
-            errorList.push("กรุณาระบุ อีเมล ให้ถูกต้อง");
+        //if ($CspUtils.IsNullOrEmpty($scope.model.Email)) {
+        //    errorList.push("กรุณาระบุ อีเมล ให้ถูกต้อง");
+        //}
+
+
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactTitle)) {
+            errorList.push("ยังไม่ได้ระบุ คำนำหน้า บุคคลอ้างอิง คนที่ 1");
+        }
+        else {
+            if ($CspUtils.IsNullOrEmpty($scope.model.ContactTitleName)) {
+                $("input[type=hidden][id='ContactTitleName']").val($scope.getNameFromID($scope.prefixes, $scope.model.ContactTitle));
+            }
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactFName)) {
+            errorList.push("ยังไม่ได้ระบุ ชื่อตัว บุคคลอ้างอิง คนที่ 1");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactLName)) {
+            errorList.push("ยังไม่ได้ระบุ ชื่อสกุล บุคคลอ้างอิง คนที่ 1");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactDetail)) {
+            errorList.push("ยังไม่ได้ระบุ เกี่ยวข้องเป็น บุคคลอ้างอิง คนที่ 1");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactPhoneNo)) {
+            errorList.push("ยังไม่ได้ระบุ เบอร์โทรศัพท์ติดต่อ บุคคลอ้างอิง คนที่ 1");
         }
 
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactTitle2)) {
+            errorList.push("ยังไม่ได้ระบุ คำนำหน้า บุคคลอ้างอิง คนที่ 2");
+        }
+        else {
+            if ($CspUtils.IsNullOrEmpty($scope.model.ContactTitleName2)) {
+                $("input[type=hidden][id='ContactTitleName2']").val($scope.getNameFromID($scope.prefixes, $scope.model.ContactTitle2));
+            }
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactFName2)) {
+            errorList.push("ยังไม่ได้ระบุ ชื่อตัว บุคคลอ้างอิง คนที่ 2");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactLName2)) {
+            errorList.push("ยังไม่ได้ระบุ ชื่อสกุล บุคคลอ้างอิง คนที่ 2");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactDetail2)) {
+            errorList.push("ยังไม่ได้ระบุ เกี่ยวข้องเป็น บุคคลอ้างอิง คนที่ 2");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.model.ContactPhoneNo2)) {
+            errorList.push("ยังไม่ได้ระบุ เบอร์โทรศัพท์ติดต่อ บุคคลอ้างอิง คนที่ 2");
+        }
         //if ($CspUtils.IsNullOrEmpty($scope.model.ExamSiteID)) {
         //    errorList.push("กรุณาระบุ จังหวัดที่ประสงค์จะเข้าสอบ");
         //}
@@ -727,6 +801,9 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }
         if ($CspUtils.IsNullOrEmpty($scope.confirm) || $scope.confirm == false) {
             errorList.push("กรุณายืนยันการสมัคร");
+        }
+        if ($CspUtils.IsNullOrEmpty($scope.confirm2) || $scope.confirm2 == false) {
+            errorList.push("กรุณายืนยันเผยแพร่ข้อมูลส่วนบุคคล");
         }
         if ($scope.smsStatus && $CspUtils.IsNullOrEmpty($scope.model.SMSMobile)) {
             errorList.push("กรุณาระบุ หมายเลขโทรศัพท์เคลื่อนที่ ให้ถูกต้อง");
@@ -801,6 +878,13 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         } else {
             $scope.model.SMSStatus = 'N'
         }
+
+
+        sessionStorage.setItem("gridEducation", JSON.stringify($scope.model.gridEducation));
+        sessionStorage.setItem("gridExperience", JSON.stringify($scope.model.gridExperience));
+
+
+
         if ($scope.waitingDetect == true) {
             e.preventDefault();
 
@@ -1285,6 +1369,7 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             $scope.SetLoading("lstEducationals", true);
             $LookupService.getLookupEducationals($scope.model.RegClassID).then(function (result) {
                 $scope.lstEducationals = result.data;
+                $scope.lstEduSerti = result.data;
                 //console.log($scope.lstEducationals);
                 if ($scope.lstEducationals.length == 1) {
                     $scope.model.ClassLavelID = $scope.lstEducationals[0].id;
@@ -1343,6 +1428,9 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
                 console.log("Error on getLookupOCSCEducationals", err);
             }).finally(function () { $scope.SetLoading("lstOCSCEducationals", false); });
         }
+
+        $scope.getLookupHighestEducationals()
+
     };
 
     $scope.degreeChange = function () {
@@ -1797,6 +1885,183 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         });
     };
 
+    $scope.getTemplate = function (member, selectTable) {
+
+        if ($scope.checkModeEditTable == selectTable) {
+            if ($scope.model.selected != undefined) {
+                if (member.SEQ_NO === $scope.model.selected.SEQ_NO) return selectTable + 'Edit';
+                else return selectTable + 'Display';
+            } else return selectTable + 'Display'
+        } else return selectTable + 'Display'
+    };
+    $scope.getTemplateFooter = function (selectTable) {
+        if ($scope[selectTable] === $scope.gridModes.adding) {
+            return selectTable + "Edit";
+        }
+        else if ($scope[selectTable] === $scope.gridModes.editing) {
+            return "";
+        } else {
+            return selectTable + "FooterDisplay";
+        }
+    };
+    $scope.addMember = function (selectTable) {
+        $scope[selectTable] = $scope.gridModes.adding;
+
+        var obj = {};
+
+        switch (selectTable) {
+            case "gridEducation":
+                obj.CLASS_LEVEL_ID = "";
+                obj.DEGREE_NAME = "";
+                obj.MAJOR_NAME = "";
+                obj.SCHOOL_NAME = "";
+                break;
+            case "gridExperience":
+                obj.START_DATE = "";
+                obj.END_DATE = "";
+                obj.POSITION_NAME = "";
+                obj.WORKPLACE = "";
+                obj.SALARY = "";
+                obj.REMARK = "";
+                break;
+        }
+        $scope.model.selected = obj;
+    }
+
+    $scope.salaryGrid = function (event)
+    {
+
+        $("#SALARY").keypress(function (e) { return Character.isKeyPointNumberCharacter(e); });
+    }
+
+    $scope.savemember = function (item, selectTable) {
+        var modelSaved = angular.copy($scope.model.selected);
+
+        // TODO : Add Validation Here
+        var errorList = [];
+        switch (selectTable) {
+            case "gridEducation":
+                if ($CspUtils.IsNullOrEmpty(modelSaved.CLASS_LEVEL_ID)) {
+                    errorList.push("ยังไม่ได้ระบุปริญญา");
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.DEGREE_NAME)) {
+                    errorList.push("ยังไม่ได้ระบุชื่อวุฒิการศึกษา");
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.MAJOR_NAME)) {
+                    errorList.push("ยังไม่ได้ระบุสาขา");
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.SCHOOL_NAME)) {
+                    errorList.push("ยังไม่ได้ระบุการอนุมัติจากสถานศึกษา");
+                }
+                break;
+            case "gridExperience":
+                if ($CspUtils.IsNullOrEmpty(modelSaved.START_DATE)) {
+                    errorList.push("ยังไม่ได้ระบุวันที่สำเร็จการศึกษา");
+                }
+                else {
+                    var dateArray1 = modelSaved.START_DATE.split("/");
+                    var newDate1 = dateArray1[1] + '/' + dateArray1[0] + '/' + dateArray1[2];
+
+                    var dateArray2 = $scope.closeEnrollDate.split("/");
+                    var newDate2 = dateArray2[1] + '/' + dateArray2[0] + '/' + dateArray2[2];
+                    if (new Date(newDate1) > new Date(newDate2)) {
+                        errorList.push("วันที่ประสบการณ์การทำงาน มากกว่า วันที่ปิดรับสมัคร");
+                    }
+                }
+
+                if ($CspUtils.IsNullOrEmpty(modelSaved.END_DATE)) {
+                    errorList.push("ยังไม่ได้ระบุวันที่สำเร็จการศึกษา");
+                }
+                else {
+                    var dateArray1 = modelSaved.END_DATE.split("/");
+                    var newDate1 = dateArray1[1] + '/' + dateArray1[0] + '/' + dateArray1[2];
+
+                    var dateArray2 = $scope.closeEnrollDate.split("/");
+                    var newDate2 = dateArray2[1] + '/' + dateArray2[0] + '/' + dateArray2[2];
+                    if (new Date(newDate1) > new Date(newDate2)) {
+                        errorList.push("วันที่ประสบการณ์การทำงาน  มากกว่า วันที่ปิดรับสมัคร");
+                    }
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.POSITION_NAME)) {
+                    errorList.push("ยังไม่ได้ระบุตำแหน่ง");
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.WORKPLACE)) {
+                    errorList.push("ยังไม่ได้ระบุสถานที่ทำงาน");
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.SALARY)) {
+                    errorList.push("ยังไม่ได้ระบุเงินเดือนสุดท้ายก่อนออก");
+                }
+                if ($CspUtils.IsNullOrEmpty(modelSaved.REMARK)) {
+                    errorList.push("ยังไม่ได้ระบุเหตุผลที่เปลี่ยนงาน");
+                }
+                break;
+           
+            default: errorList.push("ไม่เจอ case")
+        }
+
+        // มีบางอันไม่ผ่าน validation
+        if (errorList.length > 0) {
+            var msg = errorList.join('<br/>');
+            alertWarning(msg);
+            return;
+        }
+
+        var lastSeq = 0;
+        // TODO : GetMaxSeq
+        if ($scope.model[selectTable])
+            lastSeq = $scope.model[selectTable].length;
+        else $scope.model[selectTable] = [];
+        var url = API_ROOT;
+        if ($scope[selectTable] === $scope.gridModes.adding) {
+            modelSaved.SEQ_NO = lastSeq + 1;
+            $scope.model[selectTable].push(modelSaved);
+            $scope.resetListTable(selectTable);
+            //$scope.reSequence();
+        } else {
+            $scope.model[selectTable][modelSaved.SEQ_NO - 1] = modelSaved;
+            $scope.resetListTable(selectTable);
+        }
+    };
+
+    $scope.eduSertiChange = function () {
+        if (!$CspUtils.IsNullOrEmpty($scope.model.selected.CLASS_LEVEL_ID)) {
+            var convertID = parseInt($scope.model.selected.CLASS_LEVEL_ID)
+            $scope.model.selected.CLASS_LEVEL_Name = $scope.lstEduSerti.find(x => x.id === convertID.toString()).text;
+        } else {
+            $scope.model.selected.CLASS_LEVEL_Name = "";
+        }
+    }
+
+    $scope.resetListTable = function (selectTable) {
+        $scope.model.selected = {};
+        $scope[selectTable] = $scope.gridModes.display;
+    };
+    $scope.editmember = function (member, selectTable) {
+        $scope.checkModeEditTable = selectTable;
+
+        $scope.model.selected = angular.copy(member);
+        $scope[selectTable] = $scope.gridModes.editing;
+    };
+
+    $scope.removeMember = function (item, selectTable) {
+        $scope.deleteMember([item], selectTable);
+    };
+    $scope.deleteMember = function (list, selectTable) {
+        arrQueue = [];
+        angular.forEach(list, function (item) {
+            var index = $scope.model[selectTable].indexOf(item);
+            $scope.model[selectTable].splice(index, 1);
+            $scope.selectedCount--;
+        });
+
+        //for (var i = 1; i < list.length; i++) {
+        //    $scope.model[selectTable][i].displaySeq = n++;
+        //}
+        var n = 1;
+        angular.forEach($scope.model[selectTable], function (item, index) {
+            $scope.model[selectTable][index].SEQ_NO = n++;
+        });
+    };
     //$scope.openDialog = function () {
     //    var modalInstance = $uibModal.open({
     //        templateUrl: DIALOG_URL,

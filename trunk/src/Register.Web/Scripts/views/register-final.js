@@ -8,6 +8,7 @@ app.controller("registerFinalController", ["$scope", "CspUtils", "LookupService"
     $scope.isLoading = false;
 
     $scope.init = function () {
+        sessionStorage.clear()
         $scope.isLoading = true;
         var url = API_ROOT + "/Register/QrcodeInfo?testTypeID=" + $scope.testTypeID + "&citizenID=" + $scope.citizenID;
         var config = {};

@@ -12,7 +12,7 @@
                 @*<div class="text-center mt-3 information font-weight-bold">ผู้สมัครสามารถพิมพ์ใบสมัครได้ โดยคลิกที่ปุ่มเมนู "พิมพ์ใบสมัคร"</div>*@
                 <div class="text-blue text-center information font-weight-bold mt-3">การสมัครสอบจะเสร็จสมบูรณ์ต่อเมื่อผู้สมัครสอบชำระค่าธรรมเนียมในการสมัครสอบแล้ว</div>
                 <div class="text-center information font-weight-bold mt-3">หลังจากที่ผู้สมัครชำระเงินค่าสมัครสอบแล้ว <span class="text-danger">ระบบจะปรับปรุงสถานะการชำระเงิน</span> <h4 class="d-inline font-weight-bold" style="color:red;">ภายในวันถัดไป</h4><br />ผู้สมัครสามารถเข้ามาตรวจสอบสถานะการชำระเงิน โดยคลิกที่ปุ่มเมนู "ตรวจสอบสถานะการสมัครสอบ"</div>
-                <div class="text-center mt-3 information">ท่านสามารถชำระเงินค่าสมัครสอบได้ 2 ช่องทาง ดังต่อไปนี้</div>
+                @*<div class="text-center mt-3 information">ท่านสามารถชำระเงินค่าสมัครสอบได้ 2 ช่องทาง ดังต่อไปนี้</div>*@
                 @*<div class="row mt-5">
                         <div class="col-12 col-md-2"></div>
                         <div class="col-12 col-md-4 text-left">- ชำระเงินออนไลน์ ผ่านบัตรเครดิต, บัตรเดบิต</div>
@@ -22,7 +22,7 @@
                     </div>*@
                 <div class="row mt-3">
                     <div class="col-12 col-md-2"></div>
-                    <div class="col-12 col-md-5 text-left">1.  พิมพ์แบบฟอร์มการชำระเงิน นำไปชำระเงินที่เคาน์เตอร์ของธนาคารกรุงไทย</div>
+                    <div class="col-12 col-md-5 text-left align-self-center">1.  พิมพ์แบบฟอร์มการชำระเงิน นำไปชำระเงินที่เคาน์เตอร์ของธนาคารกรุงไทย</div>
                     <div class="col-12 col-md-5">
                         @using (Html.BeginForm("PrintPayIn", "Reports", FormMethod.Post, new { area = "", enctype = "multipart/form-data", @target = "_blank" }))
                         {
@@ -34,11 +34,9 @@
                         }
                     </div>
                 </div>
-                <div class="row mt-3 ng-cloak">
+                @*<div class="row mt-3 ng-cloak">
                     <div class="col-12 col-md-2"></div>
                     <div class="col-12 col-md-10 text-left">2. ชำระเงินโดยการสแกน QR code ผ่านแอพพลิเคชั่น Krungthai NEXT </div>
-                    @*<div class="col-12 col-md-6">
-                        </div>*@
                 </div>
 
                 <div class="row mt-3 ng-cloak">
@@ -63,19 +61,30 @@
                         </a><br />
                         <button type="button" class="btn btn-outline-info mt-2" onclick="imgQrSMS.click()">ดาวน์โหลด QR Code</button>
                     </div>
-                </div>
-                @*<div class="row mt-3">
-                        <div class="col-12 offset-md-1 col-md-10 text-center">
-                            <img src="~/Content/Images/banklist3.png" style="max-width: 100%; border: solid 1px black" />
-                        </div>
-
-                    </div>*@
-                <div class="row mt-5">
-                    <div class="col-12 col-md-12 text-center">
-                        <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i> กลับหนัาหลัก</a>
+                </div>*@
+                <div class="row mt-5 ng-cloak"  ng-if="qrcodeInfo.SmsStatus == 'Y'">
+                    <div class="col-12 col-md-4" ></div>
+                    <div class="col-12 col-md-4 text-center">
+                        <label class="font-weight-bold">ค่าบริการ SMS 20 บาท</label><br /><label class="font-weight-bold text-danger">**ไม่ใช่ค่าสมัครสอบ**</label><br />
+                        <a id="imgQrSMS" href="{{qrcodeInfo.SMSQRCode}}" target="_blank" download="QrCode-SMS.jpg">
+                            <img ng-src="{{qrcodeInfo.SMSQRCode}}" style="max-width: 250px; border: solid 1px black" />
+                        </a><br />
+                        <button type="button" class="btn btn-outline-info mt-2" onclick="imgQrSMS.click()">ดาวน์โหลด QR Code</button>
                     </div>
                 </div>
-            </div>
+
+                    @*<div class="row mt-3">
+                <div class="col-12 offset-md-1 col-md-10 text-center">
+                    <img src="~/Content/Images/banklist3.png" style="max-width: 100%; border: solid 1px black" />
+                </div>
+
+            </div>*@
+                    <div class="row mt-5">
+                        <div class="col-12 col-md-12 text-center">
+                            <a href="@Url.Action("Index","Home")" class="btn btn-primary ml-1"><i class="fas fa-home"></i> กลับหนัาหลัก</a>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 </div>

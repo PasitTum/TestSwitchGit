@@ -93,6 +93,15 @@ namespace Register.Reports
                 var titleName = enrollDatas.GetValueIgnoreCase("TITLE_NAME_TH") == null ? "" : enrollDatas.GetValueIgnoreCase("TITLE_NAME_TH");
                 var firstName = enrollDatas.GetValueIgnoreCase("FNAME_TH") == null ? "" : enrollDatas.GetValueIgnoreCase("FNAME_TH");
 
+                var amountOnly = "0";
+                if (!string.IsNullOrEmpty(amountTotal)) {
+
+                    var AMT = enrollDatas.GetValueIgnoreCase("IB_IR_AMT") == null ? "" : enrollDatas.GetValueIgnoreCase("IB_IR_AMT");
+                    if (!string.IsNullOrEmpty(AMT)) { 
+                    amountOnly = (int.Parse(amountTotal) - int.Parse(AMT)).ToString();
+                    }
+                }
+
                 EncryptHelper encryptHelper = new EncryptHelper();
                 var citizen = enrollDatas.GetValueIgnoreCase("CITIZEN_ID") == null ? "" : enrollDatas.GetValueIgnoreCase("CITIZEN_ID");
                 if (citizen != null & citizen != "")
@@ -151,7 +160,7 @@ namespace Register.Reports
                             {
                                 fontStyle = SetFontStyle(fontStyle, "red", 96, "normal");
                                 PdfContentByte canvas = stamper.GetOverContent(1);
-                                this.WriteTestSystem(canvas, "ทดสอบระบบ", fontStyle, 70, 200);
+                                this.WriteTestSystem(canvas, "ทดสอบระบบ", fontStyle, 70, 220);
                             }
                             foreach (JObject setting in this.SettingData)
                             {
@@ -227,6 +236,10 @@ namespace Register.Reports
                                 else if (string.Compare(objectType, "manylines-center", true) == 0)
                                 {
                                     this.WriteTextCenterMultiLines(canvas, fieldValue, fontStyle, x, y, w, h, lh);
+                                }
+                                else if (string.Compare(objectType, "AmountOnly", true) == 0)
+                                {
+                                    this.WriteText(canvas, amountOnly, fontStyle, x, y);
                                 }
                                 else
                                 {
