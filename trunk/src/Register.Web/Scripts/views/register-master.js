@@ -432,7 +432,10 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             errorList.push("ยังไม่ได้ระบุ ชื่อหลักสูตร/ปริญญาบัตร");
         }
 
-        if ($scope.model.DegreeID == '999999' && $CspUtils.IsNullOrEmpty($scope.model.DegreeName)) {
+        //if ($scope.model.DegreeID == '999999' && $CspUtils.IsNullOrEmpty($scope.model.DegreeName)) {
+        //    errorList.push("ยังไม่ได้ระบุ ชื่อหลักสูตร/ปริญญาบัตร อื่นๆ");
+        //}
+        if ($scope.model.DegreeID == '999999' && $CspUtils.IsNullOrEmpty($scope.model.DegreeName) && $scope.model.ClassLavelID != '2') {
             errorList.push("ยังไม่ได้ระบุ ชื่อหลักสูตร/ปริญญาบัตร อื่นๆ");
         }
         //if ($CspUtils.IsNullOrEmpty($scope.model.DegreeName)) {
@@ -803,7 +806,7 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             errorList.push("กรุณายืนยันการสมัคร");
         }
         if ($CspUtils.IsNullOrEmpty($scope.confirm2) || $scope.confirm2 == false) {
-            errorList.push("กรุณายืนยันเผยแพร่ข้อมูลส่วนบุคคล");
+            errorList.push("กรุณายืนยันยินยอมการให้สิทธิในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคล");
         }
         if ($scope.smsStatus && $CspUtils.IsNullOrEmpty($scope.model.SMSMobile)) {
             errorList.push("กรุณาระบุ หมายเลขโทรศัพท์เคลื่อนที่ ให้ถูกต้อง");
