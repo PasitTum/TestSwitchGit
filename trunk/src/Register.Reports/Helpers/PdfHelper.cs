@@ -11,41 +11,79 @@ namespace Register.Reports.Helpers
 {
     public class PdfHelper
     {
-        public static bool MergePDFs(IEnumerable<string> fileNames, string targetPdf)
+        public static byte[] MergePDFs(IEnumerable<byte[]> fileByte, string targetPdf)
         {
-            bool merged = true;
-            using (FileStream stream = new FileStream(targetPdf, FileMode.Create))
+            using (var ms = new MemoryStream())
             {
-                Document document = new Document();
-                PdfCopy pdf = new PdfCopy(document, stream);
-                PdfReader reader = null;
-                try
+                using (var doc = new Document())
                 {
-                    document.Open();
-                    foreach (string file in fileNames)
+                    using (var copy = new PdfSmartCopy(doc, ms))
                     {
-                        reader = new PdfReader(file);
-                        pdf.AddDocument(reader);
-                        reader.Close();
+                        doc.Open();
+                        foreach (var p in fileByte)
+                        {
+                            using (var reader = new PdfReader(p))
+                            {
+                                copy.AddDocument(reader);
+                            }
+                        }
+                        doc.Close();
                     }
                 }
-                catch (Exception)
-                {
-                    merged = false;
-                    if (reader != null)
-                    {
-                        reader.Close();
-                    }
-                }
-                finally
-                {
-                    if (document != null)
-                    {
-                        document.Close();
-                    }
-                }
+                return ms.ToArray();
             }
-            return merged;
+
+
+            //byte[] buffer;
+            //using (var result = new MemoryStream())
+            //{
+            //    Document document = new Document();
+            //    PdfCopy pdf = new PdfCopy(document, result);
+            //    PdfReader reader = null;
+            //    document.Open();
+            //    foreach (byte[] file in fileNames)
+            //    {
+            //        reader = new PdfReader(file);
+            //        pdf.AddDocument(reader);
+            //        reader.Close();
+            //    }
+            //    buffer = result.ToArray();
+            //}
+            
+            //using (FileStream stream = new FileStream(targetPdf, FileMode.Create))
+            //{
+            //    Document document = new Document();
+            //    PdfCopy pdf = new PdfCopy(document, stream);
+            //    PdfReader reader = null;
+            //    try
+            //    {
+            //        document.Open();
+            //        foreach (byte[] file in fileNames)
+            //        {
+            //            reader = new PdfReader(file);
+            //            pdf.AddDocument(reader);
+            //            reader.Close();
+            //        }
+            //    }
+            //    catch (Exception)
+            //    {
+            //        merged = false;
+            //        if (reader != null)
+            //        {
+            //            reader.Close();
+            //        }
+            //    }
+            //    finally
+            //    {
+            //        if (document != null)
+            //        {
+            //            document.Close();
+            //        }
+            //    }
+            //}
+            //return buffer;
+
+
         }
     }
 }

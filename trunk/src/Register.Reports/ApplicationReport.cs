@@ -19,6 +19,9 @@ using ZXing;
 using CWN.OTAS.Lib.Helper;
 using Register.Reports.Helpers;
 using CSP.Lib.Diagnostic;
+using CrystalDecisions.CrystalReports.Engine;
+using System.Data;
+using CrystalDecisions.Shared;
 
 namespace Register.Reports
 {
@@ -29,6 +32,7 @@ namespace Register.Reports
         Font Font;
         public bool IsTesting { get; set; }
         public string ImageBase64 { get; set; }
+        public byte[] ImageByte { get; set; }
 
         public ApplicationReport(int testtypeID)
         {
@@ -77,10 +81,9 @@ namespace Register.Reports
             this.Font = new Font(_baseFont);
         }
 
-        public override ResultInfo GetReport(string documentPath)
+        public override byte[] GetReport()
         {
-            var result = new ResultInfo();
-            this.PdfPath = HttpContext.Current.Server.MapPath(documentPath);
+            byte[] buffer;
             var templateFile = this.GetFileNameInReportPath(this.TemplateFileName);
             if (this.enrollDatas != null)
             {
@@ -96,12 +99,12 @@ namespace Register.Reports
 
                 if (!File.Exists(templateFile))
                 {
-                    //Log.WriteErrorLog(tsw.TraceError, string.Format("Template file {0} not found.", templateFile));
-                    result.Success = false;
-                    result.ErrorMessage = string.Format("Template file {0} not found.", templateFile);
-                    return result;
+                    // return no success
+                    throw new FileNotFoundException(String.Format("Template not found.[{0}]", templateFile));
                 }
-
+            }
+            using (var result = new MemoryStream())
+            {
                 EncryptHelper encryptHelper = new EncryptHelper();
                 var citizen = enrollDatas.GetValueIgnoreCase("CITIZEN_ID") == null ? "" : enrollDatas.GetValueIgnoreCase("CITIZEN_ID");
                 if (citizen != null & citizen != "")
@@ -120,39 +123,11 @@ namespace Register.Reports
                     password = encryptHelper.DecryptData(password);
                 }
 
-                this.FileDownloadName = this.ReportName + "_" + citizen + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                if (this.IsLocalFileExists())
-                {
-                    if (this.KeepPdfFile)
-                    {
-                        result.Success = true;
-                        result.ReturnValue1 = this.LocalFileName;
-                        //result.ReturnValue1 = this.FileDownloadName;
-                        //result.ReturnValue2 = this.LocalFileName;
-                        return result;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            System.IO.File.Delete(this.LocalFileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.WriteErrorLog(tsw.TraceError, ex);
-                            throw (ex);
-                        }
-                    }
-                }
-
-
-                var targetFile = this.LocalFileName;
                 try
                 {
                     using (var reader = new PdfReader(templateFile))
                     {
-                        using (var targetFileStream = new FileStream(targetFile, FileMode.Create))
-                        using (var stamper = new PdfStamper(reader, targetFileStream))
+                        using (var stamper = new PdfStamper(reader, result))
                         {
                             this.Initial();
 
@@ -278,31 +253,146 @@ namespace Register.Reports
                                 }
                             }
                         }
+                        buffer = result.ToArray();
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteErrorLog(tsw.TraceError, ex);
                     throw (ex);
+                    //Log.WriteErrorLog(tsw.TraceError, ex);
                 }
-                finally
-                {
-                    //if (stamper != null) stamper.Close();
-                    //if (reader != null) reader.Close();
-                }
-
-                result.Success = true;
-                result.ReturnValue1 = this.LocalFileName;
-                //result.ReturnValue1 = this.FileDownloadName;
-                //result.ReturnValue2 = this.LocalFileName;
             }
-            else
+            return buffer;
+        }
+
+        protected void SetReportDataSource(ReportDocument _repDoc, DataSet ds)
+        {
+            if (_repDoc == null) return;
+
+            //_repDoc.SetDataSource(ds);	// อันนี้ไม่เวิร์คถ้ามี subreport 
+            for (int i = 0; i < ds.Tables.Count; i++)
             {
-                result.Success = false;
-                result.ErrorMessage = "ไม่มีข้อมูล";
+                for (int j = 0; j < _repDoc.Database.Tables.Count; j++)
+                {
+                    if (ds.Tables[i].TableName.ToLower() == _repDoc.Database.Tables[j].Name.ToLower())
+                    {
+                        _repDoc.Database.Tables[j].SetDataSource(ds.Tables[i]);
+                    }
+                }
             }
 
-            return result;
+            if (_repDoc.Subreports.Count > 0)
+            {
+                foreach (ReportDocument subRpt in _repDoc.Subreports)
+                {
+                    for (int k = 0; k < subRpt.Database.Tables.Count; k++)
+                    {
+                        for (int i = 0; i < ds.Tables.Count; i++)
+                        {
+                            if (ds.Tables[i].TableName.ToLower() == subRpt.Database.Tables[k].Name.ToLower())
+                            {
+                                subRpt.Database.Tables[k].SetDataSource(ds.Tables[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public void SetBasicParmeterForReport(ReportDocument _repDoc, string citizen)
+        {
+            if (_repDoc == null) return;
+
+            // Set Parameter ให้กับ Report 
+            string paramName = string.Empty;
+            foreach (ParameterField param in _repDoc.ParameterFields)
+            {
+                paramName = param.Name.ToUpper();
+                switch (paramName)
+                {
+                    case "PICTURE":
+                        _repDoc.SetParameterValue(paramName, this.ImageByte);
+                        break;
+                    case "CITIZEN_ID":
+                        _repDoc.SetParameterValue(paramName, citizen);
+                        break;
+                    default:
+                        _repDoc.SetParameterValue(paramName, "");
+                        break;
+                }
+            }
+        }
+
+        public byte[] GetCrystalReport(string citizen)
+        {
+            var result = new ResultInfo();
+            var rpName = "rptApplication.rpt";
+            var templateFile = this.GetFileNameInReportPath(this.TemplateFileName);
+
+            if (this.enrollDatas != null)
+            {
+                if (!File.Exists(templateFile))
+                {
+                    // return no success
+                    throw new FileNotFoundException(String.Format("Template not found.[{0}]", templateFile));
+                }
+                byte[] ms = null;
+                using (ReportDocument rpd = new ReportDocument())
+                {
+                    var targetFile = this.LocalFileName;
+                    try
+                    {
+
+                        rpd.Load(HttpContext.Current.Server.MapPath("~/Reports/" + rpName));
+
+                        ///
+
+                        ds.Tables[0].Columns.Add("PICTURE", typeof(System.Byte[]));
+                        ds.Tables[0].Columns.Add("COUNT_PUNISH", typeof(System.String));
+                        ds.Tables[0].Columns.Add("IP_ADDRESS", typeof(System.String));
+                        ds.Tables[0].Columns.Add("DATE_NOW", typeof(System.String));
+                        ds.Tables[0].Columns.Add("TableExpShow", typeof(System.String));
+                        ds.Tables[0].Columns.Add("TableStudyShow", typeof(System.String));
+
+                        ds.Tables[0].Rows[0]["PICTURE"] = this.ImageByte;
+                        //ds.Tables[0].Rows[0]["COUNT_PUNISH"] = ds.Tables[5].Rows.Count;
+                        ds.Tables[0].Rows[0]["IP_ADDRESS"] = GetServerIPLast3();
+                        ds.Tables[0].Rows[0]["DATE_NOW"] = DateTime.Now.ToDateTextThai();
+
+                        if (ds.Tables[1].Rows.Count == 0)
+                        {
+                            ds.Tables[0].Rows[0]["TableStudyShow"] = 0;
+                        }
+                        else
+                        {
+                            ds.Tables[0].Rows[0]["TableStudyShow"] = 1;
+                        }
+                        if (ds.Tables[2].Rows.Count == 0)
+                        {
+                            ds.Tables[0].Rows[0]["TableExpShow"] = 0;
+                        }
+                        else
+                        {
+                            ds.Tables[0].Rows[0]["TableExpShow"] = 1;
+                        }
+
+                        this.SetReportDataSource(rpd, ds);
+                        this.SetBasicParmeterForReport(rpd, citizen);
+                        using (var mStream = rpd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat))
+                        {
+                            MemoryStream memoryStream = new MemoryStream();
+                             mStream.CopyTo(memoryStream);
+                            ms = memoryStream.ToArray();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.WriteErrorLog(tsw.TraceError, ex);
+                        throw (ex);
+                    }
+                }
+                return ms;
+            }
+            return null;   
         }
     }
 }

@@ -163,21 +163,20 @@ namespace Register.Reports
             this.Font = new Font(_baseFont);
         }
 
-        public override ResultInfo GetReport(string documentPath)
+        public override byte[] GetReport()
         {
-            var result = new ResultInfo();
-            this.PdfPath = HttpContext.Current.Server.MapPath(documentPath);
+            byte[] buffer;
             var templateFile = this.GetFileNameInReportPath(this.TemplateFileName);
             if (this.enrollDatas != null)
             {
                 if (!File.Exists(templateFile))
                 {
-                    //Log.WriteErrorLog(tsw.TraceError, string.Format("Template file {0} not found.", templateFile));
-                    result.Success = false;
-                    result.ErrorMessage = string.Format("Template file {0} not found.", templateFile);
-                    return result;
+                    // return no success
+                    throw new FileNotFoundException(String.Format("Template not found.[{0}]", templateFile));
                 }
-
+            }
+            using (var result = new MemoryStream())
+            {
                 var compCode = enrollDatas.GetValueIgnoreCase("SMS_COMP_CODE");
                 var refNo1 = enrollDatas.GetValueIgnoreCase("SMS_REF_1");
                 var refNo2 = enrollDatas.GetValueIgnoreCase("SMS_REF_2");
@@ -185,100 +184,87 @@ namespace Register.Reports
                 var taxId = enrollDatas.GetValueIgnoreCase("SMS_TAX_ID");
                 var amount = enrollDatas.GetValueIgnoreCase("SMS_AMOUNT");
 
-                this.FileDownloadName = this.ReportName + "_" + refNo1 + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                if (this.IsLocalFileExists())
-                {
-                    if (this.KeepPdfFile)
-                    {
-                        result.Success = true;
-                        result.ReturnValue1 = this.LocalFileName;
-                        //result.ReturnValue1 = this.FileDownloadName;
-                        //result.ReturnValue2 = this.LocalFileName;
-                        return result;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            System.IO.File.Delete(this.LocalFileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw (ex);
-                            //Log.WriteErrorLog(tsw.TraceError, ex);
-                        }
-                    }
-                }
-
-
-                var targetFile = this.LocalFileName;
-
-                PdfReader reader = null;
-                PdfStamper stamper = null;
                 try
                 {
-                    reader = new PdfReader(templateFile);
-                    var targetFileStream = new FileStream(targetFile, FileMode.Create);
-                    stamper = new PdfStamper(reader, targetFileStream);
-                    PdfContentByte canvas = stamper.GetOverContent(1);
-
-                    // Load Font 
-                    this.Initial();
-                    this.LoadFont(reader);
-                    var fontStyle = this.Font;
-                    var barcodeText = PaymentExtension.FormatPaymentBarCode(refNo1, refNo2.ToString(), taxId, suffix, Decimal.Parse(amount));
-                    var amountTh = ThaiBaht.ToBahtText(Convert.ToDouble(amount));
-
-                    if (IsTesting)
+                    using (var reader = new PdfReader(templateFile))
                     {
-                        fontStyle = SetFontStyle(fontStyle, "red", 96, "normal");
-                        this.WriteTestSystem(canvas, "ทดสอบระบบ", fontStyle, 70, 200);
-                    }
-                    foreach (JObject setting in this.SettingData)
-                    {
-                        var x = float.Parse(setting.GetValueIgnoreCase("x"));
-                        var y = float.Parse(setting.GetValueIgnoreCase("y"));
+                        using (var stamper = new PdfStamper(reader, result))
+                        {
 
-                        var fieldName = setting.GetValueIgnoreCase("fieldname");
-                        var fieldValue = enrollDatas.GetValueIgnoreCase(fieldName);
+                            // Load Font 
+                            this.Initial();
+                            this.LoadFont(reader);
+                            var fontStyle = this.Font;
+                            var barcodeText = PaymentExtension.FormatPaymentBarCode(refNo1, refNo2.ToString(), taxId, suffix, Decimal.Parse(amount));
+                            var amountTh = ThaiBaht.ToBahtText(Convert.ToDouble(amount));
 
-                        //var fontStyle = new Font();
+                            //var page = setting.GetValueIgnoreCase("page") == null ? 1 : int.Parse(setting.GetValueIgnoreCase("page"));
+                            PdfContentByte canvas = stamper.GetOverContent(1);
 
-                        if (setting.GetValueIgnoreCase("size") != null)
-                        {
-                            fontStyle = font[setting.GetValueIgnoreCase("size") + (setting.GetValueIgnoreCase("weight") == null ? "" : "-" + setting.GetValueIgnoreCase("weight"))];
-                        }
 
-                        var objectType = setting.GetValueIgnoreCase("objecttype");
+                            //PdfStamper stamper = null;
 
-                        if (string.Compare(objectType, "barcode", true) == 0)
-                        {
-                            createBarcode(canvas, barcodeText, x, y, fontStyle);
+                            //reader = new PdfReader(templateFile);
+                            //var targetFileStream = new FileStream(targetFile, FileMode.Create);
+                            //stamper = new PdfStamper(reader, targetFileStream);
+                            //PdfContentByte canvas = stamper.GetOverContent(1);
+
+
+                            if (IsTesting)
+                            {
+                                fontStyle = SetFontStyle(fontStyle, "red", 96, "normal");
+                                this.WriteTestSystem(canvas, "ทดสอบระบบ", fontStyle, 70, 200);
+                            }
+                            foreach (JObject setting in this.SettingData)
+                            {
+                                var x = float.Parse(setting.GetValueIgnoreCase("x"));
+                                var y = float.Parse(setting.GetValueIgnoreCase("y"));
+
+                                var fieldName = setting.GetValueIgnoreCase("fieldname");
+                                var fieldValue = enrollDatas.GetValueIgnoreCase(fieldName);
+
+                                //var page = setting.GetValueIgnoreCase("page") == null ? 1 : int.Parse(setting.GetValueIgnoreCase("page"));
+                                //PdfContentByte canvas = stamper.GetOverContent(page);
+                                //var fontStyle = new Font();
+
+                                if (setting.GetValueIgnoreCase("size") != null)
+                                {
+                                    fontStyle = font[setting.GetValueIgnoreCase("size") + (setting.GetValueIgnoreCase("weight") == null ? "" : "-" + setting.GetValueIgnoreCase("weight"))];
+                                }
+
+                                var objectType = setting.GetValueIgnoreCase("objecttype");
+
+                                if (string.Compare(objectType, "barcode", true) == 0)
+                                {
+                                    createBarcode(canvas, barcodeText, x, y, fontStyle);
+                                }
+                                else if (string.Compare(objectType, "ip", true) == 0)
+                                {
+                                    this.WriteText(canvas, GetServerIPLast3(), fontStyle, x, y);
+                                }
+                                else if (string.Compare(objectType, "date", true) == 0)
+                                {
+                                    this.WriteText(canvas, DateTime.Now.ToDateTextThai(), fontStyle, x, y);
+                                }
+                                else if (string.Compare(objectType, "qrcode", true) == 0)
+                                {
+                                    createQrcode(canvas, barcodeText, x, y);
+                                }
+                                else if (string.Compare(objectType, "price", true) == 0)
+                                {
+                                    this.WriteText(canvas, Decimal.Parse(fieldValue).ToString("####.00"), fontStyle, x, y);
+                                }
+                                else if (string.Compare(objectType, "amountTh", true) == 0)
+                                {
+                                    this.WriteText(canvas, amountTh, fontStyle, x, y);
+                                }
+                                else
+                                {
+                                    this.WriteText(canvas, fieldValue, fontStyle, x, y);
+                                }
+                            }
                         }
-                        else if (string.Compare(objectType, "ip", true) == 0)
-                        {
-                            this.WriteText(canvas, GetServerIPLast3(), fontStyle, x, y);
-                        }
-                        else if (string.Compare(objectType, "date", true) == 0)
-                        {
-                            this.WriteText(canvas, DateTime.Now.ToDateTextThai(), fontStyle, x, y);
-                        }
-                        else if (string.Compare(objectType, "qrcode", true) == 0)
-                        {
-                            createQrcode(canvas, barcodeText, x, y);
-                        }
-                        else if (string.Compare(objectType, "price", true) == 0)
-                        {
-                            this.WriteText(canvas, Decimal.Parse(fieldValue).ToString("####.00"), fontStyle, x, y);
-                        }
-                        else if (string.Compare(objectType, "amountTh", true) == 0)
-                        {
-                            this.WriteText(canvas, amountTh, fontStyle, x, y);
-                        }
-                        else
-                        {
-                            this.WriteText(canvas, fieldValue, fontStyle, x, y);
-                        }
+                        buffer = result.ToArray();
                     }
                 }
                 catch (Exception ex)
@@ -286,24 +272,8 @@ namespace Register.Reports
                     throw (ex);
                     //Log.WriteErrorLog(tsw.TraceError, ex);
                 }
-                finally
-                {
-                    if (stamper != null) stamper.Close();
-                    if (reader != null) reader.Close();
-                }
-
-                result.Success = true;
-                result.ReturnValue1 = this.LocalFileName;
-                //result.ReturnValue1 = this.FileDownloadName;
-                //result.ReturnValue2 = this.LocalFileName;
             }
-            else
-            {
-                result.Success = false;
-                result.ErrorMessage = "ไม่มีข้อมูล";
-            }
-
-            return result;
+            return buffer;
         }
 
         private void WriteText(PdfContentByte canvas, string text, Font font, float x, float y)

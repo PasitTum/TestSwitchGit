@@ -67,21 +67,20 @@ namespace Register.Reports
             this.Font = new Font(_baseFont);
         }
 
-        public override ResultInfo GetReport(string documentPath)
+        public override byte[] GetReport()
         {
-            var result = new ResultInfo();
-            this.PdfPath = HttpContext.Current.Server.MapPath(documentPath);
+            byte[] buffer;
             var templateFile = this.GetFileNameInReportPath(this.TemplateFileName);
             if (this.enrollDatas != null)
             {
                 if (!File.Exists(templateFile))
                 {
-                    //Log.WriteErrorLog(tsw.TraceError, string.Format("Template file {0} not found.", templateFile));
-                    result.Success = false;
-                    result.ErrorMessage = string.Format("Template file {0} not found.", templateFile);
-                    return result;
+                    // return no success
+                    throw new FileNotFoundException(String.Format("Template not found.[{0}]", templateFile));
                 }
-
+            }
+            using (var result = new MemoryStream())
+            {
                 var seatNo = enrollDatas.GetValueIgnoreCase("EXAM_SEAT_NO") == null ? "" : enrollDatas.GetValueIgnoreCase("EXAM_SEAT_NO");
                 EncryptHelper encryptHelper = new EncryptHelper();
                 var citizen = enrollDatas.GetValueIgnoreCase("CITIZEN_ID") == null ? "" : enrollDatas.GetValueIgnoreCase("CITIZEN_ID");
@@ -89,38 +88,11 @@ namespace Register.Reports
                 {
                     citizen = encryptHelper.DecryptData(citizen);
                 }
-                this.FileDownloadName = this.ReportName + "_" + seatNo + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                if (this.IsLocalFileExists())
-                {
-                    if (this.KeepPdfFile)
-                    {
-                        result.Success = true;
-                        result.ReturnValue1 = this.LocalFileName;
-                        //result.ReturnValue1 = this.FileDownloadName;
-                        //result.ReturnValue2 = this.LocalFileName;
-                        return result;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            System.IO.File.Delete(this.LocalFileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.WriteErrorLog(tsw.TraceError, ex);
-                            throw (ex);
-                        }
-                    }
-                }
-
-                var targetFile = this.LocalFileName;
                 try
                 {
                     using (var reader = new PdfReader(templateFile))
                     {
-                        using (var targetFileStream = new FileStream(targetFile, FileMode.Create))
-                        using (var stamper = new PdfStamper(reader, targetFileStream))
+                        using (var stamper = new PdfStamper(reader, result))
                         {
 
                             // Load Font 
@@ -226,6 +198,7 @@ namespace Register.Reports
                                 this.WriteTestSystem(canvas, "ทดสอบระบบ", fontStyle, 75, 200);
                             }
                         }
+                        buffer = result.ToArray();
                     }
                 }
                 catch (Exception ex)
@@ -233,24 +206,8 @@ namespace Register.Reports
                     throw (ex);
                     //Log.WriteErrorLog(tsw.TraceError, ex);
                 }
-                finally
-                {
-                    //if (stamper != null) stamper.Close();
-                    //if (reader != null) reader.Close();
-                }
-
-                result.Success = true;
-                result.ReturnValue1 = this.LocalFileName;
-                //result.ReturnValue1 = this.FileDownloadName;
-                //result.ReturnValue2 = this.LocalFileName;
             }
-            else
-            {
-                result.Success = false;
-                result.ErrorMessage = "ไม่มีข้อมูล";
-            }
-
-            return result;
+            return buffer;
         }
 
         public void setImage(PdfContentByte canvas, string base64, float x, float y, float fitW, float fitH)

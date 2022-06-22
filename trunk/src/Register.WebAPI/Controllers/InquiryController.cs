@@ -55,6 +55,15 @@ namespace Register.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("ExamCrystalApplication")]
+        public IHttpActionResult ExamCrystalApplication(int testTypeID, string citizenID, string laserCode)
+        {
+            var dal = new InquiryDAL();
+            var lst = dal.ExamCrystalApplication(testTypeID, citizenID, laserCode);
+            return Json(lst);
+        }
+
+        [HttpGet]
         [Route("UploadStatus")]
         public async Task<IHttpActionResult> UploadStatus(int testTypeID, string citizenID)
         {

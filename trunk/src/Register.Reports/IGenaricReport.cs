@@ -10,6 +10,7 @@ namespace Register.Reports
     public interface IGenaricReport
     {
          string JsonData { get; set; }
-         ResultInfo GetReport(string documentPath);
+        byte[] GetReport();
+         //ResultInfo GetReport(string documentPath);
     }
 }

@@ -17,6 +17,7 @@ namespace Register.Database
     public static class DBExtensions
     {
         private static System.Diagnostics.TraceSwitch tsw = new System.Diagnostics.TraceSwitch("mySwitch", "");
+        static string _commandTimeout = "900";
 
         public static IEnumerable<dynamic> DynamicListFromSql(this DbContext db, string Sql, Dictionary<string, object> Params = null)
         {
@@ -184,6 +185,63 @@ namespace Register.Database
                 result.ErrorMessage = ex.Message;
             }
             return result;
+        }
+        static public DataSet ExecStoredCrystal(this DbContext db, string storeName, string tableName, SqlParameter[] parameter)
+        {
+            var connStr = db.Database.Connection as SqlConnection;
+            if (tsw.TraceInfo && parameter != null)
+            {
+                string paraValue = string.Empty;
+                for (int iLog = 0; iLog < parameter.Length; iLog++)
+                {
+                    paraValue += string.Format(" Para[{0}] = {1}", iLog, parameter[iLog].Value.ToString());
+                }
+                Log.WriteInformationLog(tsw.TraceError, String.Format("ExecStored ConnStr : {0}\r\nstoreName :{1} \r\nParameter : {2}", connStr, storeName, paraValue));
+            }
+            DataSet dsResult = new DataSet();
+            if (tableName == null || tableName.Length == 0)
+            {
+                tableName = "tablename";
+            }
+            SqlConnection sqlconn = new SqlConnection(connStr.ConnectionString);
+            try
+            {
+                SqlCommand cm = new SqlCommand();
+                cm.Connection = sqlconn;
+                cm.CommandText = storeName;
+                cm.CommandType = CommandType.StoredProcedure;
+                if (_commandTimeout != null && _commandTimeout != string.Empty)
+                {
+                    cm.CommandTimeout = Convert.ToInt32(_commandTimeout);
+                }
+                if (parameter != null && parameter.Length > 0)
+                {
+                    for (int iPara = 0; iPara < parameter.Length; iPara++)
+                    {
+                        cm.Parameters.Add(parameter[iPara]);
+                    }
+                }
+                SqlDataAdapter da = new SqlDataAdapter(cm);
+                da.Fill(dsResult, tableName);
+            }
+            catch (SqlException ex)
+            {
+                if (sqlconn != null)
+                {
+                    sqlconn.Close();
+                }
+                Log.WriteErrorLog(tsw.TraceError, ex);
+                //WriteLog(tsw.TraceError, "ExecStored", String.Format("ConnStr : {0}\r\nStoredName :{1}\r\nError : {2}", connStr, storeName, ex.Message + "\r\n" + ex.StackTrace));
+                throw new Exception(ex.Message);
+
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrorLog(tsw.TraceError, ex);
+                //WriteLog(tsw.TraceError, "ExecStored", String.Format("ConnStr : {0}\r\nStoredName :{1}\r\nError : {2}", connStr, storeName, ex.Message + "\r\n" + ex.StackTrace));
+                throw new Exception(ex.Message);
+            }
+            return dsResult;
         }
     }
 }

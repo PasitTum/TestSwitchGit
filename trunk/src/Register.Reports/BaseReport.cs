@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Web;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace Register.Reports
 {
@@ -26,8 +27,10 @@ namespace Register.Reports
         public string SettingFileName { get; set; }
 
         public string TemplateFileName { get; set; }
+        public DataSet ds { get; set; }
 
-        public abstract ResultInfo GetReport(string documentPath);
+        public abstract byte[] GetReport();
+        //public abstract ResultInfo GetReport(string documentPath);
 
         public abstract void RefreshDataSource();
 

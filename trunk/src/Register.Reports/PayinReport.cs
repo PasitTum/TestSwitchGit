@@ -68,21 +68,20 @@ namespace Register.Reports
             this.Font = new Font(_baseFont);
         }
 
-        public override ResultInfo GetReport(string documentPath)
+        public override byte[] GetReport()
         {
-            var result = new ResultInfo();
-            this.PdfPath = HttpContext.Current.Server.MapPath(documentPath);
+            byte[] buffer;
             var templateFile = this.GetFileNameInReportPath(this.TemplateFileName);
             if (this.enrollDatas != null)
             {
                 if (!File.Exists(templateFile))
                 {
-                    //Log.WriteErrorLog(tsw.TraceError, string.Format("Template file {0} not found.", templateFile));
-                    result.Success = false;
-                    result.ErrorMessage = string.Format("Template file {0} not found.", templateFile);
-                    return result;
+                    // return no success
+                    throw new FileNotFoundException(String.Format("Template not found.[{0}]", templateFile));
                 }
-
+            }
+            using (var result = new MemoryStream())
+            {
                 var compCode = enrollDatas.GetValueIgnoreCase("COMP_CODE") == null ? "" : enrollDatas.GetValueIgnoreCase("COMP_CODE");
                 var refNo1 = enrollDatas.GetValueIgnoreCase("REF1") == null ? "" : enrollDatas.GetValueIgnoreCase("REF1");
                 var refNo2 = enrollDatas.GetValueIgnoreCase("REF2") == null ? "" : enrollDatas.GetValueIgnoreCase("REF2");
@@ -94,11 +93,13 @@ namespace Register.Reports
                 var firstName = enrollDatas.GetValueIgnoreCase("FNAME_TH") == null ? "" : enrollDatas.GetValueIgnoreCase("FNAME_TH");
 
                 var amountOnly = "0";
-                if (!string.IsNullOrEmpty(amountTotal)) {
+                if (!string.IsNullOrEmpty(amountTotal))
+                {
 
                     var AMT = enrollDatas.GetValueIgnoreCase("IB_IR_AMT") == null ? "" : enrollDatas.GetValueIgnoreCase("IB_IR_AMT");
-                    if (!string.IsNullOrEmpty(AMT)) { 
-                    amountOnly = (int.Parse(amountTotal) - int.Parse(AMT)).ToString();
+                    if (!string.IsNullOrEmpty(AMT))
+                    {
+                        amountOnly = (int.Parse(amountTotal) - int.Parse(AMT)).ToString();
                     }
                 }
 
@@ -114,39 +115,11 @@ namespace Register.Reports
                     password = encryptHelper.DecryptData(password);
                 }
 
-                this.FileDownloadName = this.ReportName + "_" + refNo1 + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-                if (this.IsLocalFileExists())
-                {
-                    if (this.KeepPdfFile)
-                    {
-                        result.Success = true;
-                        result.ReturnValue1 = this.LocalFileName;
-                        //result.ReturnValue1 = this.FileDownloadName;
-                        //result.ReturnValue2 = this.LocalFileName;
-                        return result;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            System.IO.File.Delete(this.LocalFileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.WriteErrorLog(tsw.TraceError, ex);
-                            throw (ex);
-                        }
-                    }
-                }
-
-
-                var targetFile = this.LocalFileName;
                 try
                 {
                     using (var reader = new PdfReader(templateFile))
                     {
-                        using (var targetFileStream = new FileStream(targetFile, FileMode.Create))
-                        using (var stamper = new PdfStamper(reader, targetFileStream))
+                        using (var stamper = new PdfStamper(reader, result))
                         {
                             this.Initial();
                             var barcodeText = PaymentExtension.FormatPaymentBarCode(refNo1, refNo2.ToString(), taxId, suffix, Decimal.Parse(amount));
@@ -247,6 +220,7 @@ namespace Register.Reports
                                 }
                             }
                         }
+                        buffer = result.ToArray();
                     }
                 }
                 catch (Exception ex)
@@ -254,24 +228,8 @@ namespace Register.Reports
                     Log.WriteErrorLog(tsw.TraceError, ex);
                     throw (ex);
                 }
-                finally
-                {
-                    //if (stamper != null) stamper.Close();
-                    //if (reader != null) reader.Close();
-                }
-
-                result.Success = true;
-                result.ReturnValue1 = this.LocalFileName;
-                //result.ReturnValue1 = this.FileDownloadName;
-                //result.ReturnValue2 = this.LocalFileName;
             }
-            else
-            {
-                result.Success = false;
-                result.ErrorMessage = "ไม่มีข้อมูล";
-            }
-
-            return result;
+            return buffer;
         }
 
         protected void WriteTextCenterMultiLines(PdfContentByte canvas, string text, Font font, float x, float y, float w, float h, float lh)

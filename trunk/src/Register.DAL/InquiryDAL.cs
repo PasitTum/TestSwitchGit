@@ -6,6 +6,8 @@ using Register.Database;
 using Register.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -119,6 +121,49 @@ namespace Register.DAL
             }
             return null;
         }
+
+
+        public DataSet ExamCrystalApplication(int testTypeID, string citizenID, string laserCode)
+        {
+            EncryptHelper encryptHelper = new EncryptHelper();
+            var citizen = string.Empty;
+            if (citizenID != null & citizenID != "")
+            {
+                citizen = encryptHelper.EncryptData(citizenID.ToString());
+            }
+            DataSet dsResult = new DataSet();
+            try
+            {
+                using (var db = new RegisterDB())
+                {
+                    SqlParameter[] param = new SqlParameter[6];
+                    param[0] = new SqlParameter("@IPADDRESS", SqlDbType.VarChar, 30);
+                    param[0].Value = "";
+                    param[1] = new SqlParameter("@MACADDRESS", SqlDbType.VarChar, 30);
+                    param[1].Value = "";
+                    param[2] = new SqlParameter("@PROCESSCD", SqlDbType.VarChar, 100);
+                    param[2].Value = "";
+                    param[3] = new SqlParameter("@TEST_TYPE_ID", SqlDbType.Int);
+                    param[3].Value = testTypeID;
+                    param[4] = new SqlParameter("@CITIZEN_ID", SqlDbType.VarChar, 50);
+                    param[4].Value = citizen;
+                    param[5] = new SqlParameter("@LASER_CODE", SqlDbType.VarChar, 50);
+                    param[5].Value = "";
+
+                    dsResult = db.ExecStoredCrystal("ENR_SP_GET_APPICATION_FORM", "Application", param);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Log.WriteErrorLog(tsw.TraceError, ex);
+            }
+            return dsResult;
+
+
+        }
+
+
 
         public async Task<List<PaymentRepeatedModel>> PaymentRepeated(int testTypeID, string citizenID, string laserCode)
         {

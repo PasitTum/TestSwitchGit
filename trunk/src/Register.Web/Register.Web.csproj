@@ -219,6 +219,11 @@
     <Compile Include="Models\RegisterViewModels.cs" />
     <Compile Include="Models\TesttypeListingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\DataSet\dsMain.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsMain.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -626,6 +631,17 @@
     <Content Include="Scripts\angular-sanitize.min.js.map" />
     <Content Include="Reports\ApplicationTemplate.pdf" />
     <Content Include="Reports\application-setting.json" />
+    <Content Include="Reports\DataSet\dsMain.xsc">
+      <DependentUpon>dsMain.xsd</DependentUpon>
+    </Content>
+    <None Include="Reports\DataSet\dsMain.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsMain.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\DataSet\dsMain.xss">
+      <DependentUpon>dsMain.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
@@ -741,7 +757,9 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
