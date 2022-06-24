@@ -34,7 +34,6 @@ namespace Register.Web.Controllers
         public async Task<ActionResult> PrintPayin(int testTypeID, string citizenID)
         {
             byte[] result = null;
-            var reportOutputFolder = "~/temp";
             var api = SysParameterHelper.ApiUrlServerSide;
             var jsonResult = string.Empty;
             var localFile = "";
@@ -99,6 +98,11 @@ namespace Register.Web.Controllers
                     throw (ex);
                 }
             }
+
+            if (result == null)
+            {
+                return Content("ไม่มีข้อมูล");
+            }
             return File(result, "application/pdf", localFile);
         }
 
@@ -107,7 +111,6 @@ namespace Register.Web.Controllers
         public async Task<ActionResult> PrintExamCard(int testTypeID, string citizenID)
         {
             byte[] result = null;
-            var reportOutputFolder = "~/temp";
             var api = SysParameterHelper.ApiUrlServerSide;
             var jsonResult = string.Empty;
 
@@ -131,6 +134,11 @@ namespace Register.Web.Controllers
             {
                 Log.WriteErrorLog(tsw.TraceError, ex);
                 throw (ex);
+            }
+
+            if (result == null)
+            {
+                return Content("ไม่มีข้อมูล");
             }
             return File(result, "application/pdf", String.Format("Application_{0}_{1}.pdf", citizenID, DateTime.Now.ToString("yyyyMMddHHmmss")));
         }
@@ -166,7 +174,7 @@ namespace Register.Web.Controllers
 
                 if (result == null)
                 {
-                    return Content("ไม่พบข้อมูล"); 
+                    return Content("ไม่มีข้อมูล"); 
                 }
             }
             catch (Exception ex)
@@ -225,7 +233,6 @@ namespace Register.Web.Controllers
         public async Task<ActionResult> PrintSmsPayIn(int testTypeID, string citizenID)
         {
             byte[] result = null;
-            var reportOutputFolder = "~/temp";
             var api = SysParameterHelper.ApiUrlServerSide;
             var jsonResult = string.Empty;
 
@@ -249,6 +256,11 @@ namespace Register.Web.Controllers
             {
                 Log.WriteErrorLog(tsw.TraceError, ex);
                 throw (ex);
+            }
+
+            if (result == null)
+            {
+                return Content("ไม่มีข้อมูล");
             }
             return File(result, "application/pdf", String.Format("SmsPayin_{0}_{1}.pdf", citizenID, DateTime.Now.ToString("yyyyMMddHHmmss")));
         }
