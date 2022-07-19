@@ -1372,7 +1372,6 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             $scope.SetLoading("lstEducationals", true);
             $LookupService.getLookupEducationals($scope.model.RegClassID).then(function (result) {
                 $scope.lstEducationals = result.data;
-                $scope.lstEduSerti = result.data;
                 //console.log($scope.lstEducationals);
                 if ($scope.lstEducationals.length == 1) {
                     $scope.model.ClassLavelID = $scope.lstEducationals[0].id;
@@ -1524,6 +1523,7 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             $scope.SetLoading("lstHighestEducationals", true);
             $LookupService.getLookupHighestEducationals($scope.model.ClassLavelID).then(function (result) {
                 $scope.lstHighestEducationals = result.data;
+                $scope.lstEduSerti = result.data;
             }, function (err) {
                 console.log("Error on getLookupHighestEducationals", err);
                 $scope.lstHighestEducationals = [];
