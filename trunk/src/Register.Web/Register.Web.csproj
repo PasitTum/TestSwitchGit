@@ -340,6 +340,7 @@
     <Content Include="Scripts\sweetalert2.min.js" />
     <Content Include="Scripts\views\exam-application.js" />
     <Content Include="Scripts\views\error-register-data.js" />
+    <Content Include="Scripts\views\register-master-2.js" />
     <Content Include="Scripts\views\reuploaddocs-index.js" />
     <Content Include="Scripts\views\register-index.js" />
     <Content Include="Scripts\views\register-master.js" />
@@ -841,6 +842,9 @@
     <Content Include="Views\Shared\_Footer2.cshtml" />
     <Content Include="Views\Register\_EducationGrid.cshtml" />
     <Content Include="Views\Register\_ExperienceGrid.cshtml" />
+    <Content Include="Views\Register\2\ConfirmRegister.cshtml" />
+    <Content Include="Views\Register\2\Register.cshtml" />
+    <Content Include="Views\Home\_FAQ_TestType2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
