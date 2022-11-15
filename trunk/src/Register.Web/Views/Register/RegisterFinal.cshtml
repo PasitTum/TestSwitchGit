@@ -34,9 +34,9 @@
                         }
                     </div>
                 </div>
-                @*<div class="row mt-3 ng-cloak">
+                <div class="row mt-3 ng-cloak">
                     <div class="col-12 col-md-2"></div>
-                    <div class="col-12 col-md-10 text-left">2. ชำระเงินโดยการสแกน QR code ผ่านแอพพลิเคชั่น Krungthai NEXT </div>
+                    <div class="col-12 col-md-10 text-left">2. ชำระเงินโดยการสแกน QR code ผ่านแอปพลิเคชัน Krungthai NEXT </div>
                 </div>
 
                 <div class="row mt-3 ng-cloak">
@@ -48,7 +48,7 @@
                     <div class="col-12 col-md-2" ng-if="qrcodeInfo.SmsStatus == 'Y'"></div>
                     <div class="col-12 col-md-4" ng-if="qrcodeInfo.SmsStatus == 'N'"></div>
                     <div class="col-12 col-md-4 text-center">
-                        <label class="font-weight-bold information">ค่าธรรมเนียมการสอบ 300 บาท</label><br /><label class="font-weight-bold">และค่าธรรมเนียมธนาคาร 30 บาท</label><br />
+                        <label class="font-weight-bold information">ค่าธรรมเนียมการสอบ 400 บาท</label><br /><label class="font-weight-bold">และค่าธรรมเนียมธนาคาร 30 บาท</label><br />
                         <a id="imgQrRegister" href="{{qrcodeInfo.QRCode}}" target="_blank" download="QrCode.jpg">
                             <img ng-src="{{qrcodeInfo.QRCode}}" style="max-width: 250px; border: solid 1px black" />
                         </a><br />
@@ -61,8 +61,8 @@
                         </a><br />
                         <button type="button" class="btn btn-outline-info mt-2" onclick="imgQrSMS.click()">ดาวน์โหลด QR Code</button>
                     </div>
-                </div>*@
-                <div class="row mt-5 ng-cloak"  ng-if="qrcodeInfo.SmsStatus == 'Y'">
+                </div>
+                @*<div class="row mt-5 ng-cloak"  ng-if="qrcodeInfo.SmsStatus == 'Y'">
                     <div class="col-12 col-md-4" ></div>
                     <div class="col-12 col-md-4 text-center">
                         <label class="font-weight-bold">ค่าบริการ SMS 20 บาท</label><br /><label class="font-weight-bold text-danger">**ไม่ใช่ค่าสมัครสอบ**</label><br />
@@ -71,7 +71,7 @@
                         </a><br />
                         <button type="button" class="btn btn-outline-info mt-2" onclick="imgQrSMS.click()">ดาวน์โหลด QR Code</button>
                     </div>
-                </div>
+                </div>*@
 
                     @*<div class="row mt-3">
                 <div class="col-12 offset-md-1 col-md-10 text-center">
