@@ -635,6 +635,8 @@
     <Content Include="Reports\DataSet\dsMain.xsc">
       <DependentUpon>dsMain.xsd</DependentUpon>
     </Content>
+    <Content Include="Reports\ApplicationTemplate_tt2.pdf" />
+    <Content Include="Reports\application-setting-tt2.json" />
     <None Include="Reports\DataSet\dsMain.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
