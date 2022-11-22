@@ -196,7 +196,7 @@ namespace Register.Database
                 {
                     paraValue += string.Format(" Para[{0}] = {1}", iLog, parameter[iLog].Value.ToString());
                 }
-                Log.WriteInformationLog(tsw.TraceError, String.Format("ExecStored ConnStr : {0}\r\nstoreName :{1} \r\nParameter : {2}", connStr, storeName, paraValue));
+                Log.WriteInformationLog(tsw.TraceError, String.Format("ExecStored ConnStr : {0}\r\nstoreName :{1} \r\nParameter : {2}", connStr, storeName, paraValue.ToString()));
             }
             DataSet dsResult = new DataSet();
             if (tableName == null || tableName.Length == 0)
