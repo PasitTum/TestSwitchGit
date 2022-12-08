@@ -12,6 +12,7 @@
                 @*<div class="text-center mt-3 information font-weight-bold">ผู้สมัครสามารถพิมพ์ใบสมัครได้ โดยคลิกที่ปุ่มเมนู "พิมพ์ใบสมัคร"</div>*@
                 <div class="text-blue text-center information font-weight-bold mt-3">การสมัครสอบจะเสร็จสมบูรณ์ต่อเมื่อผู้สมัครสอบชำระค่าธรรมเนียมในการสมัครสอบแล้ว</div>
                 <div class="text-center information font-weight-bold mt-3">หลังจากที่ผู้สมัครชำระเงินค่าสมัครสอบแล้ว <span class="text-danger">ระบบจะปรับปรุงสถานะการชำระเงิน</span> <h4 class="d-inline font-weight-bold" style="color:red;">ภายในวันถัดไป</h4><br />ผู้สมัครสามารถเข้ามาตรวจสอบสถานะการชำระเงิน โดยคลิกที่ปุ่มเมนู "ตรวจสอบสถานะการสมัครสอบ"</div>
+
                 @*<div class="text-center mt-3 information">ท่านสามารถชำระเงินค่าสมัครสอบได้ 2 ช่องทาง ดังต่อไปนี้</div>*@
                 @*<div class="row mt-5">
                         <div class="col-12 col-md-2"></div>
@@ -20,6 +21,25 @@
                             <a href="https://www.ktbnetbank.com/consumer/" target="_blank" class="btn btn-success ml-md-5 mb-3"><i class="far fa-credit-card"></i>&nbsp;&nbsp;ชำระเงินออนไลน์</a>
                         </div>
                     </div>*@
+                <div class="row mt-3 ng-cloak">
+                    <div class="col-12 col-md-2"></div>
+                    <div class="col-12 col-md-10 text-left">
+
+                        <div ng-show="testTypeID == 2">
+                            ค่าธรรมเนียมการสมัครสอบ<span class="text-danger" style="text-decoration: underline;">รวมค่าธรรมเนียมธนาคาร</span> สำหรับตำแหน่ง ดังต่อไปนี้<br>
+                            1) ตำแหน่งนักทรัพยากรบุคคล จำนวน 430 บาท<br>
+                            2) ตำแหน่งนักส่งเสริมการพัฒนาชุมชน จำนวน 430 บาท<br>
+                            3) ตำแหน่งนักวิเคราะห์นโยบายและแผน จำนวน 430 บาท<br>
+                            4) ตำแหน่งนักประชาสัมพันธ์ จำนวน 430 บาท<br>
+                            5) ตำแหน่งวิศวกรโยธา จำนวน 430 บาท<br>
+                            6) ตำแหน่งนักวิชาการพัสดุ จำนวน 430 บาท<br>
+                            <span class="text-blue">
+                                และจำนวน 400 บาท สำหรับตำแหน่งนายช่างไฟฟ้า
+                            </span><br>
+                            <span class="text-danger blink_me">*<span style="text-decoration: underline;">คำเตือน</span> กรณีชำระผ่านแอปพลิเคชัน กรุณาตรวจสอบยอดเงินให้ตรงกับตำแหน่งที่สมัคร</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mt-3">
                     <div class="col-12 col-md-2"></div>
                     <div class="col-12 col-md-5 text-left align-self-center">1.  พิมพ์แบบฟอร์มการชำระเงิน นำไปชำระเงินที่เคาน์เตอร์ของธนาคารกรุงไทย</div>
