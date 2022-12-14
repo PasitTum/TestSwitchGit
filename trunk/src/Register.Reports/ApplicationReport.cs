@@ -326,7 +326,7 @@ namespace Register.Reports
         {
             var result = new ResultInfo();
             var rpName = "rptApplication.rpt";
-            var templateFile = this.GetFileNameInReportPath(this.TemplateFileName);
+            var templateFile = this.GetFileNameInReportPath(rpName);
 
             if (this.enrollDatas != null)
             {
