@@ -421,9 +421,11 @@ namespace Register.Web.Reports.DataSet {
             
             private global::System.Data.DataColumn columnSARALY_AMT;
             
-            private global::System.Data.DataColumn columnADDRESS_NO;
+            private global::System.Data.DataColumn columnPROVINCE_NAME_TH;
             
             private global::System.Data.DataColumn columnVILLAGE_NAME;
+            
+            private global::System.Data.DataColumn columnADDRESS_NO;
             
             private global::System.Data.DataColumn columnMOO;
             
@@ -431,7 +433,7 @@ namespace Register.Web.Reports.DataSet {
             
             private global::System.Data.DataColumn columnSTREET;
             
-            private global::System.Data.DataColumn columnPROVINCE_NAME_TH;
+            private global::System.Data.DataColumn columnPROV_NAME;
             
             private global::System.Data.DataColumn columnAMPHUR_NAME_TH;
             
@@ -804,9 +806,9 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ADDRESS_NOColumn {
+            public global::System.Data.DataColumn PROVINCE_NAME_THColumn {
                 get {
-                    return this.columnADDRESS_NO;
+                    return this.columnPROVINCE_NAME_TH;
                 }
             }
             
@@ -815,6 +817,14 @@ namespace Register.Web.Reports.DataSet {
             public global::System.Data.DataColumn VILLAGE_NAMEColumn {
                 get {
                     return this.columnVILLAGE_NAME;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn ADDRESS_NOColumn {
+                get {
+                    return this.columnADDRESS_NO;
                 }
             }
             
@@ -844,9 +854,9 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn PROVINCE_NAME_THColumn {
+            public global::System.Data.DataColumn PROV_NAMEColumn {
                 get {
-                    return this.columnPROVINCE_NAME_TH;
+                    return this.columnPROV_NAME;
                 }
             }
             
@@ -1116,12 +1126,13 @@ namespace Register.Web.Reports.DataSet {
                         string OFFICE_NAME, 
                         string DIVISION_NAME, 
                         string SARALY_AMT, 
-                        string ADDRESS_NO, 
+                        string PROVINCE_NAME_TH, 
                         string VILLAGE_NAME, 
+                        string ADDRESS_NO, 
                         string MOO, 
                         string SOI, 
                         string STREET, 
-                        string PROVINCE_NAME_TH, 
+                        string PROV_NAME, 
                         string AMPHUR_NAME_TH, 
                         string TUMBON_NAME_TH, 
                         string POST_CODE, 
@@ -1184,12 +1195,13 @@ namespace Register.Web.Reports.DataSet {
                         OFFICE_NAME,
                         DIVISION_NAME,
                         SARALY_AMT,
-                        ADDRESS_NO,
+                        PROVINCE_NAME_TH,
                         VILLAGE_NAME,
+                        ADDRESS_NO,
                         MOO,
                         SOI,
                         STREET,
-                        PROVINCE_NAME_TH,
+                        PROV_NAME,
                         AMPHUR_NAME_TH,
                         TUMBON_NAME_TH,
                         POST_CODE,
@@ -1272,12 +1284,13 @@ namespace Register.Web.Reports.DataSet {
                 this.columnOFFICE_NAME = base.Columns["OFFICE_NAME"];
                 this.columnDIVISION_NAME = base.Columns["DIVISION_NAME"];
                 this.columnSARALY_AMT = base.Columns["SARALY_AMT"];
-                this.columnADDRESS_NO = base.Columns["ADDRESS_NO"];
+                this.columnPROVINCE_NAME_TH = base.Columns["PROVINCE_NAME_TH"];
                 this.columnVILLAGE_NAME = base.Columns["VILLAGE_NAME"];
+                this.columnADDRESS_NO = base.Columns["ADDRESS_NO"];
                 this.columnMOO = base.Columns["MOO"];
                 this.columnSOI = base.Columns["SOI"];
                 this.columnSTREET = base.Columns["STREET"];
-                this.columnPROVINCE_NAME_TH = base.Columns["PROVINCE_NAME_TH"];
+                this.columnPROV_NAME = base.Columns["PROV_NAME"];
                 this.columnAMPHUR_NAME_TH = base.Columns["AMPHUR_NAME_TH"];
                 this.columnTUMBON_NAME_TH = base.Columns["TUMBON_NAME_TH"];
                 this.columnPOST_CODE = base.Columns["POST_CODE"];
@@ -1379,18 +1392,20 @@ namespace Register.Web.Reports.DataSet {
                 base.Columns.Add(this.columnDIVISION_NAME);
                 this.columnSARALY_AMT = new global::System.Data.DataColumn("SARALY_AMT", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSARALY_AMT);
-                this.columnADDRESS_NO = new global::System.Data.DataColumn("ADDRESS_NO", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnADDRESS_NO);
+                this.columnPROVINCE_NAME_TH = new global::System.Data.DataColumn("PROVINCE_NAME_TH", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPROVINCE_NAME_TH);
                 this.columnVILLAGE_NAME = new global::System.Data.DataColumn("VILLAGE_NAME", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnVILLAGE_NAME);
+                this.columnADDRESS_NO = new global::System.Data.DataColumn("ADDRESS_NO", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnADDRESS_NO);
                 this.columnMOO = new global::System.Data.DataColumn("MOO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMOO);
                 this.columnSOI = new global::System.Data.DataColumn("SOI", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSOI);
                 this.columnSTREET = new global::System.Data.DataColumn("STREET", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSTREET);
-                this.columnPROVINCE_NAME_TH = new global::System.Data.DataColumn("PROVINCE_NAME_TH", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnPROVINCE_NAME_TH);
+                this.columnPROV_NAME = new global::System.Data.DataColumn("PROV_NAME", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPROV_NAME);
                 this.columnAMPHUR_NAME_TH = new global::System.Data.DataColumn("AMPHUR_NAME_TH", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnAMPHUR_NAME_TH);
                 this.columnTUMBON_NAME_TH = new global::System.Data.DataColumn("TUMBON_NAME_TH", typeof(string), null, global::System.Data.MappingType.Element);
@@ -2832,17 +2847,17 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string ADDRESS_NO {
+            public string PROVINCE_NAME_TH {
                 get {
                     try {
-                        return ((string)(this[this.tableMainInfo.ADDRESS_NOColumn]));
+                        return ((string)(this[this.tableMainInfo.PROVINCE_NAME_THColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ADDRESS_NO\' in table \'MainInfo\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'PROVINCE_NAME_TH\' in table \'MainInfo\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableMainInfo.ADDRESS_NOColumn] = value;
+                    this[this.tableMainInfo.PROVINCE_NAME_THColumn] = value;
                 }
             }
             
@@ -2859,6 +2874,22 @@ namespace Register.Web.Reports.DataSet {
                 }
                 set {
                     this[this.tableMainInfo.VILLAGE_NAMEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string ADDRESS_NO {
+                get {
+                    try {
+                        return ((string)(this[this.tableMainInfo.ADDRESS_NOColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ADDRESS_NO\' in table \'MainInfo\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableMainInfo.ADDRESS_NOColumn] = value;
                 }
             }
             
@@ -2912,17 +2943,17 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string PROVINCE_NAME_TH {
+            public string PROV_NAME {
                 get {
                     try {
-                        return ((string)(this[this.tableMainInfo.PROVINCE_NAME_THColumn]));
+                        return ((string)(this[this.tableMainInfo.PROV_NAMEColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'PROVINCE_NAME_TH\' in table \'MainInfo\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'PROV_NAME\' in table \'MainInfo\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableMainInfo.PROVINCE_NAME_THColumn] = value;
+                    this[this.tableMainInfo.PROV_NAMEColumn] = value;
                 }
             }
             
@@ -3744,14 +3775,14 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsADDRESS_NONull() {
-                return this.IsNull(this.tableMainInfo.ADDRESS_NOColumn);
+            public bool IsPROVINCE_NAME_THNull() {
+                return this.IsNull(this.tableMainInfo.PROVINCE_NAME_THColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetADDRESS_NONull() {
-                this[this.tableMainInfo.ADDRESS_NOColumn] = global::System.Convert.DBNull;
+            public void SetPROVINCE_NAME_THNull() {
+                this[this.tableMainInfo.PROVINCE_NAME_THColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3764,6 +3795,18 @@ namespace Register.Web.Reports.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetVILLAGE_NAMENull() {
                 this[this.tableMainInfo.VILLAGE_NAMEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsADDRESS_NONull() {
+                return this.IsNull(this.tableMainInfo.ADDRESS_NOColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetADDRESS_NONull() {
+                this[this.tableMainInfo.ADDRESS_NOColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -3804,14 +3847,14 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsPROVINCE_NAME_THNull() {
-                return this.IsNull(this.tableMainInfo.PROVINCE_NAME_THColumn);
+            public bool IsPROV_NAMENull() {
+                return this.IsNull(this.tableMainInfo.PROV_NAMEColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetPROVINCE_NAME_THNull() {
-                this[this.tableMainInfo.PROVINCE_NAME_THColumn] = global::System.Convert.DBNull;
+            public void SetPROV_NAMENull() {
+                this[this.tableMainInfo.PROV_NAMEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
