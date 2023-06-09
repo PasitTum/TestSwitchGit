@@ -152,6 +152,7 @@ namespace Register.Models
         public string IPAddress { get; set; }
         public string MacAddress { get; set; }
         public string OCSCFlag { get; set; }
+        public string OCSCWaitFlag { get; set; }
         public string OCSCLevelID { get; set; }
         public string OCSCLevelName { get; set; }
         public string OCSCCertNo { get; set; }

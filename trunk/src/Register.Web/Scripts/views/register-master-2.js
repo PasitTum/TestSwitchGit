@@ -112,6 +112,7 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
     $scope.tbbFlag = $scope.model.TbbFlag == 'Y' ? true : false;
     $scope.ocscFlag = $scope.model.OCSCFlag == 'Y' ? true : false;
     $scope.smsStatus = $scope.model.SMSStatus == 'Y' ? true : false;
+    $scope.ocscWaitFlag = $scope.model.OCSCWaitFlag == 'Y' ? true : false;
     $scope.occFlag = false;
     $scope.isLoading = false;
     $scope.confirm2 = false;
@@ -193,6 +194,7 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             $scope.provinceChange();
             $scope.tbbprovinceChange();
             $scope.getExamSites();
+
 
             if (!$CspUtils.IsNullOrEmpty($scope.model.OccuupationID)) {
                 if ($scope.model.OccuupationID == "5" || $scope.model.OccuupationID == "4") {
@@ -333,6 +335,8 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             $scope.checkDevice();
 
         }
+
+        $scope.educationChange();
         //end อัปโหลดรูป
     };
 
@@ -493,6 +497,23 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         //if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCPassDate)) {
         //    errorList.push("กรุณาระบุ วันประกาศขึ้นทะเบียนสอบ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
         //}
+        if (!$scope.ocscWaitFlag) {
+            if (!$scope.ocscFlag) {
+                errorList.push("กรุณาระบุ ว่าเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+            }
+            if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCLevelID)) {
+                errorList.push("กรุณาระบุ ระดับวุฒิการศึกษา การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+            }
+            if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCCertNo)) {
+                errorList.push("กรุณาระบุ เลขที่หนังสือรับรองฯ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+            }
+            if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCExamDate)) {
+                errorList.push("กรุณาระบุ วันที่สอบ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+            }
+            if ($scope.ocscFlag && $CspUtils.IsNullOrEmpty($scope.model.OCSCPassDate)) {
+                errorList.push("กรุณาระบุ วันประกาศขึ้นทะเบียนสอบ การวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.");
+            }
+        }
         // end ก.พ.
         if ($CspUtils.IsNullOrEmpty($scope.model.GPA)) {
             errorList.push("ยังไม่ได้ระบุ เกรดเฉลี่ยสะสม");
@@ -880,6 +901,12 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             $scope.model.SMSStatus = 'Y'
         } else {
             $scope.model.SMSStatus = 'N'
+        }
+
+        if ($scope.ocscWaitFlag) {
+            $scope.model.OCSCWaitFlag = 'Y'
+        } else {
+            $scope.model.OCSCWaitFlag = 'N'
         }
 
 
@@ -1383,6 +1410,24 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }
     };
 
+    $scope.getOCSCEducationals = function () {
+        if (!$CspUtils.IsNullOrEmpty($scope.model.ClassLavelID)) {
+            $scope.SetLoading("lstOCSCEducationals", true);
+            $LookupService.getLookupOCSCEducationals($scope.testTypeID, $scope.model.ClassLavelID).then(function (result) {
+                $scope.lstOCSCEducationals = result.data;
+                if ($scope.lstOCSCEducationals.length == 1) {
+                    $scope.model.OCSCLevelID = $scope.lstOCSCEducationals[0].id;
+                }
+            }, function (err) {
+                console.log("Error on getLookupOCSCEducationals", err);
+                $scope.lstOCSCEducationals = [];
+            }).finally(function () { $scope.SetLoading("lstOCSCEducationals", false); });
+        } else {
+            $scope.lstOCSCEducationals = [];
+        }
+    };
+
+
     $scope.educationChange = function () {
         //console.log("ClassLavelID", $scope.modelOrg.ClassLavelID);
         if (!$CspUtils.IsNullOrEmpty($scope.modelOrg.ClassLavelID)) {
@@ -1400,8 +1445,8 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }
 
         $scope.lstDegrees = [];
-        $scope.model.DegreeID = "";
-        $scope.model.DegreeName = "";
+        //$scope.model.DegreeID = "";
+        //$scope.model.DegreeName = "";
         if (!$CspUtils.IsNullOrEmpty($scope.model.ClassLavelID)) {
             $scope.SetLoading("lstDegrees", true);
             $LookupService.getLookupDegrees($scope.model.RegClassID, $scope.model.ClassLavelID).then(function (result) {
@@ -1415,24 +1460,24 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             }).finally(function () { $scope.SetLoading("lstDegrees", false); });
         }
 
-        $scope.model.OCSCLevelID = "";
-        $scope.model.OCSCLevelName = "";
-        $scope.lstOCSCEducationals = [];
-        if (!$CspUtils.IsNullOrEmpty($scope.model.ClassLavelID)) {
-            $scope.SetLoading("lstOCSCEducationals", true);
-            $LookupService.getLookupOCSCEducationals($scope.testTypeID, $scope.model.ClassLavelID).then(function (result) {
-                $scope.lstOCSCEducationals = result.data;
-                if ($scope.lstOCSCEducationals.length == 1) {
-                    $scope.model.OCSCLevelID = $scope.lstOCSCEducationals[0].id;
-                }
-                $scope.ocscLevelChange();
-            }, function (err) {
-                console.log("Error on getLookupOCSCEducationals", err);
-            }).finally(function () { $scope.SetLoading("lstOCSCEducationals", false); });
-        }
+        //$scope.model.OCSCLevelID = "";
+        //$scope.model.OCSCLevelName = "";
+        //$scope.lstOCSCEducationals = [];
+        //if (!$CspUtils.IsNullOrEmpty($scope.model.ClassLavelID)) {
+        //    $scope.SetLoading("lstOCSCEducationals", true);
+        //    $LookupService.getLookupOCSCEducationals($scope.testTypeID, $scope.model.ClassLavelID).then(function (result) {
+        //        $scope.lstOCSCEducationals = result.data;
+        //        if ($scope.lstOCSCEducationals.length == 1) {
+        //            $scope.model.OCSCLevelID = $scope.lstOCSCEducationals[0].id;
+        //        }
+        //        $scope.ocscLevelChange();
+        //    }, function (err) {
+        //        console.log("Error on getLookupOCSCEducationals", err);
+        //    }).finally(function () { $scope.SetLoading("lstOCSCEducationals", false); });
+        //}
 
         $scope.getLookupHighestEducationals()
-
+        $scope.getOCSCEducationals();
     };
 
     $scope.degreeChange = function () {
@@ -1451,8 +1496,8 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
             }
         }
 
-        $scope.model.MajorID = "";
-        $scope.model.MajorName = "";
+        //$scope.model.MajorID = "";
+        //$scope.model.MajorName = "";
         $scope.lstMajors = [];
         if (!$CspUtils.IsNullOrEmpty($scope.model.DegreeID)) {
             $scope.SetLoading("lstMajors", true);
@@ -1593,14 +1638,22 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }
     };
 
-    $scope.getNameFromID = function (lst, id) {
+    //$scope.getNameFromID = function (lst, id) {
+    //    if (lst.length > 0 && !$CspUtils.IsNullOrEmpty(id)) {
+    //        var name = lst.find(x => x.id === id);
+    //        if (!$CspUtils.IsNullOrEmpty(name)) {
+    //            return name.text;
+    //        }
+    //    }
+    //    return "";
+    //};
+       $scope.getNameFromID = function (lst, id) {
         if (lst.length > 0 && !$CspUtils.IsNullOrEmpty(id)) {
-            var name = lst.find(x => x.id === id);
-            if (!$CspUtils.IsNullOrEmpty(name)) {
-                return name.text;
-            }
+            var name = $filter('filter')(lst, {
+                id: id
+            });
+            return name[0].text;
         }
-        return "";
     };
 
     $scope.eduFlagChange = function () {
@@ -1624,13 +1677,13 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }
     };
 
-    $scope.ocscFlagChange = function () {
-        if ($scope.ocscFlag) {
-            $scope.model.OCSCFlag = 'Y'
-        } else {
-            $scope.model.OCSCFlag = 'N'
-        }
-    };
+    //$scope.ocscFlagChange = function () {
+    //    if ($scope.ocscFlag) {
+    //        $scope.model.OCSCFlag = 'Y'
+    //    } else {
+    //        $scope.model.OCSCFlag = 'N'
+    //    }
+    //};
 
     $scope.tbbFlagChange = function () {
         if (tbbFlag) {
@@ -1871,6 +1924,23 @@ app.controller("registerController", ["$scope", "$uibModal", "CspUtils", "Lookup
         }, function () {
             $scope.checked = false;
         });
+    };
+
+    $scope.ocscFlagChange = function (mode) {
+
+        if (mode == 'ocscWaitFlag') {
+            $scope.model.OCSCLevelID = "";
+            $scope.model.OCSCCertNo = "";
+            $scope.model.OCSCExamDate = null;
+            $scope.model.OCSCPassDate = null;
+            $scope.ocscFlag = false
+            $scope.model.OCSCFlag = 'N'
+            $scope.model.OCSCWaitFlag = 'Y'
+        } else {
+            $scope.model.OCSCFlag = 'Y'
+            $scope.model.OCSCWaitFlag = 'N'
+            $scope.ocscWaitFlag = false;
+        }
     };
 
     $scope.openDialog = function () {

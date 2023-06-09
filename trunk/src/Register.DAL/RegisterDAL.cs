@@ -202,6 +202,7 @@ namespace Register.DAL
                     prms.Add(new CommonParameter("@HIGHEST_GRADUATE_DATE", null));
                     prms.Add(new CommonParameter("@HIGHEST_GRADUATE_GPA", ""));
 
+                    prms.Add(new CommonParameter("@OCSC_IS_WAIT_RESULT", model.OCSCWaitFlag));
                     prms.Add(new CommonParameter("@OCSC_LEVEL_ID", model.OCSCLevelID));
                     prms.Add(new CommonParameter("@OCSC_CERT_NO", model.OCSCCertNo));
                     prms.Add(new CommonParameter("@OCSC_EXAM_DTM", model.OCSCExamDate.ToDateTimeFromThai()));

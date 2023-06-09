@@ -847,6 +847,11 @@
     <Content Include="Views\Register\2\ConfirmRegister.cshtml" />
     <Content Include="Views\Register\2\Register.cshtml" />
     <Content Include="Views\Home\_FAQ_TestType2.cshtml" />
+    <Content Include="Views\Register\3\ConfirmRegister.cshtml" />
+    <Content Include="Views\Register\3\Register.cshtml" />
+    <Content Include="Views\Home\_FAQ_TestType3.cshtml" />
+    <Content Include="Views\Shared\_Footer3.cshtml" />
+    <Content Include="Views\Shared\_SideBar_TestType3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

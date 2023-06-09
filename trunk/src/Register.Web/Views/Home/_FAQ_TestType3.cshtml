@@ -1,0 +1,248 @@
+﻿@{
+    var testTypeID = this.ViewContext.RouteData.GetRequiredString("testtypeid");
+    var fileName = "~/Docs/แบบคำร้องขอแก้ไขข้อมูลในใบสมัคร_T" + testTypeID + ".pdf";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body form-group">
+                <h4 class="text-center font-weight-bold">@ViewBag.Title</h4>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 1</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: <span class="text-underline">ผู้สมัครที่กรอกใบสมัครสอบผิดพลาด</span>ในกรณีดังต่อไปนี้ ผิด ได้แก่ <span class="text-underline">เลขประจำตัวประชาชน, คำนำหน้านาม, ชื่อตัว, ชื่อสกุล</span> ต้องดำเนินการอย่างไร</label><br />
+                                <label class="ml-3">
+                                    A: สำหรับผู้สมัครที่กรอกข้อมูลผิด กรมการพัฒนาชุมชนจะให้ท่านส่งคำร้องขอแก้ไขข้อมูลได้ ภายหลังจากที่กรมการพัฒนาชุมชนได้ประกาศรายชื่อผู้สมัครแล้ว<br />
+                                    @*A: สำหรับผู้สมัครที่กรอกข้อมูลต่อไปนี้ผิด ได้แก่ เลขประตัวประชาชน, ชื่อตัว, ชื่อสกุล, คำนำหน้านาม ให้ยื่นขอแก้ไขข้อมูลโดยมีเอกสารประกอบ ดังนี้<br />
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) แบบคำร้องขอแก้ไขข้อมูล <a class="text-link" href="@Url.Content(fileName)" target="_blank">(Download ใบคำร้อง คลิกที่นี่)</a></span><br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) ใบสมัครที่พิมพ์ออกจากระบบ จำนวน 1 ฉบับ<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) หลักฐานการชำระเงินจาก บมจ.ธนาคารกรุงไทย<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) สำเนาทะเบียนบ้าน (ที่ระบุชื่อ - สกุล เลขประจำตัวประชาชน ชัดเจน) จำนวน 1 ฉบับ<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยติดต่อขอยื่นแบบคำร้อง<span class="text-center text-blue">ภายในวันที่ 9 ธันวาคม 2565 </span>ในวันและเวลาราชการ ได้ 2 ทาง ดังนี้<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) ยื่นด้วยตนเองได้ที่ กรมการพัฒนาชุมชน อาคารรัฐประศาสนภักดี ชั้น 5 ศูนย์ราชการเฉลิมพระเกียรติ 80 พรรษา ถนนแจ้งวัฒนะ เขตหลักสี่ กรุงเทพมหานคร 10210<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) ส่งทางโทรสาร (Fax) หมายเลข 02-143-8914, 02-143-8915 กรณีที่ส่งเอกสารทางโทรสาร (Fax) แล้ว ต้องโทรศัพท์เข้ามาสอบถามเจ้าหน้าที่เพื่อยืนยันการได้รับเอกสารด้วย ขอทราบข้อมูลเพิ่มเติมทางโทรศัพท์หมายเลข เพิ่ม 02-141-6180, 02-141-6379, 02-141-6173 , 02-141-6200, 02-141-6174, และ 02-141-2675<br />*@
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 2</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: <span class="text-underline">หากมีการเปลี่ยนชื่อ หรือนามสกุล หลังจากที่ได้สมัครสอบไปแล้ว</span> จะยื่นคำร้องขอแก้ไขได้หรือไม่</label><br />
+                                <label class="ml-3">
+                                    A: ในกรณีที่มีการเปลี่ยนคำนำหน้านาม, ชื่อ หรือนามสกุล หลังจากที่ได้สมัครสอบไปแล้ว ไม่ต้องยื่นคำร้องขอแก้ไข<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทั้งนี้ ในวันสอบข้อเขียน หรือในกรณีที่มีการติดต่อเกี่ยวกับการสอบ จะต้องนำหลักฐานพร้อมสำเนา การเปลี่ยนคำนำหน้านาม, ชื่อ หรือนามสกุล มาแสดงพร้อมบัตรประจำตัวประชาชน
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 3</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: กรณีที่ผู้สมัครกรอกข้อมูลอื่นผิด สามารถยื่นคำร้องขอแก้ไขได้หรือไม่</label><br />
+                                <label class="ml-3">
+                                    A: ผู้ที่กรอกใบสมัครฯ ผิดพลาดในกรณีอื่นๆ คณะกรรมการฯ จะพิจารณาดำเนินการแก้ไขให้เมื่อผู้สมัครยื่นหลักฐานครบถ้วนในวันสอบสัมภาษณ์
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 4</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: กรมการพัฒนาชุมชนเปิดรับสมัครสอบทางอินเทอร์เน็ตในวันใด</label><br />
+                                <label class="ml-3">
+                                    A: ผู้ที่มีความประสงค์จะสมัครเข้ารับการสอบแข่งขัน สามารถสมัครได้ทางอินเทอร์เน็ต<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue">ตั้งแต่วันที่ 19 มิถุนายน 2566 เวลา 08.30 น. ถึงวันที่ 7 กรกฎาคม 2566 เวลา 16.30 น.</span><br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ทางเว็บไซต์ <a class="text-link" href="http://cdd.jobthaigov.com" target="_blank">http://cdd.jobthaigov.com</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 5</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: เปิดรับชำระเงินถึงเมื่อไร</label><br />
+                                <label class="ml-3">
+                                    A: ผู้สมัครสอบสามารถชำระเงินค่าธรรมเนียมการสมัครสอบตั้งแต่วันที่ 19 มิถุนายน 2566 เวลา 08.30 น. ถึงวันที่ 8 กรกฎาคม 2566 เวลา 22.00 น. ได้ 3 ช่องทาง ดังนี้<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) ผ่านเคารน์เตอร์ บมจ.ธนาคารกรุงไทย ภายในเวลาทำการของธนาคาร<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) ผ่านช่องทางแอปพลิเคชัน Krungthai Next โดยสแกน QR Code ในแบบฟอร์มการชำระเงิน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) ผ่านช่องทางแอปพลิเคชัน “เป๋าตัง” โดยสแกน QR Code ในแบบฟอร์มการชำระเงิน<br />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 6</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ค่าธรรมเนียมในการสมัครสอบเท่าไร</label><br />
+                                <label class="ml-3">
+                                    A: ค่าธรรมเนียมการสมัครสอบ จำนวน 370 บาท สำหรับตำแหน่ง ดังต่อไปนี้<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) ตำแหน่งนายช่างโยธาปฏิบัติงาน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) ตำแหน่งเจ้าพนักงานโสตทัศนศึกษาปฏิบัติงาน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) ตำแหน่งเจ้าพนักงานธุรการปฏิบัติงาน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) ตำแหน่งเจ้าพนักงานการเงินและบัญชีปฏิบัติงาน<br />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;และมีค่าธรรมเนียมทางธนาคารอีก 30 บาท<br />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 7</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: กรมการพัฒนาชุมชน จะประกาศรายชื่อผู้สมัคร เมื่อไร</label><br />
+                                <label class="ml-3">
+                                    A: กรมการพัฒนาชุมชน จะประกาศรายชื่อผู้สมัคร วัน เวลาสถานที่สอบ และระเบียบเกี่ยวกับการสอบภายในวันที่ 18 สิงหาคม 2566 ทางเว็บไซต์กองการเจ้าหน้าที่ กรมการพัฒนาชุมชน<span class="text-blue">ทางเว็บไซต์</span> <a class="text-link" href="http://personnel.cdd.go.th">http://personnel.cdd.go.th</a>
+                                    <span class="text-blue">หรือทางเว็บไซต์</span> <a class="text-link" href="http://cdd.jobthaigov.com">http://cdd.jobthaigov.com</a> ทั้งนี้ กำหนดการอาจเปลี่ยนแปลงได้ตามความเหมาะสม
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 8</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: พิมพ์ใบสมัครตัวจริงได้ที่ไหนและเมื่อไร</label><br />
+                                <label class="ml-3">
+                                    A: สามารถตรวจสอบและพิมพ์ใบสมัครที่มีเลขประจำตัวสอบได้ทางอินเตอร์เน็ตที่เว็บไซต์ <a class="text-link" href="http://cdd.jobthaigov.com">http://cdd.jobthaigov.com</a>
+                                    ตั้งแต่วันที่ 11 กรกฎาคม 2566 เป็นต้นไป และสำหรับใบสมัครที่พิมพ์จากอินเตอร์เน็ต ให้ผู้สมัครนำมายื่นในวันสอบเพื่อวัดความเหมาะสมกับตำแหน่ง (สอบสัมภาษณ์)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 9</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ผู้มีสิทธิสมัครสอบต้องสำเร็จการศึกษาเมื่อใด</label><br />
+                                <label class="ml-3">
+                                    A: ผู้สมัครต้องสำเร็จการศึกษาในระดับการศึกษาตามตำแหน่งที่สมัคร โดยจะต้องสำเร็จการศึกษาและได้รับอนุมัติจากผู้มีอำนาจอนุมัติ<span class="text-blue"> ภายในวันปิดรับสมัคร คือ วันที่ 7 กรกฎาคม 2566</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 10</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">
+                                    Q: <span class="text-underline">กรณีส่วนราชการเปิดรับสมัครสอบแข่งขันในตำแหน่งที่กำหนดรับสมัครวุฒิประกาศนียบัตรวิชาชีพชั้นสูง (ปวส.) หรือคุณวุฒิอย่างอื่นที่เทียบได้ในระดับเดียวกัน</span> ผู้ที่จบการศึกษาระดับปริญญาตรี ประกาศนียบัตรวิชาชีพเทคนิค (ปวท.) วุฒิอนุปริญญาหลักสูตร 2 ปี หรือ 3 ปี หรือมัธยมศึกษาปีที่ 6 จะสามารถสมัครสอบในตำแหน่งดังกล่าว ได้หรือไม่
+                                </label><br />
+                                <label class="ml-3">
+                                    A: <span class="text-blue text-underline">ไม่สามารถสมัครสอบได้</span> เนื่องจากการที่จะเข้ารับราชการเป็นข้าราชการพลเรือนสามัญในตำแหน่งใด ผู้สมัครสอบจะต้องมีคุณวุฒิตรงตามมาตรฐานกำหนดตำแหน่งซึ่งกำหนดไว้ในประกาศรับสมัครสอบเท่านั้น ทั้งนี้ คุณวุฒิดังกล่าวต้องเป็นคุณวุมิที่ ก.พ. รับรองด้วย
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 11</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: ผู้สมัครสอบต้องเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป ของสำนักงาน ก.พ. หรือไม่</label><br />
+                                <label class="ml-3">
+                                    A: ผู้สมัคร<span class="text-blue text-underline">ต้อง</span>เป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป ของสำนักงาน ก.พ.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 12</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: หากต้องการสอบถามรายละเอียดเกี่ยวกับตำแหน่ง คุณสมบัติผู้สมัครสอบ วุฒิการศึกษา และอื่นๆ สามารถติดต่อได้ที่ใด</label><br />
+                                <label class="ml-3">
+                                    A: ผู้สมัครสามารถติดต่อได้ที่ กลุ่มงานสรรหาและประเมินบุคคล กองการเจ้าหน้าที่ กรมการพัฒนาชุมชน ชั้น 5 อาคารรัฐประศาสนภักดี ศูนย์ราชการเฉลิมพระเกียรติ 80 พรรษา ถนนแจ้งวัฒนะ เขตหลักสี่ กรุงเทพมหานคร 10210 โทรศัพท์หมายเลข 02-141-6180, 02-141-6379, 02-141-6173, 02-141-6200, 02-141-6174, และ 02-141-2675 ในวันและเวลาราชการ
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <div class="col-11">
+                        <div class="card">
+                            <h5 class="card-header header-table text-center">คำถามข้อที่ 13</h5>
+                            <div class="card-body">
+                                <label class="text-danger ml-3">Q: หากต้องการสอบถามรายละเอียดเกี่ยวกับการสมัครสอบ เช่น การพิมพ์ใบสมัคร การค้นหาใบสมัคร หรือมีปัญหาเกี่ยวกับระบบการสมัครสอบ สามารถติดต่อได้ที่ใด</label><br />
+                                <label class="ml-3">
+                                    A: ผู้สมัครสามารถติดต่อได้ที่ Call Center
+                                    <span class="text-blue">โทร. 0-2697-0999 กด 902</span> ในวันจันทร์-ศุกร์ เวลา 8.30 - 17.30 น.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row justify-content-center mt-3">
+                        <div class="col-11">
+                            <div class="card">
+                                <h5 class="card-header header-table text-center">คำถามข้อที่ 14</h5>
+                                <div class="card-body">
+                                    <label class="text-danger ml-3">Q: สมัครสอบตำแหน่ง ตำแหน่งนายช่างโยธาปฏิบัติงาน, ตำแหน่งเจ้าพนักงานโสตทัศนศึกษาปฏิบัติงาน, ตำแหน่งเจ้าพนักงานธุรการปฏิบัติงาน หรือตำแหน่งเจ้าพนักงานการเงินและบัญชีปฏิบัติงาน แต่จบวุฒิการศึกษาสูงกว่า ปวส. ได้หรือไม่</label><br />
+                                    <label class="ml-3">
+                                        A: <span class="text-blue text-underline">ไม่ได้</span> ผู้สมัครจะต้องจบการศึกษาในระดับชั้น ปวส. และตรงตามสาขาที่ต้องการสมัคร เท่านั้น
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-11">
+                            <div class="card">
+                                <h5 class="card-header header-table text-center">คำถามข้อที่ 15</h5>
+                                <div class="card-body">
+                                    <label class="text-danger ml-3">Q: สมัครสอบตำแหน่งวิศวกรโยธา จะต้องแนบใบอนุญาตผู้ประกอบวิชาชีพวิศวกรรมด้วยหรือไม่</label><br />
+                                    <label class="ml-3">
+                                        A: ให้ผู้สมัครนำสำเนาผู้ประกอบวิชาชีพวิศวกรรมควบคุม มายื่นในวันสอบสัมภาษณ์ ทั้งนี้ให้ผู้สมัครติดตามประกาศกรมการพัฒนาชุมชน เกี่ยวกับการสรรหาและเลือกสรรบุคคลเพื่อจัดจ้างเป็นพนักงานราชการทั่วไป สังกัดกรมการพัฒนาชุมชนอย่างต่อเนื่อง
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-11">
+                            <div class="card">
+                                <h5 class="card-header header-table text-center">คำถามข้อที่ 15</h5>
+                                <div class="card-body">
+                                    <label class="text-danger ml-3">Q: ผู้สมัครสามารถเลือกสถานที่ปฏิบัติงานได้หรือไม่</label><br />
+                                    <label class="ml-3">
+                                        A: กรมการพัฒนาชุมชนจะดำเนินการบรรจุบุคคลภายนอกเป็นพนักงานราชการตามความเหมาะสม
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>

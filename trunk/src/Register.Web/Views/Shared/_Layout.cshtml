@@ -67,7 +67,7 @@
         <!-- Page Content  -->
         <div id="content">
             <div id="mobileHeader" class="d-md-none bg-sidebar-header my-0 py-2">
-                <a class="ml-2" href="@Url.Action("Index","Landing")">
+                <a class="ml-2" href="@Url.Action("Index", "Landing")">
                     <img class="img-layout" src="~/Content/Images/logo.png?_=20220511" style="height:40px" />
                 </a>
             </div>
@@ -86,7 +86,24 @@
         </div>
     </div>
 
-    @Html.Partial("_Footer"+testTypeID)
+
+    @{
+        var faqFileName = String.Format("_Footer{0}", testTypeID);
+        var faqFile = "~/Views/Shared/" + faqFileName + ".cshtml";
+        var absolutePathFaq = HttpContext.Current.Server.MapPath(faqFile);
+        if (System.IO.File.Exists(absolutePathFaq))
+        {
+            @Html.Partial(faqFileName)
+        }
+        else
+        {
+            @Html.Partial("_Footer")
+        }
+
+    }
+
+
+    @*@Html.Partial("_Footer"+testTypeID)*@
     <script>
         var TEST_TYPE_ID = "@testTypeID";
         var WWW_ROOT = window.location.protocol + '//' + window.location.host + "@SysParameterHelper.AppRoot";
