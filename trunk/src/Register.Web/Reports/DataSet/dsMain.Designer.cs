@@ -403,6 +403,8 @@ namespace Register.Web.Reports.DataSet {
             
             private global::System.Data.DataColumn columnGRADUATE_GPA;
             
+            private global::System.Data.DataColumn columnOCSC_IS_WAIT_RESULT;
+            
             private global::System.Data.DataColumn columnCLASS_OCS_NAME_TH;
             
             private global::System.Data.DataColumn columnOCSC_CERT_NO;
@@ -729,6 +731,14 @@ namespace Register.Web.Reports.DataSet {
             public global::System.Data.DataColumn GRADUATE_GPAColumn {
                 get {
                     return this.columnGRADUATE_GPA;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OCSC_IS_WAIT_RESULTColumn {
+                get {
+                    return this.columnOCSC_IS_WAIT_RESULT;
                 }
             }
             
@@ -1117,6 +1127,7 @@ namespace Register.Web.Reports.DataSet {
                         string SCHOOL_ADD, 
                         string GRADUATE_DATE, 
                         string GRADUATE_GPA, 
+                        string OCSC_IS_WAIT_RESULT, 
                         string CLASS_OCS_NAME_TH, 
                         string OCSC_CERT_NO, 
                         string OCSC_EXAM_DTM, 
@@ -1186,6 +1197,7 @@ namespace Register.Web.Reports.DataSet {
                         SCHOOL_ADD,
                         GRADUATE_DATE,
                         GRADUATE_GPA,
+                        OCSC_IS_WAIT_RESULT,
                         CLASS_OCS_NAME_TH,
                         OCSC_CERT_NO,
                         OCSC_EXAM_DTM,
@@ -1275,6 +1287,7 @@ namespace Register.Web.Reports.DataSet {
                 this.columnSCHOOL_ADD = base.Columns["SCHOOL_ADD"];
                 this.columnGRADUATE_DATE = base.Columns["GRADUATE_DATE"];
                 this.columnGRADUATE_GPA = base.Columns["GRADUATE_GPA"];
+                this.columnOCSC_IS_WAIT_RESULT = base.Columns["OCSC_IS_WAIT_RESULT"];
                 this.columnCLASS_OCS_NAME_TH = base.Columns["CLASS_OCS_NAME_TH"];
                 this.columnOCSC_CERT_NO = base.Columns["OCSC_CERT_NO"];
                 this.columnOCSC_EXAM_DTM = base.Columns["OCSC_EXAM_DTM"];
@@ -1374,6 +1387,8 @@ namespace Register.Web.Reports.DataSet {
                 base.Columns.Add(this.columnGRADUATE_DATE);
                 this.columnGRADUATE_GPA = new global::System.Data.DataColumn("GRADUATE_GPA", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGRADUATE_GPA);
+                this.columnOCSC_IS_WAIT_RESULT = new global::System.Data.DataColumn("OCSC_IS_WAIT_RESULT", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOCSC_IS_WAIT_RESULT);
                 this.columnCLASS_OCS_NAME_TH = new global::System.Data.DataColumn("CLASS_OCS_NAME_TH", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCLASS_OCS_NAME_TH);
                 this.columnOCSC_CERT_NO = new global::System.Data.DataColumn("OCSC_CERT_NO", typeof(string), null, global::System.Data.MappingType.Element);
@@ -2703,6 +2718,22 @@ namespace Register.Web.Reports.DataSet {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string OCSC_IS_WAIT_RESULT {
+                get {
+                    try {
+                        return ((string)(this[this.tableMainInfo.OCSC_IS_WAIT_RESULTColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'OCSC_IS_WAIT_RESULT\' in table \'MainInfo\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableMainInfo.OCSC_IS_WAIT_RESULTColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string CLASS_OCS_NAME_TH {
                 get {
                     try {
@@ -3663,6 +3694,18 @@ namespace Register.Web.Reports.DataSet {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetGRADUATE_GPANull() {
                 this[this.tableMainInfo.GRADUATE_GPAColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsOCSC_IS_WAIT_RESULTNull() {
+                return this.IsNull(this.tableMainInfo.OCSC_IS_WAIT_RESULTColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetOCSC_IS_WAIT_RESULTNull() {
+                this[this.tableMainInfo.OCSC_IS_WAIT_RESULTColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

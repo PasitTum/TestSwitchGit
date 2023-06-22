@@ -1,0 +1,380 @@
+[
+  {
+    "varname": "waterMark",
+    "fieldname": "WATER_MARK",
+    "objecttype": "waterMark",
+    "size": 96,
+    "page": 1,
+    "x": 75,
+    "y": 200
+  },
+  {
+    "varname": "EXAM_SEAT_NO",
+    "fieldname": "EXAM_SEAT_NO",
+    "size": 14,
+    "page": 1,
+    "x": 46,
+    "y": 36.8
+  },
+  {
+    "varname": "TESTING_CLASS_NAME",
+    "fieldname": "TESTING_CLASS_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 48,
+    "y": 42.9
+  },
+  {
+    "varname": "FULL_NAME",
+    "fieldname": "FULL_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 37,
+    "y": 49
+  },
+  {
+    "varname": "GENDER",
+    "fieldname": "GENDER",
+    "size": 14,
+    "page": 1,
+    "x": 27.5,
+    "y": 55.1
+  },
+  {
+    "varname": "NationName",
+    "fieldname": "NATION_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 51,
+    "y": 55.1
+  },
+  {
+    "varname": "BDay",
+    "fieldname": "BIRTH_DATE_DAY",
+    "size": 14,
+    "page": 1,
+    "x": 93,
+    "y": 55.1
+  },
+  {
+    "varname": "BMonth",
+    "fieldname": "BIRTH_DATE_MONTH",
+    "objecttype": "monthname",
+    "size": 14,
+    "page": 1,
+    "x": 101,
+    "y": 55.1
+  },
+  {
+    "varname": "BYear",
+    "fieldname": "BIRTH_DATE_YEAR",
+    "objecttype": "year",
+    "size": 14,
+    "page": 1,
+    "x": 121,
+    "y": 55.1
+  },
+  {
+    "varname": "AYear",
+    "fieldname": "AGE_YEAR",
+    "size": 14,
+    "page": 1,
+    "x": 137.2,
+    "y": 55.1
+  },
+  {
+    "varname": "AMonth",
+    "fieldname": "AGE_MONTH",
+    "size": 14,
+    "page": 1,
+    "x": 147,
+    "y": 55.1
+  },
+  {
+    "varname": "CitizenID",
+    "fieldname": "CITIZEN_ID",
+    "objecttype": "citizen",
+    "size": 14,
+    "page": 1,
+    "x": 52,
+    "y": 61.1
+  },
+  {
+    "varname": "ClassLevel",
+    "fieldname": "CLASS_LEVEL_NAME_TH",
+    "size": 14,
+    "page": 1,
+    "x": 50,
+    "y": 67.1
+  },
+  {
+    "varname": "DEGREE_NAME",
+    "fieldname": "DEGREE_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 60,
+    "y": 73
+  },
+  {
+    "varname": "Major",
+    "fieldname": "MAJOR_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 35,
+    "y": 79.4
+  },
+  {
+    "varname": "School",
+    "fieldname": "SCHOOL_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 40,
+    "y": 85.4
+  },
+  {
+    "varname": "FACULTY_NAME",
+    "fieldname": "FACULTY_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 143,
+    "y": 85.4
+  },
+  {
+    "varname": "SCHOOL_COUNTRY",
+    "fieldname": "SCHOOL_COUNTRY",
+    "size": 14,
+    "page": 1,
+    "x": 42,
+    "y": 91.7
+  },
+  {
+    "varname": "SCHOOL_PROV_NAME",
+    "fieldname": "SCHOOL_PROV_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 80,
+    "y": 91.7
+  },
+  {
+    "varname": "GDay",
+    "fieldname": "TESTING_GRAD_DAY",
+    "size": 14,
+    "page": 1,
+    "x": 151,
+    "y": 91.7
+  },
+  {
+    "varname": "GMonth",
+    "fieldname": "TESTING_GRAD_MONTH",
+    "objecttype": "monthname",
+    "size": 14,
+    "page": 1,
+    "x": 159.5,
+    "y": 91.7
+  },
+  {
+    "varname": "GYear",
+    "fieldname": "TESTING_GRAD_YEAR",
+    "objecttype": "year",
+    "size": 14,
+    "page": 1,
+    "x": 179,
+    "y": 91.7
+  },
+  {
+    "varname": "FULLNAME_OF_EDU",
+    "fieldname": "FULLNAME_OF_EDU",
+    "size": 14,
+    "page": 1,
+    "x": 80,
+    "y": 97.8
+  },
+  {
+    "varname": "OccName",
+    "fieldname": "OCCUPATION_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 39,
+    "y": 110
+  },
+  {
+    "varname": "PositionName",
+    "fieldname": "POSITION_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 135,
+    "y": 110
+  },
+  {
+    "varname": "OffName",
+    "fieldname": "OFFICE_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 45,
+    "y": 115
+  },
+  {
+    "varname": "DivName",
+    "fieldname": "DIVISION_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 50,
+    "y": 121
+  },
+  {
+    "varname": "Salary",
+    "fieldname": "SALARY",
+    "objecttype": "number",
+    "size": 14,
+    "page": 1,
+    "x": 156,
+    "y": 121
+  },
+  {
+    "varname": "TBB_ADDRESS_NO",
+    "fieldname": "TBB_ADDRESS_NO",
+    "size": 14,
+    "page": 1,
+    "x": 64,
+    "y": 134.5
+  },
+  {
+    "varname": "TBB_VILLAGE_NAME",
+    "fieldname": "TBB_VILLAGE_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 120,
+    "y": 134.5
+  },
+  {
+    "varname": "TBB_MOO",
+    "fieldname": "TBB_MOO",
+    "size": 14,
+    "page": 1,
+    "x": 175,
+    "y": 134.5
+  },
+  {
+    "varname": "TBB_SOI",
+    "fieldname": "TBB_SOI",
+    "size": 14,
+    "page": 1,
+    "x": 46,
+    "y": 140.5
+  },
+  {
+    "varname": "TBB_STREET",
+    "fieldname": "TBB_STREET",
+    "size": 14,
+    "page": 1,
+    "x": 91,
+    "y": 140.5
+  },
+  {
+    "varname": "TBB_TUMBON_NAME",
+    "fieldname": "TBB_TUMBON_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 153,
+    "y": 140.5
+  },
+  {
+    "varname": "TBB_AMPHUR_NAME",
+    "fieldname": "TBB_AMPHUR_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 40,
+    "y": 146.7
+  },
+  {
+    "varname": "TBB_PROVINCE_NAME",
+    "fieldname": "TBB_PROVINCE_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 100,
+    "y": 146.7
+  },
+  {
+    "varname": "TBB_POST_CODE",
+    "fieldname": "TBB_POST_CODE",
+    "size": 14,
+    "page": 1,
+    "x": 170,
+    "y": 146.7
+  },
+  {
+    "varname": "TBB_PHONE_NO",
+    "fieldname": "TBB_PHONE_NO",
+    "size": 14,
+    "page": 1,
+    "x": 40,
+    "y": 152.7
+  },
+  {
+    "varname": "TBB_PHONE_EX",
+    "fieldname": "TBB_PHONE_EX",
+    "size": 14,
+    "page": 1,
+    "x": 90,
+    "y": 152.5
+  },
+  {
+    "varname": "CURRENT_AMPHUR_NAME",
+    "fieldname": "CURRENT_AMPHUR_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 61,
+    "y": 165
+  },
+  {
+    "varname": "CURRENT_PROVINCE_NAME",
+    "fieldname": "CURRENT_PROVINCE_NAME",
+    "size": 14,
+    "page": 1,
+    "x": 118,
+    "y": 165
+  },
+  {
+    "varname": "MobileNo",
+    "fieldname": "MOBILE_NO",
+    "size": 14,
+    "page": 1,
+    "x": 45,
+    "y": 171
+  },
+  {
+    "varname": "Email",
+    "fieldname": "EMAIL",
+    "size": 14,
+    "page": 1,
+    "x": 87,
+    "y": 171
+  },
+  {
+    "varname": "SignName",
+    "fieldname": "FULL_NAME",
+    "objecttype": "sign",
+    "size": 14,
+    "page": 1,
+    "x": 142,
+    "y": 233
+  },
+  {
+    "varname": "DateFooterP1",
+    "fieldname": "Date",
+    "objecttype": "date",
+    "size": 12,
+    "page": 1,
+    "x": 135,
+    "y": 286.5
+  },
+  {
+    "varname": "IPFooterP1",
+    "fieldname": "IP",
+    "objecttype": "ip",
+    "size": 12,
+    "page": 1,
+    "x": 170,
+    "y": 286.5
+  }
+]

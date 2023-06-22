@@ -236,43 +236,43 @@
                     @* ก.พ. *@
                     @*<div class="form-group row">
 
-                        <label for="" class="col-12 col-md-2 text-md-right col-form-label"></label>
-                        <div class="input-group col-12 col-md-8">
-                            <div class="custom-control custom-checkbox custom-control-inline mt-3 ml-2 mr-1 mr-md-0">
-                                <input class="custom-control-input col-form-label" type="checkbox"
-                                       ng-model="ocscFlag"
-                                       id="ocscFlag" disabled="disabled">
-                                <label class="custom-control-label pointer" onclick="" for="ocscFlag">
-                                    &nbsp;ข้าพเจ้าเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.
-                                </label>
+                            <label for="" class="col-12 col-md-2 text-md-right col-form-label"></label>
+                            <div class="input-group col-12 col-md-8">
+                                <div class="custom-control custom-checkbox custom-control-inline mt-3 ml-2 mr-1 mr-md-0">
+                                    <input class="custom-control-input col-form-label" type="checkbox"
+                                           ng-model="ocscFlag"
+                                           id="ocscFlag" disabled="disabled">
+                                    <label class="custom-control-label pointer" onclick="" for="ocscFlag">
+                                        &nbsp;ข้าพเจ้าเป็นผู้สอบผ่านการวัดความรู้ความสามารถทั่วไป (ภาค ก.) ของสำนักงาน ก.พ.
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group row mt-3">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ระดับวุฒิการศึกษา</label>
+                            <div class="input-group col-12 col-md-4">
+                                <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCLevelName}}</label>
                             </div>
                         </div>
-
-                    </div>
-                    <div class="form-group row mt-3">
-                        <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">ระดับวุฒิการศึกษา</label>
-                        <div class="input-group col-12 col-md-4">
-                            <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCLevelName}}</label>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">เลขที่หนังสือรับรองฯ</label>
+                            <div class="input-group col-6 col-md-4 pointer">
+                                <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCCertNo}}</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">เลขที่หนังสือรับรองฯ</label>
-                        <div class="input-group col-6 col-md-4 pointer">
-                            <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCCertNo}}</label>
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วันที่สอบ</label>
+                            <div class="input-group col-6 col-md-4 pointer">
+                                <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCExamDate}}</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label required">วันที่สอบ</label>
-                        <div class="input-group col-6 col-md-4 pointer">
-                            <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCExamDate}}</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label font-weight-bold">วันประกาศขึ้นทะเบียนสอบ</label>
-                        <div class="input-group col-6 col-md-4 pointer">
-                            <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCPassDate}}</label>
-                        </div>
-                    </div>*@
+                        <div class="form-group row">
+                            <label for="" class="control-label col-12 col-md-3 text-md-right col-form-label font-weight-bold">วันประกาศขึ้นทะเบียนสอบ</label>
+                            <div class="input-group col-6 col-md-4 pointer">
+                                <label for="" class="col-12 col-md-12 ml-3 ml-md-0 col-form-label">{{model.OCSCPassDate}}</label>
+                            </div>
+                        </div>*@
                     <div class="form-group row">
 
                         <label for="" class="col-12 col-md-2 text-md-right col-form-label"></label>
@@ -1233,6 +1233,7 @@
                     @Html.HiddenFor(m => m.TbbFlag)
                     @Html.HiddenFor(m => m.EduFlag)
                     @Html.HiddenFor(m => m.OCSCFlag)
+                    @Html.HiddenFor(m => m.OCSCWaitFlag)
                     @Html.HiddenFor(m => m.OCSCLevelID)
                     @Html.HiddenFor(m => m.OCSCLevelName)
                     @Html.HiddenFor(m => m.OCSCCertNo)

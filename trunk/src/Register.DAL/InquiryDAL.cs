@@ -147,7 +147,7 @@ namespace Register.DAL
                     param[3].Value = testTypeID;
                     param[4] = new SqlParameter("@CITIZEN_ID", SqlDbType.VarChar, 50);
                     param[4].Value = citizen;
-                    param[5] = new SqlParameter("@LASER_CODE", SqlDbType.VarChar, 50);
+                    param[5] = new SqlParameter("@CONDITION", SqlDbType.VarChar, 50);
                     param[5].Value = "";
 
                     dsResult = db.ExecStoredCrystal("ENR_SP_GET_APPICATION_FORM", "Application", param);

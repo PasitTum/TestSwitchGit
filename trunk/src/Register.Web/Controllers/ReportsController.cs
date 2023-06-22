@@ -180,7 +180,7 @@ namespace Register.Web.Controllers
             catch (Exception ex)
             {
                 Log.WriteErrorLog(tsw.TraceError, ex);
-                throw (ex);
+                return Content("ไม่มีข้อมูล");
             }
             return File(result, "application/pdf", String.Format("Application_{0}_{1}.pdf", citizenID, DateTime.Now.ToString("yyyyMMddHHmmss")));
 
